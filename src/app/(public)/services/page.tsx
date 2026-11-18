@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 import {
   Search,
   Clock,
@@ -211,7 +213,9 @@ const categoriesList = [
 const ITEMS_PER_PAGE = 9;
 
 function ServicesContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { isAuthenticated } = useAuth();
   const initialCategoryParam = searchParams.get("category");
 
   const [services, setServices] = useState<Service[]>(fallbackServices);
@@ -251,8 +255,22 @@ function ServicesContent() {
   }, []);
 
   const handleOpenBooking = (service: Service) => {
+    if (!isAuthenticated) {
+      toast.info("Please sign in or create an account to book an appointment.");
+      router.push(`/sign-in?redirect=${encodeURIComponent(`/services`)}`);
+      return;
+    }
     setSelectedService(service);
     setIsModalOpen(true);
+  };
+
+  const handleViewDetails = (serviceId: string) => {
+    if (!isAuthenticated) {
+      toast.info("Please sign in or create an account to view service details.");
+      router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
+      return;
+    }
+    router.push(`/services/${serviceId}`);
   };
 
   const handleResetFilters = () => {
@@ -487,15 +505,14 @@ function ServicesContent() {
 
                 {/* Bottom Row: Details ↗ & Book Now Button */}
                 <div className="p-6 pt-0 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 mt-2 flex items-center justify-between gap-3">
-                  <Link href={`/services/${service._id}`} className="flex-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] text-xs font-medium"
-                    >
-                      View details ↗
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleViewDetails(service._id)}
+                    className="flex-1 rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] text-xs font-medium"
+                  >
+                    View details ↗
+                  </Button>
 
                   <Button
                     size="sm"

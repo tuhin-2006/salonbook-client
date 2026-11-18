@@ -64,7 +64,7 @@ export const Navbar = () => {
                 </span>
               </div>
               <span className="text-[10px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60 -mt-1 hidden sm:inline">
-                Madison Avenue, NYC
+                SoHo Atelier, NYC
               </span>
             </div>
           </Link>
@@ -145,7 +145,7 @@ export const Navbar = () => {
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/services">
+                <Link href={isAuthenticated ? "/services" : "/sign-in?redirect=/services"}>
                   <Button
                     variant="default"
                     size="sm"
@@ -244,7 +244,7 @@ export const Navbar = () => {
                     Sign In
                   </Button>
                 </Link>
-                <Link href="/services" onClick={() => setMobileMenuOpen(false)}>
+                <Link href={isAuthenticated ? "/services" : "/sign-in?redirect=/services"} onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="default" className="w-full text-xs font-bold rounded-xl bg-[#3B1F2B] text-[#FAF7F2]">
                     Book now
                   </Button>

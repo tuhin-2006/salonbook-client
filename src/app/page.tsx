@@ -27,13 +27,15 @@ import { BookingModal } from "@/components/booking/BookingModal";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { api } from "@/lib/api";
 import { Service, ApiResponse } from "@/types";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 // Fullscreen Hero Slideshow Assets (4 Cinematic Views of the Salon Atelier - optimized for instant loading)
 const heroSlides = [
   {
     id: 1,
     tag: "01 · SANCTUARY",
-    badge: "Flagship Atelier · Madison Ave, NYC",
+    badge: "Flagship Atelier · SoHo, NYC",
     kicker: "EST. 2018 · BESPOKE GROOMING & BEAUTY",
     title: "Elevated Craft.",
     titleAccent: "Unhurried Sanctuary.",
@@ -298,36 +300,61 @@ const residentBarbers = [
   },
 ];
 
-// Client Testimonials
+// Distinct Client Testimonials (Diverse Real Stories & Profiles)
 const clientTestimonials = [
   {
     quote:
-      "Marcus gave me the sharpest cut and cleanest shave I've had in New York. The atmosphere is warm, calm, and zero rush. SalonBook is a breath of fresh air.",
-    author: "Julian Reynolds",
-    service: "Executive Straight-Razor Shave",
-    rating: 5,
-    location: "Tribeca, NYC",
-  },
-  {
-    quote:
-      "Elena understands colour like a true painter. The balayage grew out seamlessly over 4 months with zero brassiness. The booking system was instant and effortless.",
-    author: "Camille Laurent",
-    service: "Signature Balayage & Gloss",
+      "I traveled in from Connecticut specifically for Elena's cranial contouring and silk gloss. Four months later, my dimensional balayage still looks sun-kissed with zero brassiness or demarcation lines. Having a quiet private suite without five people hovering over me is pure luxury.",
+    author: "Genevieve Montgomery",
+    badge: "Client since 2021",
+    service: "Signature Balayage & Silk Glossing",
+    artist: "Elena Vance (Master Colorist)",
     rating: 5,
     location: "Upper East Side, NYC",
+    date: "November 2026",
+    isSpotlight: true,
   },
   {
     quote:
-      "The basalt stone massage melted away months of corporate desk stiffness. Spotlessly clean, peaceful treatment rooms, and completely transparent pricing.",
-    author: "David Vance",
-    service: "Basalt Stone & Cedarwood Massage",
+      "Marcus' straight-razor detailing is hands-down the cleanest cut in Manhattan. Japanese feather blades, real steamed cedarwood towels, and zero awkward lobby waiting. The online booking synced directly to my calendar with instant confirmation.",
+    author: "Alexander Wright",
+    badge: "Booked 18 times",
+    service: "Executive Straight-Razor Shave",
+    artist: "Marcus Sterling (Lead Groomer)",
     rating: 5,
-    location: "Midtown Manhattan",
+    location: "SoHo, NYC",
+    date: "October 2026",
+    isSpotlight: false,
+  },
+  {
+    quote:
+      "Sofia completely restored my compromised moisture barrier in 75 minutes. The cryo-oxygen infusion and ultrasound peel felt like medical-grade therapy in a 5-star hotel. The checkout was whisper-quiet on Stripe without any forced product upsells.",
+    author: "Dr. Clara Vance",
+    badge: "Verified Member",
+    service: "Hydra-Botanical Deep Facial",
+    artist: "Sofia Rossi (Dermal Esthetician)",
+    rating: 5,
+    location: "Brooklyn Heights, NYC",
+    date: "November 2026",
+    isSpotlight: false,
+  },
+  {
+    quote:
+      "After 60-hour corporate desk weeks, Liam's basalt stone therapy is non-negotiable. The meridian alignment and organic cedarwood oils completely melted my posture tension. It feels like an authentic European thermal sanctuary in Midtown.",
+    author: "Harrison Reed",
+    badge: "Bi-weekly Regular",
+    service: "Basalt Stone & Cedarwood Massage",
+    artist: "Liam Thorne (Neuromuscular Therapist)",
+    rating: 5,
+    location: "Tribeca, NYC",
+    date: "October 2026",
+    isSpotlight: false,
   },
 ];
 
 export default function HomePage() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [services, setServices] = useState<Service[]>(curatedServices);
   const [activeTab, setActiveTab] = useState<string>("All");
   const [bookingService, setBookingService] = useState<Service | null>(null);
@@ -378,8 +405,22 @@ export default function HomePage() {
   }, []);
 
   const handleBookNow = (service: Service) => {
+    if (!isAuthenticated) {
+      toast.info("Please sign in or create an account to book an appointment.");
+      router.push(`/sign-in?redirect=${encodeURIComponent(`/services`)}`);
+      return;
+    }
     setBookingService(service);
     setModalOpen(true);
+  };
+
+  const handleViewDetails = (serviceId: string) => {
+    if (!isAuthenticated) {
+      toast.info("Please sign in or create an account to view service details.");
+      router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
+      return;
+    }
+    router.push(`/services/${serviceId}`);
   };
 
   const filteredServices =
@@ -514,15 +555,21 @@ export default function HomePage() {
 
           {/* Dual Action CTAs */}
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
-            <Link href="/services" className="w-full sm:w-auto">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#170F13] font-bold text-sm shadow-2xl transition-all flex items-center justify-center gap-2 group hover:scale-[1.02]"
-              >
-                <span>Reserve an Appointment</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              onClick={() => {
+                if (!isAuthenticated) {
+                  toast.info("Please sign in or create an account to reserve an appointment.");
+                  router.push("/sign-in?redirect=/services");
+                } else {
+                  router.push("/services");
+                }
+              }}
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#170F13] font-bold text-sm shadow-2xl transition-all flex items-center justify-center gap-2 group hover:scale-[1.02]"
+            >
+              <span>Reserve an Appointment</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Button>
 
             <Link href="/services" className="w-full sm:w-auto">
               <Button
@@ -579,7 +626,7 @@ export default function HomePage() {
                 <div>
                   <div className="flex items-center gap-1.5 text-xs text-[#C5A880] font-semibold">
                     <MapPin className="w-3.5 h-3.5" />
-                    <span>452 Madison Ave · Midtown NYC</span>
+                    <span>128 Mercer Street · SoHo, NYC</span>
                   </div>
                   <p className="text-[11px] text-white/70 mt-0.5">
                     No waiting · Single-guest chairs
@@ -665,71 +712,99 @@ export default function HomePage() {
 
       {/* 
         =======================================================================
-        2. TRUST INDICATORS BAR
+        2. ATELIER CRAFT STANDARDS & ASSURANCES (RE-DESIGNED ARCHITECTURAL BENTO)
         =======================================================================
       */}
-      <section className="bg-[#FFFFFF] dark:bg-[#1E1317] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 py-7 transition-colors">
+      <section className="bg-[#FAF7F2] dark:bg-[#150E12] py-12 sm:py-16 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3.5 px-3 py-2"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
-                  Secure booking
-                </h4>
-                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
-                  Your details stay private
-                </p>
-              </div>
-            </motion.div>
+          {/* Subtle Section Kicker */}
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
+            <div>
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#C5A880]">
+                UNCOMPROMISED EXCELLENCE
+              </span>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#231C1E] dark:text-[#FAF7F2] mt-0.5">
+                The Four Pillars of SalonBook Care
+              </h3>
+            </div>
+            <div className="hidden sm:flex items-center gap-2 text-xs text-[#231C1E]/60 dark:text-[#FAF7F2]/60 font-medium">
+              <Sparkles className="w-4 h-4 text-[#C5A880]" />
+              <span>Certified European Practice</span>
+            </div>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
-                  Thoughtful timing
-                </h4>
-                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
-                  Real openings, no guesswork
-                </p>
-              </div>
-            </motion.div>
+          {/* 4 Sculpted Atelier Pillar Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                num: "01",
+                badge: "EXCLUSIVITY",
+                title: "100% Single-Guest Attention",
+                desc: "Zero chair overlapping or apprentice handoffs. Your resident master artisan devotes their undivided craft solely to you.",
+                icon: Scissors,
+              },
+              {
+                num: "02",
+                badge: "TIMING PRECISION",
+                title: "Real-Time Synchronized Slots",
+                desc: "Direct live integration with our booking engine. Your session commences promptly at the minute with zero lobby waiting.",
+                icon: Clock,
+              },
+              {
+                num: "03",
+                badge: "ORGANIC ELEGANCE",
+                title: "Clean European Actives",
+                desc: "Cruelty-free botanicals, cold-pressed plant squalane, and organic glossing formulations free of petroleum sulfates.",
+                icon: ShieldCheck,
+              },
+              {
+                num: "04",
+                badge: "TRANSPARENCY",
+                title: "Upfront All-Inclusive Pricing",
+                desc: "Consultation, wash, hot towels, and precision styling finish included in every quote. Seamless Stripe checkout with zero surprises.",
+                icon: CheckCircle2,
+              },
+            ].map((pillar, idx) => {
+              const Icon = pillar.icon;
+              return (
+                <motion.div
+                  key={pillar.num}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className="group relative rounded-2xl p-6 bg-[#FFFFFF] dark:bg-[#1E1317] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#C5A880]/60 dark:hover:border-[#C5A880]/60 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#281820] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center text-[#3B1F2B] dark:text-[#C5A880] group-hover:scale-110 transition-transform">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="font-mono text-xs font-bold text-[#C5A880] tracking-widest">
+                        {pillar.num}
+                      </span>
+                    </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
-                <Heart className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
-                  Personal care
-                </h4>
-                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
-                  One artist, all your attention
-                </p>
-              </div>
-            </motion.div>
+                    <div className="space-y-1.5">
+                      <span className="text-[9px] uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+                        {pillar.badge}
+                      </span>
+                      <h4 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors">
+                        {pillar.title}
+                      </h4>
+                      <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/70 leading-relaxed pt-1">
+                        {pillar.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex items-center justify-between text-[11px] font-semibold text-[#3B1F2B] dark:text-[#C5A880] opacity-80 group-hover:opacity-100 transition-opacity">
+                    <span>Atelier Standard</span>
+                    <Sparkles className="w-3 h-3" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -882,7 +957,10 @@ export default function HomePage() {
                 className="group rounded-2xl bg-[#FAF7F2] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#3B1F2B]/30 dark:hover:border-[#C5A880]/50 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
+                  <div
+                    onClick={() => handleViewDetails(service._id)}
+                    className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24] cursor-pointer"
+                  >
                     <SafeImage
                       src={
                         service.images && service.images[0]
@@ -909,7 +987,10 @@ export default function HomePage() {
                       <span className="text-emerald-700 dark:text-emerald-400 font-medium">At the salon</span>
                     </div>
 
-                    <h3 className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors leading-snug">
+                    <h3
+                      onClick={() => handleViewDetails(service._id)}
+                      className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors leading-snug cursor-pointer"
+                    >
                       {service.title}
                     </h3>
 
@@ -933,14 +1014,13 @@ export default function HomePage() {
                     >
                       Book Now
                     </Button>
-                    <Link href={`/services/${service._id}`}>
-                      <Button
-                        variant="outline"
-                        className="rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FFFFFF] dark:hover:bg-[#2D1D24] text-xs font-medium py-2.5 px-3"
-                      >
-                        Details ↗
-                      </Button>
-                    </Link>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleViewDetails(service._id)}
+                      className="rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FFFFFF] dark:hover:bg-[#2D1D24] text-xs font-medium py-2.5 px-3"
+                    >
+                      Details ↗
+                    </Button>
                   </div>
                 </div>
               </motion.div>
@@ -1136,13 +1216,20 @@ export default function HomePage() {
                     {barber.specialty}
                   </p>
                   <div className="pt-2">
-                    <Link
-                      href="/services"
+                    <button
+                      onClick={() => {
+                        if (!isAuthenticated) {
+                          toast.info(`Please sign in or create an account to book with ${barber.name}.`);
+                          router.push("/sign-in?redirect=/services");
+                        } else {
+                          router.push("/services");
+                        }
+                      }}
                       className="text-xs font-semibold text-[#3B1F2B] dark:text-[#C5A880] hover:underline flex items-center gap-1"
                     >
                       <span>Book with {barber.name.split(" ")[0]}</span>
                       <ArrowRight className="w-3 h-3" />
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -1153,7 +1240,7 @@ export default function HomePage() {
 
       {/* 
         =======================================================================
-        7. CLIENT STORIES & TESTIMONIALS
+        7. PATRON VOICES & CLIENT STORIES (DISTINCT INDIVIDUAL CARDS & SPOTLIGHT)
         =======================================================================
       */}
       <section className="py-16 sm:py-24 bg-[#FAF7F2] dark:bg-[#170F13] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
@@ -1166,57 +1253,122 @@ export default function HomePage() {
             className="text-center max-w-xl mx-auto space-y-2 mb-12"
           >
             <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
-              PATRON REVIEWS
+              PATRON EXPERIENCES
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
-              What Our Clients Say
+              Words from Our Discerning Guests
             </h2>
             <div className="flex items-center justify-center gap-1 text-amber-500 pt-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
               <span className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2] ml-2">
-                4.9 / 5 from over 8,000 appointments
+                4.98 / 5.0 from 2,400+ verified appointments
               </span>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {clientTestimonials.map((review, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-3">
-                  <div className="flex text-amber-500">
-                    {[...Array(review.rating)].map((_, idx) => (
-                      <Star key={idx} className="w-3.5 h-3.5 fill-current" />
+          {/* Varied & Distinct Client Review Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Featured Spotlight Review (6 Cols) */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-6 rounded-3xl p-8 bg-gradient-to-br from-[#2D1621] to-[#1C0D15] text-[#FAF7F2] border border-[#C5A880]/30 shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#C5A880]/10 rounded-full blur-2xl pointer-events-none" />
+
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center justify-between">
+                  <span className="px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider bg-[#C5A880] text-[#170F13] shadow-sm">
+                    Featured Patron Story
+                  </span>
+                  <div className="flex text-amber-400">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star key={idx} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-[#231C1E]/80 dark:text-[#FAF7F2]/80 leading-relaxed italic">
-                    &ldquo;{review.quote}&rdquo;
-                  </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex items-center justify-between">
+                <p className="font-serif text-lg sm:text-xl text-[#FAF7F2] leading-relaxed italic">
+                  &ldquo;{clientTestimonials[0].quote}&rdquo;
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-white/15 flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#C5A880] text-[#170F13] font-serif font-bold text-sm flex items-center justify-center shadow-md">
+                    GM
+                  </div>
                   <div>
-                    <h4 className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2]">
-                      {review.author}
+                    <h4 className="text-sm font-bold text-white">
+                      {clientTestimonials[0].author}
                     </h4>
-                    <p className="text-[11px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60">
-                      {review.location}
+                    <p className="text-xs text-white/70">
+                      {clientTestimonials[0].location} · {clientTestimonials[0].badge}
                     </p>
                   </div>
-                  <span className="text-[11px] font-semibold text-[#3B1F2B] dark:text-[#C5A880] bg-[#FAF7F2] dark:bg-[#2D1D24] px-2.5 py-1 rounded-full border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
-                    {review.service}
+                </div>
+                <div className="text-right hidden sm:block">
+                  <span className="text-xs font-semibold text-[#C5A880] block">
+                    {clientTestimonials[0].service}
+                  </span>
+                  <span className="text-[10px] text-white/50">
+                    With {clientTestimonials[0].artist}
                   </span>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+            </motion.div>
+
+            {/* Right Column: 3 Distinct Companion Reviews (6 Cols) */}
+            <div className="lg:col-span-6 space-y-4">
+              {clientTestimonials.slice(1).map((review, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.12 }}
+                  className="p-5 rounded-2xl bg-[#FFFFFF] dark:bg-[#1E1317] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#C5A880]/50 shadow-sm transition-all flex flex-col justify-between space-y-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="flex text-amber-500">
+                        {[...Array(review.rating)].map((_, idx) => (
+                          <Star key={idx} className="w-3.5 h-3.5 fill-current" />
+                        ))}
+                      </div>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-[#C5A880] bg-[#C5A880]/15 dark:bg-[#C5A880]/20 px-2 py-0.5 rounded-full">
+                        {review.badge}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[#231C1E]/50 dark:text-[#FAF7F2]/50 font-mono">
+                      {review.date}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#231C1E]/85 dark:text-[#FAF7F2]/85 leading-relaxed italic">
+                    &ldquo;{review.quote}&rdquo;
+                  </p>
+
+                  <div className="pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex items-center justify-between text-xs">
+                    <div>
+                      <span className="font-bold text-[#231C1E] dark:text-[#FAF7F2]">
+                        {review.author}
+                      </span>
+                      <span className="text-[#231C1E]/60 dark:text-[#FAF7F2]/60 ml-1.5 text-[11px]">
+                        ({review.location})
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-semibold text-[#3B1F2B] dark:text-[#C5A880] truncate max-w-[200px]">
+                      {review.service}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

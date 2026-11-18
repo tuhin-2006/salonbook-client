@@ -72,7 +72,7 @@ export const Footer = () => {
                   SalonBook
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880]">
-                  Madison Avenue · New York
+                  SoHo Atelier · New York
                 </span>
               </div>
             </Link>
@@ -204,19 +204,19 @@ export const Footer = () => {
             </h4>
             <p className="text-xs text-[#FAF7F2]/80 flex items-start gap-2 leading-relaxed">
               <MapPin className="w-3.5 h-3.5 text-[#C5A880] mt-0.5 shrink-0" />
-              <span>450 Madison Avenue, 4th Floor<br />New York, NY 10022</span>
+              <span>128 Mercer Street, Suite 4B<br />SoHo, New York, NY 10012</span>
             </p>
             <p className="text-xs text-[#FAF7F2]/80 flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-[#C5A880] shrink-0" />
-              <span>+1 (212) 555-0198</span>
+              <span>+1 (646) 892-4410</span>
             </p>
             <p className="text-xs text-[#FAF7F2]/80 flex items-center gap-2">
               <Mail className="w-3.5 h-3.5 text-[#C5A880] shrink-0" />
-              <span>concierge@salonbook.com</span>
+              <span>care@salonbook-atelier.com</span>
             </p>
             <p className="text-xs text-[#FAF7F2]/80 flex items-center gap-2 pt-1">
               <Clock className="w-3.5 h-3.5 text-[#C5A880] shrink-0" />
-              <span>Daily · 9:00 AM – 8:00 PM EST</span>
+              <span>Mon – Sat: 9:00 AM – 8:30 PM | Sun: 10:00 AM – 6:00 PM</span>
             </p>
           </div>
         </div>

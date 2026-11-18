@@ -19,17 +19,27 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { Service, ApiResponse } from "@/types";
 import { api } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 export default function ServiceDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const serviceId = params?.id as string;
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   const [service, setService] = useState<Service | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Auth Guard: Require login to view service details
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      toast.info("Please sign in or create an account to view treatment details.");
+      router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
+    }
+  }, [authLoading, isAuthenticated, router, serviceId]);
 
   useEffect(() => {
     if (!serviceId) return;
@@ -74,13 +84,13 @@ export default function ServiceDetailsPage() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || authLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen py-24 flex items-center justify-center bg-[#FAF7F2] dark:bg-[#170F13]">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#3B1F2B] dark:border-[#C5A880] border-t-transparent animate-spin rounded-full" />
           <p className="text-xs uppercase tracking-[0.2em] text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-semibold">
-            Loading Ritual Dossier...
+            {!isAuthenticated && !authLoading ? "Redirecting to Sign In..." : "Loading Ritual Dossier..."}
           </p>
         </div>
       </div>
@@ -280,7 +290,14 @@ export default function ServiceDetailsPage() {
               <div className="space-y-3 pt-2">
                 <Button
                   size="lg"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      toast.info("Please sign in to reserve an appointment.");
+                      router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
+                      return;
+                    }
+                    setIsModalOpen(true);
+                  }}
                   className="w-full h-12 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] text-[#FAF7F2] dark:text-[#170F13] shadow-md"
                 >
                   <Calendar className="w-4 h-4 mr-2 text-[#C5A880] dark:text-[#170F13]" />

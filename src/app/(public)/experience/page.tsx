@@ -61,7 +61,7 @@ export default function ExperiencePage() {
               className="w-full h-full object-cover"
             />
             <div className="absolute bottom-0 inset-x-0 p-4 bg-[#231C1E]/90 text-[#FAF7F2] backdrop-blur-md border-t border-[#FAF7F2]/10 flex items-center justify-between text-xs">
-              <span className="font-serif font-bold">Madison Avenue Atelier · Suite 4</span>
+              <span className="font-serif font-bold">SoHo Atelier · 128 Mercer St, Suite 4B</span>
               <span className="text-[10px] uppercase tracking-wider text-[#C5A880] font-semibold">Dedicated Chair Studio</span>
             </div>
           </div>
