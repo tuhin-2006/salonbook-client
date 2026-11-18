@@ -16,14 +16,54 @@ import {
   Sparkles,
   Compass,
   CheckCircle2,
+  Camera,
+  Image as ImageIcon,
+  Check,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { AuthHeroVisual } from "@/components/auth/AuthHeroVisual";
+import { SafeImage } from "@/components/ui/SafeImage";
+import { getInitials } from "@/lib/utils";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Curated aesthetic portrait avatars for atelier patrons
+const DEMO_AVATARS = [
+  {
+    id: "avatar-1",
+    label: "Camille",
+    url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "avatar-2",
+    label: "Marcus",
+    url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "avatar-3",
+    label: "Elena",
+    url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "avatar-4",
+    label: "Julian",
+    url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "avatar-5",
+    label: "Genevieve",
+    url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+  },
+  {
+    id: "avatar-6",
+    label: "Harrison",
+    url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
+  },
+];
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -39,6 +79,13 @@ export default function SignUpPage() {
   const [agreeTerms, setAgreeTerms] = useState(true);
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Dynamic Profile Picture State
+  const [avatarMode, setAvatarMode] = useState<"preset" | "custom">("preset");
+  const [selectedAvatarUrl, setSelectedAvatarUrl] = useState<string>(DEMO_AVATARS[0].url);
+  const [customAvatarUrl, setCustomAvatarUrl] = useState("");
+
+  const activePhotoUrl = avatarMode === "custom" ? customAvatarUrl.trim() : selectedAvatarUrl;
 
   React.useEffect(() => {
     if (isAuthenticated) {
@@ -81,6 +128,7 @@ export default function SignUpPage() {
         email: email.trim(),
         password,
         phone: phone.trim() || undefined,
+        image: activePhotoUrl || undefined,
       });
       toast.success("Welcome to SalonBook! Your client profile is ready.");
       router.push("/dashboard");
@@ -97,12 +145,12 @@ export default function SignUpPage() {
       <div className="absolute top-[-10%] left-[-5%] w-[420px] h-[420px] rounded-full bg-[#C8A879]/10 dark:bg-[#C8A879]/15 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[20%] w-[450px] h-[450px] rounded-full bg-[#3B1F2B]/10 dark:bg-[#4A2035]/25 blur-[140px] pointer-events-none" />
 
-      {/* Left Column: Registration Panel */}
+      {/* Left Column: Dynamic Registration Panel */}
       <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-7 sm:px-10 md:px-14 lg:px-12 xl:px-16 min-h-screen relative z-10">
         <AuthHeader />
 
-        <div className="w-full max-w-[440px] mx-auto my-auto py-4 space-y-6">
-          {/* Dynamic Status Badge */}
+        <div className="w-full max-w-[450px] mx-auto my-auto py-4 space-y-5">
+          {/* Dynamic Live Status Badge */}
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,7 +163,7 @@ export default function SignUpPage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
               <span className="text-[10px] uppercase tracking-wider font-semibold text-[#786C68] dark:text-[#C8A879]">
-                Instant Membership · No Hidden Fees
+                VIP Client Registration · Priority Slots
               </span>
             </div>
 
@@ -126,7 +174,7 @@ export default function SignUpPage() {
           </motion.div>
 
           {/* Headline */}
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <div className="inline-flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#94704C] dark:bg-[#C8A879]" />
               <span className="text-[11px] uppercase tracking-[0.25em] text-[#94704C] dark:text-[#C8A879] font-bold">
@@ -137,11 +185,11 @@ export default function SignUpPage() {
               Create Your Account
             </h1>
             <p className="text-xs sm:text-sm text-[#786C68] dark:text-[#B9AEB0] leading-relaxed font-sans">
-              Join SalonBook and make every beauty appointment effortless.
+              Join SalonBook to enjoy personalized chair consultations and effortless scheduling.
             </p>
           </div>
 
-          {/* Elevated Glassmorphic Card */}
+          {/* Elevated Luxury Glassmorphic Card */}
           <div className="rounded-3xl p-5 sm:p-6 bg-[#FFFFFF]/90 dark:bg-[#20171B]/90 border border-[rgba(90,65,48,0.16)] dark:border-[rgba(200,168,121,0.22)] shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl relative space-y-4">
             <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#C8A879]/50 to-transparent pointer-events-none" />
 
@@ -157,8 +205,135 @@ export default function SignUpPage() {
               </motion.div>
             )}
 
+            {/* Dynamic Profile Picture Selection Section */}
+            <div className="p-3.5 rounded-2xl bg-[#F8F5F0]/70 dark:bg-[#181115]/90 border border-[rgba(90,65,48,0.14)] dark:border-[rgba(200,168,121,0.18)] space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-[#786C68] dark:text-[#C8A879] flex items-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5 text-[#94704C] dark:text-[#C8A879]" />
+                  SELECT PROFILE AVATAR
+                </span>
+
+                {/* Mode Selector Tabs */}
+                <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[#EFE8DF] dark:bg-[#261D21] text-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => setAvatarMode("preset")}
+                    className={`px-2 py-0.5 rounded-md font-semibold transition-all ${
+                      avatarMode === "preset"
+                        ? "bg-[#FFFFFF] dark:bg-[#C8A879] text-[#251C1D] dark:text-[#171114] shadow-xs"
+                        : "text-[#786C68] dark:text-[#B9AEB0] hover:text-[#251C1D] dark:hover:text-[#F7F0E8]"
+                    }`}
+                  >
+                    Preset Avatars
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAvatarMode("custom")}
+                    className={`px-2 py-0.5 rounded-md font-semibold transition-all ${
+                      avatarMode === "custom"
+                        ? "bg-[#FFFFFF] dark:bg-[#C8A879] text-[#251C1D] dark:text-[#171114] shadow-xs"
+                        : "text-[#786C68] dark:text-[#B9AEB0] hover:text-[#251C1D] dark:hover:text-[#F7F0E8]"
+                    }`}
+                  >
+                    Photo URL
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Avatar Preview & Selection Row */}
+              <div className="flex items-center gap-3.5">
+                {/* Live Preview Circle */}
+                <div className="relative shrink-0">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#94704C] dark:border-[#C8A879] shadow-md bg-[#251C1D] dark:bg-[#261D21] flex items-center justify-center text-[#F7F0E8] font-serif font-bold text-base ring-4 ring-[#C8A879]/15">
+                    {activePhotoUrl ? (
+                      <SafeImage
+                        src={activePhotoUrl}
+                        alt="Profile Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : name ? (
+                      getInitials(name)
+                    ) : (
+                      <User className="w-6 h-6 text-[#C8A879]" />
+                    )}
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#94704C] dark:bg-[#C8A879] text-[#F7F0E8] dark:text-[#171114] flex items-center justify-center shadow-xs">
+                    <Sparkles className="w-2.5 h-2.5" />
+                  </div>
+                </div>
+
+                {/* Preset Avatars Grid OR Custom URL Input */}
+                <div className="flex-1 min-w-0">
+                  {avatarMode === "preset" ? (
+                    <div>
+                      <span className="text-[10px] text-[#786C68]/80 dark:text-[#B9AEB0]/80 block mb-1.5 font-medium">
+                        Tap an atelier portrait to select:
+                      </span>
+                      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        {DEMO_AVATARS.map((avatar) => {
+                          const isSelected = selectedAvatarUrl === avatar.url;
+                          return (
+                            <button
+                              key={avatar.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedAvatarUrl(avatar.url);
+                                toast.info(`Avatar "${avatar.label}" selected`);
+                              }}
+                              className={`relative w-9 h-9 rounded-full overflow-hidden border-2 transition-all shrink-0 group ${
+                                isSelected
+                                  ? "border-[#94704C] dark:border-[#C8A879] ring-2 ring-[#C8A879]/40 scale-105"
+                                  : "border-transparent opacity-65 hover:opacity-100 hover:border-[#94704C]/50 dark:hover:border-[#C8A879]/50"
+                              }`}
+                              title={avatar.label}
+                            >
+                              <SafeImage
+                                src={avatar.url}
+                                alt={avatar.label}
+                                className="w-full h-full object-cover"
+                              />
+                              {isSelected && (
+                                <div className="absolute inset-0 bg-[#251C1D]/35 flex items-center justify-center">
+                                  <Check className="w-3 h-3 text-[#F7F0E8] stroke-[3]" />
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-[#786C68]/80 dark:text-[#B9AEB0]/80 block font-medium">
+                        Paste custom image web link:
+                      </span>
+                      <div className="relative">
+                        <ImageIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#786C68]/60 dark:text-[#B9AEB0]/60" />
+                        <Input
+                          type="url"
+                          placeholder="https://images.com/my-photo.jpg"
+                          value={customAvatarUrl}
+                          onChange={(e) => setCustomAvatarUrl(e.target.value)}
+                          className="pl-8 pr-7 h-8 text-[11px] rounded-lg border-[rgba(90,65,48,0.2)] dark:border-[rgba(200,168,121,0.2)] bg-[#FFFFFF] dark:bg-[#20171B]"
+                        />
+                        {customAvatarUrl && (
+                          <button
+                            type="button"
+                            onClick={() => setCustomAvatarUrl("")}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#786C68] dark:text-[#B9AEB0] hover:text-red-500"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-3.5">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {/* Full Name */}
               <div className="space-y-1">
                 <label
@@ -317,7 +492,7 @@ export default function SignUpPage() {
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    <span>Create Account</span>
+                    <span>Complete Client Registration</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </span>
                 )}
@@ -326,7 +501,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Existing Account Footer Link */}
-          <div className="text-center text-xs text-[#786C68] dark:text-[#B9AEB0] pt-2">
+          <div className="text-center text-xs text-[#786C68] dark:text-[#B9AEB0] pt-1">
             Already have an account?{" "}
             <Link
               href="/sign-in"

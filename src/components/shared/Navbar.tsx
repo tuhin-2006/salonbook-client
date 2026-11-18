@@ -16,6 +16,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { getInitials } from "@/lib/utils";
 
 export const Navbar = () => {
@@ -120,8 +121,12 @@ export const Navbar = () => {
                 )}
 
                 <div className="flex items-center gap-2 pl-2 border-l border-[#E8E2D8] dark:border-[#38252E]">
-                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center">
-                    {getInitials(user.name)}
+                  <div className="w-8 h-8 rounded-full overflow-hidden border border-[#C5A880]/30 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center shrink-0">
+                    {user.image ? (
+                      <SafeImage src={user.image} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      getInitials(user.name)
+                    )}
                   </div>
                   <Button
                     variant="ghost"
@@ -204,8 +209,12 @@ export const Navbar = () => {
             {isAuthenticated && user ? (
               <>
                 <div className="flex items-center gap-3 p-3 bg-[#F5EFEB] dark:bg-[#251B20] rounded-xl border border-[#E8E2D8] dark:border-[#38252E]">
-                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center">
-                    {getInitials(user.name)}
+                  <div className="w-8 h-8 rounded-full overflow-hidden border border-[#C5A880]/30 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center shrink-0">
+                    {user.image ? (
+                      <SafeImage src={user.image} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      getInitials(user.name)
+                    )}
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2]">

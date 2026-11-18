@@ -23,6 +23,7 @@ interface AuthContextType {
     email: string;
     password: string;
     phone?: string;
+    image?: string;
   }) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
@@ -88,6 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     email: string;
     password: string;
     phone?: string;
+    image?: string;
   }) => {
     setIsLoading(true);
     try {
