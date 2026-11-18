@@ -69,7 +69,7 @@ export default function ExperiencePage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           <div className="md:col-span-7 rounded-2xl overflow-hidden border border-border shadow-xl relative aspect-[16/10] bg-muted">
             <SafeImage
-              src="https://images.unsplash.com/photo-1629882201977-941d8e12f3bc?auto=format&fit=crop&w=1200&q=85"
+              src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
               alt="Salon Interior"
               className="w-full h-full object-cover"
             />
