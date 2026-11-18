@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { CreditCard, CheckCircle2, Clock, AlertCircle, Sparkles, Receipt, ArrowRight, ShieldCheck } from "lucide-react";
+import { CreditCard, ShieldCheck } from "lucide-react";
 import { api } from "@/lib/api";
 import { Transaction, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -32,78 +32,89 @@ export default function CustomerTransactionsPage() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
-            Transaction History
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
+        <div className="space-y-1">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+            FINANCIAL DOSSIER
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+            Invoices &amp; Stripe Receipts
           </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Verified Stripe payments and invoice records for your salon appointments.
+          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-lg leading-relaxed">
+            Verified payment receipts and digital invoices for treatments concluded at SalonBook Atelier.
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold self-start sm:self-auto">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Stripe SSL Encrypted</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-[#26372D]/20 bg-[#EAE3D6]/50 text-[#26372D] dark:text-[#EAE3D6] text-[10px] uppercase tracking-[0.2em] font-semibold self-start sm:self-auto">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
+          <span>STRIPE SSL ENCRYPTED</span>
         </div>
       </div>
 
-      <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-6 sm:p-8">
         {loading ? (
-          <div className="py-20 text-center text-muted-foreground text-sm space-y-3">
-            <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
-            <p className="text-xs font-semibold text-muted-foreground">Loading payment records...</p>
+          <div className="py-20 text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin mx-auto" />
+            <p className="text-xs uppercase tracking-wider text-[#302821]/60">
+              Loading Ledger Records...
+            </p>
           </div>
         ) : transactions.length === 0 ? (
           <div className="py-16 text-center space-y-3 max-w-sm mx-auto">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center font-bold">
-              <CreditCard className="w-6 h-6" />
+            <div className="w-12 h-12 border border-[#302821]/20 bg-[#EAE3D6] mx-auto flex items-center justify-center font-bold text-[#26372D]">
+              <CreditCard className="w-5 h-5" />
             </div>
-            <h4 className="text-lg font-bold text-foreground">
-              No Payment Transactions Yet
+            <h4 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
+              No Payment Receipts Yet
             </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              When you pay for confirmed appointments via Stripe, receipts will be saved here automatically.
+            <p className="text-xs text-[#302821]/70 leading-relaxed">
+              When you pay for confirmed appointments via Stripe, receipts will be catalogued here automatically.
             </p>
-            <Link href="/dashboard/appointments">
-              <Button variant="outline" size="sm" className="rounded-xl text-xs font-bold mt-2">
-                Check My Appointments
-              </Button>
-            </Link>
+            <div className="pt-2">
+              <Link href="/dashboard/appointments">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
+                >
+                  Review Bookings
+                </Button>
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border text-muted-foreground font-bold uppercase tracking-wider text-[10px]">
-                  <th className="pb-3 pr-4">Transaction ID</th>
+                <tr className="border-b border-[#302821]/15 text-[#302821]/60 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="pb-3 pr-4">Transaction Reference</th>
                   <th className="pb-3 px-4">Amount</th>
                   <th className="pb-3 px-4">Gateway</th>
                   <th className="pb-3 px-4">Date</th>
                   <th className="pb-3 pl-4 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y divide-[#302821]/10">
                 {transactions.map((tx) => (
-                  <tr key={tx._id} className="hover:bg-secondary/40 transition-colors">
-                    <td className="py-3.5 pr-4 font-mono text-muted-foreground">
-                      {tx.stripePaymentIntentId || tx._id.slice(-8)}
+                  <tr key={tx._id} className="hover:bg-[#EAE3D6]/60 transition-colors">
+                    <td className="py-3.5 pr-4 font-mono text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                      {tx.stripePaymentIntentId || tx._id}
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-foreground text-sm">
+                    <td className="py-3.5 px-4 font-serif text-base text-[#26372D] dark:text-[#F5F1E8]">
                       {formatCurrency(tx.amount)}
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-500/10 text-indigo-600 uppercase">
-                        Stripe
+                      <span className="px-2 py-0.5 text-[9px] uppercase tracking-wider font-semibold border border-[#302821]/20">
+                        Stripe Checkout
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-muted-foreground">
+                    <td className="py-3.5 px-4 text-[#302821]/70 dark:text-[#EAE3D6]/70">
                       {formatDate(tx.createdAt)}
                     </td>
                     <td className="py-3.5 pl-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 uppercase">
-                        <CheckCircle2 className="w-3 h-3" /> Succeeded
+                      <span className="px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-semibold bg-[#26372D] text-[#F5F1E8]">
+                        Verified Paid
                       </span>
                     </td>
                   </tr>

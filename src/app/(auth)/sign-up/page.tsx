@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Sparkles,
   Mail,
   Lock,
   User,
@@ -12,8 +11,6 @@ import {
   ArrowRight,
   AlertCircle,
   Loader2,
-  ShieldCheck,
-  Scissors,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,7 +61,7 @@ export default function SignUpPage() {
         password,
         phone: phone || undefined,
       });
-      toast.success("Welcome to SalonBook! Your account is created.");
+      toast.success("Welcome to SalonBook Atelier. Your profile is created.");
       router.push("/dashboard");
     } catch (err: unknown) {
       setFormError((err as Error).message || "Registration failed.");
@@ -74,100 +71,99 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-background">
+    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
       {/* Left Form Container */}
-      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24 relative overflow-hidden">
-        <div className="mx-auto w-full max-w-md space-y-6">
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-md space-y-8">
           {/* Header */}
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Free Patron Account</span>
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-              Create Your Account
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+              PATRON INVITATION
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+              Create Your Profile
             </h1>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Book hair transformations, facial therapies, and track all your appointments in real time.
+            <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 leading-relaxed">
+              Reserve hair transformations, restorative facial therapies, and private consultations in real time.
             </p>
           </div>
 
           {/* Error Banner */}
           {formError && (
-            <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
+            <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-400 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="name">
-                Full Legal Name
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="name">
+                Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="name"
                   type="text"
                   placeholder="e.g. Elena Rostova"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="email">
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="email">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="phone">
-                Phone Number <span className="text-muted-foreground font-normal">(Optional)</span>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="phone">
+                Contact Phone <span className="text-[#302821]/40 font-normal">(Optional)</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+1 (212) 555-0198"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="password">
-                Password <span className="text-muted-foreground font-normal">(Min 6 chars)</span>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="password">
+                Password <span className="text-[#302821]/40 font-normal">(Minimum 6 characters)</span>
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                   required
                 />
               </div>
@@ -175,49 +171,49 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              variant="gradient"
-              className="w-full h-11 text-xs font-bold rounded-xl gap-2 shadow-md shadow-primary/25 mt-2"
+              variant="default"
+              className="w-full h-11 text-xs uppercase tracking-[0.2em] rounded-none bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E] mt-2"
               disabled={submitting || isLoading}
             >
               {submitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Creating Account...
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" /> CREATING PROFILE...
                 </>
               ) : (
                 <>
-                  Create Free Account <ArrowRight className="w-4 h-4" />
+                  CREATE PATRON PROFILE <ArrowRight className="w-3.5 h-3.5 ml-2" />
                 </>
               )}
             </Button>
           </form>
 
           {/* Footer note */}
-          <div className="text-center text-xs text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/sign-in" className="font-bold text-primary hover:underline">
+          <div className="text-center text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 pt-2 border-t border-[#302821]/10">
+            Already have a patron profile?{" "}
+            <Link href="/sign-in" className="font-semibold text-[#26372D] dark:text-[#B8755B] hover:underline">
               Sign In
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Right Column: Hero Visual */}
-      <div className="hidden lg:block lg:flex-1 relative bg-muted overflow-hidden">
+      {/* Right Column: Editorial Visual */}
+      <div className="hidden lg:block lg:flex-1 relative bg-[#EAE3D6] overflow-hidden border-l border-[#302821]/15">
         <SafeImage
           src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85"
-          alt="Spa Radiance"
+          alt="Spa Radiance Ritual"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-        <div className="absolute bottom-12 left-12 right-12 text-white space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold">
-            <Scissors className="w-3.5 h-3.5" /> Client Privileges
-          </div>
-          <h3 className="text-2xl font-black">
-            Seamless appointments, zero waiting lines.
+        <div className="absolute inset-0 bg-[#26372D]/40" />
+        <div className="absolute bottom-12 left-12 right-12 text-[#F5F1E8] space-y-3 p-6 bg-[#26372D]/90 backdrop-blur-sm border border-[#F5F1E8]/20">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#A4AA91] font-semibold block">
+            PATRON PRIVILEGES
+          </span>
+          <h3 className="font-serif text-2xl font-normal leading-snug">
+            Priority reservations, unhurried service, and curated botanical dossiers.
           </h3>
-          <p className="text-xs text-slate-300 leading-relaxed max-w-md">
-            Join thousands of satisfied patrons booking their beauty rituals effortlessly.
+          <p className="text-xs text-[#EAE3D6]/70">
+            Join the discerning community of SalonBook atelier patrons.
           </p>
         </div>
       </div>

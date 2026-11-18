@@ -3,7 +3,7 @@
 import React, { useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CheckCircle2, Calendar, ArrowRight, ShieldCheck, Sparkles, Receipt } from "lucide-react";
+import { CheckCircle2, ShieldCheck, ArrowRight, Receipt } from "lucide-react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
@@ -17,10 +17,10 @@ function PaymentSuccessContent() {
   useEffect(() => {
     try {
       confetti({
-        particleCount: 100,
-        spread: 80,
+        particleCount: 80,
+        spread: 70,
         origin: { y: 0.6 },
-        colors: ["#6366f1", "#8b5cf6", "#10b981", "#f43f5e"],
+        colors: ["#26372D", "#B8755B", "#343D2E", "#A4AA91"],
       });
     } catch {
       // ignore
@@ -35,43 +35,49 @@ function PaymentSuccessContent() {
   }, [appointmentId, sessionId, isMock]);
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center px-4 py-16">
-      <div className="max-w-md w-full bg-card rounded-2xl border border-border p-8 text-center space-y-6 shadow-xl relative overflow-hidden">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-600 mx-auto flex items-center justify-center border border-emerald-500/20">
-          <CheckCircle2 className="w-10 h-10" />
+    <div className="min-h-[75vh] flex items-center justify-center px-4 py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
+      <div className="max-w-md w-full bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 p-8 text-center space-y-6">
+        <div className="w-14 h-14 bg-[#26372D] text-[#F5F1E8] mx-auto flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8" />
         </div>
 
         <div className="space-y-2">
-          <span className="inline-flex items-center gap-1.5 text-xs uppercase font-extrabold tracking-wider text-emerald-600 bg-emerald-500/10 px-3.5 py-1 rounded-full border border-emerald-500/20">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Payment Verified
+          <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-[#B8755B] block">
+            SETTLEMENT VERIFIED
           </span>
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
-            Payment Successful!
+          <h1 className="font-serif text-3xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+            Payment Confirmed
           </h1>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Your transaction has been securely processed via Stripe. Your appointment is confirmed and your stylist is notified.
+          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 leading-relaxed">
+            Your transaction has been securely settled via Stripe. Your reservation is finalized and your master practitioner is notified.
           </p>
         </div>
 
         {sessionId && (
-          <div className="p-3 rounded-xl bg-secondary/50 border border-border text-left space-y-1">
-            <span className="text-[10px] uppercase font-bold text-muted-foreground">Stripe Session ID</span>
-            <p className="text-[11px] font-mono text-muted-foreground truncate">{sessionId}</p>
+          <div className="p-3 border border-[#302821]/15 bg-[#F5F1E8] text-left space-y-1">
+            <span className="text-[9px] uppercase tracking-wider text-[#302821]/60 font-semibold block">
+              Stripe Transaction ID
+            </span>
+            <p className="text-xs font-mono text-[#302821]/70 truncate">{sessionId}</p>
           </div>
         )}
 
-        <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+        <div className="pt-2 flex flex-col sm:flex-row gap-3">
           <Link href="/dashboard/appointments" className="flex-1">
-            <Button variant="gradient" className="w-full text-xs font-bold rounded-xl h-10 gap-1.5">
-              <Calendar className="w-4 h-4" />
-              <span>My Appointments</span>
+            <Button
+              variant="default"
+              className="w-full text-xs uppercase tracking-wider rounded-none h-11 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+            >
+              <span>MY DIARY</span>
             </Button>
           </Link>
           <Link href="/dashboard/transactions" className="flex-1">
-            <Button variant="outline" className="w-full text-xs font-bold rounded-xl h-10 gap-1.5">
-              <Receipt className="w-4 h-4" />
-              <span>View Invoice</span>
+            <Button
+              variant="outline"
+              className="w-full text-xs uppercase tracking-wider rounded-none h-11 border-[#302821]/20"
+            >
+              <Receipt className="w-3.5 h-3.5 mr-1" />
+              <span>RECEIPT</span>
             </Button>
           </Link>
         </div>
@@ -84,8 +90,8 @@ export default function PaymentSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-[75vh] flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        <div className="min-h-[75vh] flex items-center justify-center bg-[#F5F1E8]">
+          <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin" />
         </div>
       }
     >

@@ -1,170 +1,173 @@
 import React from "react";
 import Link from "next/link";
-import {
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Award,
-  Zap,
-  Heart,
-  Clock,
-  Scissors,
-} from "lucide-react";
+import { ArrowRight, ShieldCheck, Clock, Scissors, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function ExperiencePage() {
   const steps = [
     {
-      num: "01",
-      title: "In-Depth Consultation & Diagnostics",
-      desc: "Every appointment begins with a one-on-one session. We analyze your hair porosity, skin undertones, lifestyle demands, and styling goals before touching a product.",
-      image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
-      highlight: "Personalized Treatment Roadmap",
+      num: "I",
+      title: "Cranial Diagnostic & Bone Structure Mapping",
+      desc: "Every appointment begins with a diagnostic dialogue. We analyze your hair porosity, natural fall direction, face symmetry, and daily lifestyle before touching scissors or formulation.",
+      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
+      highlight: "BESPOKE ARCHITECTURAL BLUEPRINT",
     },
     {
-      num: "02",
-      title: "Aromatherapy & Tension Release",
-      desc: "Warm steam towels steeped in organic essential oils relax your shoulders and scalp. Complimentary specialty espresso, matcha, or organic herbal infusions are served.",
-      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
-      highlight: "Tranquil Studio Atmosphere",
+      num: "II",
+      title: "Botanical Aromatherapy & Acoustic Serenity",
+      desc: "Steamed linen towels infused with wild cedarwood, lavender, and eucalyptus soothe cranial tension in our acoustic washroom. Complimentary single-estate matcha or herbal infusions are prepared.",
+      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
+      highlight: "DECOMPRESSION SANCTUARY",
     },
     {
-      num: "03",
-      title: "Master Application & Artistry",
-      desc: "Our resident specialists apply proprietary formulas, multidimensional balayage foils, or clinical skin peels using precision techniques honed over a decade.",
-      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
-      highlight: "Uncompromising Master Focus",
+      num: "III",
+      title: "Master Scissor Architecture & Clean Actives",
+      desc: "Our resident artisans execute your tailored service with singular, unhurried focus. No junior apprentices, no station cycling. Hand-painted balayage and clean European formulations.",
+      image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
+      highlight: "UNCOMPROMISED ARTISAN DEDICATION",
     },
     {
-      num: "04",
-      title: "Signature Styling & Post-Care",
-      desc: "Walk out with a red-carpet-worthy blowout or glowing skin. You receive a customized at-home maintenance kit to keep your results fresh for weeks.",
-      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
-      highlight: "Sustained Radiance Routine",
+      num: "IV",
+      title: "Natural Diffuse Finish & Botanical Regimen",
+      desc: "Walk out with radiant hair that retains its architectural shape for months. You receive an at-home botanical maintenance dossier with organic micro-batch care recommendations.",
+      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85",
+      highlight: "SUSTAINED BIOLOGICAL RADIANCE",
     },
   ];
 
   return (
-    <div className="min-h-screen py-12 sm:py-20 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-16">
+    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-20">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>The Salon Experience</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground">
-            More Than An Appointment.{" "}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-              A Personal Ritual.
-            </span>
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
+            THE ATELIER PHILOSOPHY
+          </span>
+          <h1 className="font-serif text-4xl sm:text-6xl font-normal leading-tight text-[#302821] dark:text-[#F5F1E8]">
+            More Than an Appointment. An Unhurried Ritual.
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            We designed SalonBook to banish rushed haircuts and impersonal salon visits. Here is what your visit looks like.
+          <p className="text-xs sm:text-sm text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed max-w-xl mx-auto">
+            SalonBook was created to banish conveyor-belt salons. We cultivate quiet spaces where certified master practitioners devote their undivided artistry to your chair.
           </p>
         </div>
 
-        {/* Hero Visual */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div className="md:col-span-7 rounded-2xl overflow-hidden border border-border shadow-xl relative aspect-[16/10] bg-muted">
+        {/* Hero Visual & 3 Tenets */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-7 overflow-hidden border border-[#302821]/15 bg-[#EAE3D6] relative aspect-[4/3]">
             <SafeImage
               src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
-              alt="Salon Interior"
+              alt="Salon Interior Sanctuary"
               className="w-full h-full object-cover"
             />
+            <div className="absolute bottom-0 inset-x-0 p-4 bg-[#26372D]/90 text-[#F5F1E8] backdrop-blur-sm border-t border-[#F5F1E8]/20 flex items-center justify-between text-xs">
+              <span className="font-serif tracking-wide">Madison Avenue Atelier · Suite 4</span>
+              <span className="text-[9px] uppercase tracking-widest text-[#A4AA91]">Single-Chair Studio</span>
+            </div>
           </div>
 
           <div className="md:col-span-5 space-y-4">
-            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
-              <div className="flex items-center gap-2 text-primary font-bold text-sm">
-                <Scissors className="w-4 h-4" />
-                <span>Zero Double-Booking</span>
+            <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] space-y-2">
+              <div className="flex items-center gap-2 text-[#26372D] dark:text-[#A4AA91] font-semibold text-xs uppercase tracking-wider">
+                <Scissors className="w-3.5 h-3.5" />
+                <span>Zero Chair Overlapping</span>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                When you reserve a chair with SalonBook, that stylist is 100% dedicated to you. No rushed transitions or waiting between stations.
+              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
+                When you reserve an experience, your practitioner is 100% focused on you. No leaving you under a dryer to rush to another station.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Clean & Pure Formulas</span>
+            <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] space-y-2">
+              <div className="flex items-center gap-2 text-[#26372D] dark:text-[#A4AA91] font-semibold text-xs uppercase tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>100% Clean European Actives</span>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Every shampoo, glaze, facial masque, and oil used in our salons is free from sulfates, parabens, and micro-plastics.
+              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
+                Formulations free of synthetic parabens, petroleum sulfates, and artificial perfumes. Cold-pressed botanical extracts only.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
-              <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-sm">
-                <Zap className="w-4 h-4" />
-                <span>Seamless Technology</span>
+            <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] space-y-2">
+              <div className="flex items-center gap-2 text-[#26372D] dark:text-[#A4AA91] font-semibold text-xs uppercase tracking-wider">
+                <Clock className="w-3.5 h-3.5" />
+                <span>Honored Time Precision</span>
               </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Book in 30 seconds, reschedule with one tap, and pay effortlessly with Stripe once your service is confirmed.
+              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
+                Your appointment begins on time. Quiet checkout and seamless Stripe payment once services are concluded.
               </p>
             </div>
           </div>
         </div>
 
-        {/* 4 Steps */}
-        <div className="space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">
-              Your 4-Stage Studio Journey
+        {/* 4 Steps: Architectural Editorial Cards */}
+        <div className="space-y-10 pt-8 border-t border-[#302821]/15 dark:border-[#EAE3D6]/15">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
+              THE 4-PHASE JOURNEY
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+              From Diagnostic to Lasting Form
             </h2>
-            <p className="text-xs text-muted-foreground">
-              Predictable, pampering excellence from the moment you step through our doors.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {steps.map((step, idx) => (
               <div
                 key={idx}
-                className="bg-card rounded-2xl border border-border overflow-hidden p-6 space-y-4 shadow-sm hover:shadow-md transition-all"
+                className="bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 overflow-hidden flex flex-col justify-between"
               >
-                <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-muted">
-                  <SafeImage
-                    src={step.image}
-                    alt={step.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-lg bg-slate-900/90 text-white font-extrabold text-xs flex items-center justify-center">
-                    {step.num}
+                <div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] border-b border-[#302821]/15">
+                    <SafeImage
+                      src={step.image}
+                      alt={step.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-3 left-3 w-8 h-8 bg-[#26372D] text-[#F5F1E8] font-serif font-bold text-xs flex items-center justify-center">
+                      {step.num}
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
-                    {step.highlight}
-                  </span>
-                  <h3 className="text-base font-bold text-foreground">
-                    {step.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {step.desc}
-                  </p>
+                  <div className="p-6 space-y-2">
+                    <span className="text-[9px] uppercase tracking-[0.25em] text-[#B8755B] block font-semibold">
+                      {step.highlight}
+                    </span>
+                    <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pt-1">
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="text-center py-12 px-6 rounded-3xl bg-secondary/60 border border-border space-y-4 max-w-xl mx-auto">
-          <h3 className="text-xl font-bold text-foreground">
-            Ready to experience the difference?
+        {/* Concierge CTA */}
+        <div className="text-center py-14 px-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#26372D] text-[#F5F1E8] space-y-5 max-w-2xl mx-auto">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#A4AA91] font-semibold">
+            PRIVATE CHAIR RESERVATIONS
+          </span>
+          <h3 className="font-serif text-3xl font-normal text-[#F5F1E8]">
+            Experience Unhurried Restorative Beauty
           </h3>
-          <p className="text-xs text-muted-foreground">
-            Explore our curated menu and reserve your appointment with our master stylists.
+          <p className="text-xs text-[#EAE3D6]/75 leading-relaxed max-w-md mx-auto">
+            Reserve your consultation with our master practitioners. Availability is strictly curated.
           </p>
-          <Link href="/services">
-            <Button variant="gradient" size="lg" className="rounded-xl text-xs font-bold px-8">
-              Explore Services & Book
-            </Button>
-          </Link>
+          <div className="pt-2">
+            <Link href="/services">
+              <Button
+                variant="default"
+                size="lg"
+                className="rounded-none text-xs uppercase tracking-[0.2em] px-8 py-3.5 bg-[#B8755B] text-[#F5F1E8] hover:bg-[#a0624a]"
+              >
+                <span>EXPLORE CARTE &amp; RESERVE</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

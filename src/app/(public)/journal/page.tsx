@@ -1,141 +1,125 @@
 import React from "react";
 import Link from "next/link";
-import {
-  Sparkles,
-  Star,
-  Quote,
-  Clock,
-  ArrowRight,
-  BookOpen,
-  Award,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, Clock, Star } from "lucide-react";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function JournalPage() {
   const articles = [
     {
-      title: "The Ultimate Guide to French Balayage: Technique & Maintenance",
+      title: "The Architecture of French Balayage: Cranial Geometry & Lived-in Color",
       category: "Hair Artistry",
-      readTime: "4 min read",
+      readTime: "4 MIN READ",
       author: "Elena Vance (Master Colorist)",
-      date: "Nov 12, 2025",
-      image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+      date: "AUTUMN / WINTER 2025",
+      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
       excerpt:
-        "Learn why customized hand-painted highlights blend seamlessly with your natural regrowth and how botanical glossing extends vibrancy for up to 12 weeks.",
+        "Why bespoke hand-painted highlights must follow skull bone contours to blend organically as hair grows, eliminating harsh regrowth lines for up to 14 weeks.",
     },
     {
-      title: "Why Caviar & Microcurrent Are Replacing Invasive Facials",
-      category: "Skincare Science",
-      readTime: "5 min read",
+      title: "Biological Skin Restoration: Wild Elderberry & Cryo Sculpting",
+      category: "Dermo-Biology",
+      readTime: "5 MIN READ",
       author: "Sofia Rossi (Aesthetician)",
-      date: "Nov 05, 2025",
-      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80",
+      date: "AUTUMN / WINTER 2025",
+      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
       excerpt:
-        "Explore how wild caviar peptides stimulate collagen regeneration when combined with low-voltage electrical microcurrents for immediate facial contouring.",
+        "An exploration of cold sub-zero cryo therapy combined with cold-pressed botanical squalane to reduce inflammation and stimulate cellular collagen synthesis.",
     },
     {
-      title: "Russian Gel Manicures: Why The Precision Technique Lasts 4+ Weeks",
+      title: "Precision E-File Cuticle Therapy & Natural Apex Reinforcement",
       category: "Nail Health",
-      readTime: "3 min read",
+      readTime: "3 MIN READ",
       author: "Mia Lindqvist",
-      date: "Oct 28, 2025",
-      image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+      date: "AUTUMN / WINTER 2025",
+      image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85",
       excerpt:
-        "Discover the dry e-file methodology that cleanses the nail bed without cuticle tearing, allowing structural builder gel to adhere without lifting.",
+        "The anatomical science of dry diamond cuticle work that preserves the delicate eponychium while allowing organic builder gels to bond without lifting.",
     },
   ];
 
-  const testimonials = [
+  const citations = [
     {
       quote:
-        "The balayage service was hands down the best color transformation I have had in New York. Zero brassiness, and the blowout lasted four full days.",
-      author: "Sarah K.",
-      role: "Verified Patron",
-      service: "Signature Balayage",
-      rating: 5,
+        "The balayage by Elena is unmatched anywhere in Manhattan. Subtle, multidimensional, and my hair feels significantly healthier than before.",
+      author: "Clara Vandermeer",
+      title: "Architectural Designer · New York",
+      service: "Signature Balayage & Glaze",
     },
     {
       quote:
-        "Booking is so refreshingly fast compared to calling salons and leaving voicemails. The instant confirmation and Stripe checkout made it effortless.",
-      author: "Michael T.",
-      role: "Verified Patron",
-      service: "Executive Beard & Cut",
-      rating: 5,
+        "A quiet, civilized experience. No phone chatter, no blaring pop music, no waiting 40 minutes past your reservation. Just master-level craft.",
+      author: "Julian Mercer",
+      title: "Managing Director · Milan",
+      service: "Executive Beard & Precision Cut",
     },
     {
       quote:
-        "The deep tissue massage and cryo facial combination is pure rejuvenation. The studio environment is quiet, clean, and luxurious.",
-      author: "Jessica R.",
-      role: "Verified Patron",
-      service: "Deep Tissue & Facial",
-      rating: 5,
+        "The botanical facial cleared months of persistent dryness in one session. You can immediately feel the quality of their organic European formulas.",
+      author: "Genevieve H.",
+      title: "Editor · Paris",
+      service: "Botanical Recovery Facial",
     },
   ];
 
   return (
-    <div className="min-h-screen py-12 sm:py-20 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-16">
+    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-20">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>The Salon Journal</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground">
-            Beauty Chronicles & Expert Insights
+        <div className="text-center max-w-2xl mx-auto space-y-4">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
+            THE ATELIER JOURNAL
+          </span>
+          <h1 className="font-serif text-4xl sm:text-6xl font-normal leading-tight text-[#302821] dark:text-[#F5F1E8]">
+            Essays on Biology, Form &amp; Slow Aesthetics
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Professional hair care advice, skincare science, and patron transformations curated by our resident master stylists.
+          <p className="text-xs sm:text-sm text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed max-w-lg mx-auto">
+            Dispatches from our resident master artisans on cranial cutting techniques, botanical skin science, and restorative rituals.
           </p>
         </div>
 
         {/* Featured Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {articles.map((article, idx) => (
             <div
               key={idx}
-              className="bg-card rounded-2xl border border-border overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300"
+              className="bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 overflow-hidden flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                <div className="relative aspect-[16/11] overflow-hidden bg-[#EAE3D6] border-b border-[#302821]/15">
                   <SafeImage
                     src={article.image}
                     alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover grayscale-[10%]"
                   />
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-background/90 backdrop-blur-md text-foreground border border-border">
-                      {article.category}
-                    </span>
+                  <div className="absolute top-3 left-3 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
+                    {article.category}
                   </div>
                 </div>
 
-                <div className="p-5 space-y-2">
-                  <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                    <Clock className="w-3 h-3 text-primary" />
+                <div className="p-6 space-y-3">
+                  <div className="flex items-center gap-2 text-[10px] text-[#302821]/60 dark:text-[#EAE3D6]/60 uppercase tracking-widest">
                     <span>{article.readTime}</span>
                     <span>•</span>
                     <span>{article.date}</span>
                   </div>
 
-                  <h3 className="text-base font-bold text-foreground line-clamp-2">
+                  <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8] leading-snug">
                     {article.title}
                   </h3>
 
-                  <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
                     {article.excerpt}
                   </p>
                 </div>
               </div>
 
-              <div className="p-5 pt-0 border-t border-border/50 mt-3 flex items-center justify-between">
-                <span className="text-[11px] font-semibold text-muted-foreground">
-                  By {article.author}
+              <div className="p-6 pt-0 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 mt-3 flex items-center justify-between text-xs">
+                <span className="text-[10px] uppercase tracking-wider text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                  {article.author}
                 </span>
                 <Link href="/services">
-                  <span className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
-                    Book Service <ArrowRight className="w-3 h-3" />
+                  <span className="text-[11px] uppercase tracking-wider text-[#26372D] dark:text-[#B8755B] font-semibold hover:underline flex items-center gap-1">
+                    Reserve <ArrowRight className="w-3 h-3" />
                   </span>
                 </Link>
               </div>
@@ -144,45 +128,37 @@ export default function JournalPage() {
         </div>
 
         {/* Patron Reviews */}
-        <div className="space-y-6 pt-6">
-          <div className="text-center space-y-1">
-            <h2 className="text-2xl font-bold text-foreground">
-              What Our Patrons Say
+        <div className="space-y-8 pt-8 border-t border-[#302821]/15 dark:border-[#EAE3D6]/15">
+          <div className="text-center space-y-2">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
+              GUEST CITATIONS
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+              Words from Discerning Patrons
             </h2>
-            <p className="text-xs text-muted-foreground">
-              Real verified reviews from clients across Manhattan and beyond.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {citations.map((c, idx) => (
               <div
                 key={idx}
-                className="bg-card p-6 rounded-2xl border border-border shadow-sm space-y-4 flex flex-col justify-between"
+                className="bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="flex text-amber-500">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-500" />
+                  <div className="flex text-[#B8755B] gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-[#B8755B]" />
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed italic">
-                    &ldquo;{t.quote}&rdquo;
+                  <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-relaxed">
+                    &ldquo;{c.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-border flex items-center justify-between text-xs">
-                  <div>
-                    <span className="font-bold text-foreground block">
-                      {t.author}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      {t.service}
-                    </span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600">
-                    Verified
-                  </span>
+                <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 text-[10px] uppercase tracking-wider text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                  <p className="font-bold text-[#26372D] dark:text-[#F5F1E8]">{c.author}</p>
+                  <p>{c.title}</p>
+                  <p className="text-[#B8755B] pt-0.5">{c.service}</p>
                 </div>
               </div>
             ))}

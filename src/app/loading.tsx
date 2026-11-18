@@ -1,17 +1,11 @@
 import React from "react";
-import { Sparkles } from "lucide-react";
 
 export default function RootLoading() {
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4">
-      <div className="relative">
-        <div className="w-14 h-14 rounded-full border-2 border-gold-500/20 border-t-gold-500 animate-spin" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Sparkles className="w-5 h-5 text-gold-500 animate-pulse" />
-        </div>
-      </div>
-      <p className="font-serif text-sm tracking-widest uppercase text-muted-foreground animate-pulse">
-        L&apos;Étoile Atelier & Sanctuary
+    <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-4 bg-[#F5F1E8] dark:bg-[#151916]">
+      <div className="w-10 h-10 border-2 border-[#26372D] border-t-transparent animate-spin" />
+      <p className="font-serif text-sm tracking-[0.25em] uppercase text-[#302821]/70 animate-pulse">
+        SALONBOOK ATELIER
       </p>
     </div>
   );

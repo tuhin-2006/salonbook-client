@@ -9,17 +9,12 @@ import {
   XCircle,
   CreditCard,
   AlertCircle,
-  Sparkles,
-  ArrowRight,
-  Filter,
   Loader2,
-  ShieldCheck,
-  Scissors,
+  ArrowRight,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -127,70 +122,32 @@ export default function CustomerAppointmentsPage() {
     return app.status === activeTab;
   });
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "confirmed":
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 capitalize">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            Confirmed
-          </span>
-        );
-      case "cancelled":
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-destructive/10 text-destructive border border-destructive/20 capitalize">
-            <XCircle className="w-3.5 h-3.5" />
-            Cancelled
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 capitalize">
-            <Clock className="w-3.5 h-3.5" />
-            Pending
-          </span>
-        );
-    }
-  };
-
-  const getPaymentBadge = (paymentStatus?: string) => {
-    if (paymentStatus === "paid") {
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-600 text-white">
-          <CheckCircle2 className="w-3 h-3" /> Paid
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-secondary text-muted-foreground border border-border">
-        Unpaid
-      </span>
-    );
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header & Tab Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
-            My Appointments
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
+        <div className="space-y-1">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+            ATELIER DIARY
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+            My Reservations
           </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Manage your booked treatments, cancel pending requests, or pay with Stripe when confirmed.
+          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-lg leading-relaxed">
+            Review status of booked chairs. Pending requests can be cancelled; confirmed sessions unlock direct Stripe checkout.
           </p>
         </div>
 
         {/* Tab Filters */}
-        <div className="inline-flex items-center p-1 rounded-xl bg-card border border-border text-xs self-start sm:self-auto">
+        <div className="flex items-center gap-1 border border-[#302821]/15 bg-[#EAE3D6]/40 p-1 self-start sm:self-auto">
           {(["all", "pending", "confirmed", "cancelled"] as FilterTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-lg capitalize font-bold transition-all ${
+              className={`px-3.5 py-1.5 text-[10px] uppercase tracking-[0.16em] font-medium transition-all ${
                 activeTab === tab
-                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-[#26372D] text-[#F5F1E8]"
+                  : "text-[#302821]/70 dark:text-[#EAE3D6]/70 hover:text-[#302821]"
               }`}
             >
               {tab}
@@ -199,132 +156,157 @@ export default function CustomerAppointmentsPage() {
         </div>
       </div>
 
-      {/* Appointment Cards */}
+      {/* Appointments List */}
       {loading ? (
-        <div className="py-20 text-center space-y-3 bg-card rounded-2xl border border-border">
-          <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
-          <p className="text-xs text-muted-foreground font-semibold">
-            Loading your appointments...
+        <div className="py-24 text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin mx-auto" />
+          <p className="text-xs uppercase tracking-wider text-[#302821]/60">
+            Accessing Appointment Records...
           </p>
         </div>
       ) : filteredAppointments.length === 0 ? (
-        <div className="py-16 text-center space-y-3 bg-card rounded-2xl border border-dashed border-border p-8 max-w-md mx-auto">
-          <Scissors className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
-          <h3 className="text-base font-bold text-foreground">
-            No Appointments Found
+        <div className="py-20 border border-dashed border-[#302821]/20 bg-[#EAE3D6]/30 text-center space-y-4 max-w-md mx-auto p-8">
+          <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
+            No Reservations Found
           </h3>
-          <p className="text-xs text-muted-foreground">
-            {activeTab === "all"
-              ? "You haven't made any appointments yet."
-              : `You have no ${activeTab} appointments at this time.`}
+          <p className="text-xs text-[#302821]/70 leading-relaxed">
+            There are no {activeTab !== "all" ? activeTab : ""} appointments in your client ledger.
           </p>
           <Link href="/services">
-            <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl mt-2">
-              Browse Services
+            <Button
+              variant="default"
+              size="sm"
+              className="rounded-none text-xs uppercase tracking-wider bg-[#26372D] text-[#F5F1E8]"
+            >
+              Explore Carte
             </Button>
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredAppointments.map((app) => {
-            const service =
-              typeof app.serviceId === "object" ? app.serviceId : null;
-            const serviceTitle = service?.title || "Salon Service";
-            const serviceCategory = service?.category || "Beauty";
-            const serviceDuration = service?.durationMinutes || 60;
+            const serviceTitle =
+              typeof app.serviceId === "object"
+                ? (app.serviceId as { title?: string }).title || "Salon Treatment"
+                : "Salon Treatment";
 
-            const isPending = app.status === "pending";
-            const isConfirmed = app.status === "confirmed";
-            const isUnpaid = app.paymentStatus === "unpaid" || !app.paymentStatus;
-            const canPay = isConfirmed && isUnpaid;
-            const canCancel = isPending;
+            const canPay = app.status === "confirmed" && app.paymentStatus !== "paid";
+            const canCancel = app.status === "pending";
 
             return (
               <div
                 key={app._id}
-                className="bg-card rounded-2xl border border-border p-5 sm:p-6 shadow-sm hover:border-primary/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
+                className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-[#26372D] transition-colors"
               >
-                {/* Left: Info */}
-                <div className="space-y-2 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-secondary text-muted-foreground border border-border">
-                      {serviceCategory}
+                <div className="space-y-3 flex-1">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span
+                      className={`text-[9px] uppercase tracking-[0.2em] font-semibold px-2 py-0.5 border ${
+                        app.status === "confirmed"
+                          ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
+                          : app.status === "cancelled"
+                          ? "bg-red-500/10 text-red-700 border-red-500/30"
+                          : "bg-[#B8755B]/15 text-[#B8755B] border-[#B8755B]/30"
+                      }`}
+                    >
+                      {app.status}
                     </span>
-                    {getStatusBadge(app.status)}
-                    {getPaymentBadge(app.paymentStatus)}
+
+                    <span
+                      className={`text-[9px] uppercase tracking-[0.2em] font-semibold px-2 py-0.5 border ${
+                        app.paymentStatus === "paid"
+                          ? "bg-emerald-600/15 text-emerald-800 dark:text-emerald-400 border-emerald-600/30"
+                          : "bg-transparent text-[#302821]/60 border-[#302821]/20"
+                      }`}
+                    >
+                      {app.paymentStatus === "paid" ? "PAID VIA STRIPE" : "UNPAID"}
+                    </span>
+
+                    <span className="text-[10px] uppercase tracking-wider text-[#302821]/50">
+                      REF: {app._id.slice(-8)}
+                    </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-foreground">
+                  <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
                     {serviceTitle}
                   </h3>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1 font-semibold text-foreground">
-                      <Calendar className="w-3.5 h-3.5 text-primary" />
+                  <div className="flex flex-wrap items-center gap-5 text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                    <span className="flex items-center gap-1.5 font-medium text-[#302821] dark:text-[#F5F1E8]">
+                      <Calendar className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
                       {formatDate(app.appointmentDate || app.date || "")}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-primary" />
-                      {app.timeSlot} ({serviceDuration} mins)
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
+                      {app.timeSlot}
                     </span>
-                    <span>•</span>
-                    <span className="text-foreground font-black text-sm">
-                      {formatCurrency(app.price || app.servicePrice || service?.price || 0)}
-                    </span>
+                    {app.specialist && (
+                      <span>SPECIALIST: {app.specialist}</span>
+                    )}
                   </div>
 
-                  {app.specialist && (
-                    <p className="text-xs text-muted-foreground">
-                      Assigned Stylist:{" "}
-                      <span className="font-semibold text-foreground">
-                        {app.specialist}
-                      </span>
+                  {app.notes && (
+                    <p className="text-xs text-[#302821]/60 italic pt-1">
+                      Note: &ldquo;{app.notes}&rdquo;
                     </p>
                   )}
                 </div>
 
-                {/* Right: Actions */}
-                <div className="flex flex-wrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-border">
-                  {canPay && (
-                    <Button
-                      variant="gradient"
-                      size="sm"
-                      onClick={() => handlePayNow(app)}
-                      disabled={payingAppointmentId === app._id}
-                      className="gap-1.5 text-xs font-bold rounded-xl h-10 px-4"
-                    >
-                      {payingAppointmentId === app._id ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                          Connecting Stripe...
-                        </>
-                      ) : (
-                        <>
-                          <CreditCard className="w-3.5 h-3.5" />
-                          Pay with Stripe
-                        </>
-                      )}
-                    </Button>
-                  )}
-
-                  {canCancel && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleCancelClick(app)}
-                      className="text-xs font-bold rounded-xl h-10 px-4 text-destructive hover:bg-destructive/10 hover:border-destructive/30"
-                    >
-                      Cancel Request
-                    </Button>
-                  )}
-
-                  {!canPay && !canCancel && (
-                    <span className="text-xs text-muted-foreground italic">
-                      {app.status === "cancelled"
-                        ? "Reservation cancelled"
-                        : "Paid & scheduled"}
+                {/* Right Action Block */}
+                <div className="flex flex-col md:items-end justify-between gap-4 pt-4 md:pt-0 border-t md:border-t-0 border-[#302821]/10">
+                  <div className="md:text-right">
+                    <span className="text-[9px] uppercase tracking-wider text-[#302821]/60 block">
+                      TREATMENT FEE
                     </span>
-                  )}
+                    <span className="font-serif text-2xl font-medium text-[#26372D] dark:text-[#F5F1E8]">
+                      {formatCurrency(app.price || app.servicePrice || 0)}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Pay Now Button (Only on confirmed + unpaid) */}
+                    {canPay && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handlePayNow(app)}
+                        disabled={payingAppointmentId === app._id}
+                        className="rounded-none text-xs uppercase tracking-wider px-5 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+                      >
+                        {payingAppointmentId === app._id ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                            <span>STRIPE...</span>
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-3.5 h-3.5 mr-1.5" />
+                            <span>PAY VIA STRIPE</span>
+                          </>
+                        )}
+                      </Button>
+                    )}
+
+                    {/* Cancel Button (Only on pending) */}
+                    {canCancel && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCancelClick(app)}
+                        className="rounded-none text-xs uppercase tracking-wider border-red-300 text-red-700 hover:bg-red-50"
+                      >
+                        CANCEL REQUEST
+                      </Button>
+                    )}
+
+                    {/* Paid confirmation label */}
+                    {app.paymentStatus === "paid" && (
+                      <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Receipt Verified</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -334,54 +316,34 @@ export default function CustomerAppointmentsPage() {
 
       {/* Cancellation Confirmation Dialog */}
       <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
-        <DialogContent className="sm:max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold">
+        <DialogContent className="max-w-md bg-[#F5F1E8] border-[#302821]/20 p-6 rounded-none">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="font-serif text-2xl text-[#302821]">
               Cancel Appointment Request?
             </DialogTitle>
-            <DialogDescription className="text-xs leading-relaxed text-muted-foreground">
-              Are you sure you want to cancel your appointment? This action cannot be undone.
+            <DialogDescription className="text-xs text-[#302821]/70 leading-relaxed">
+              Are you sure you wish to cancel this pending appointment request? Once cancelled, this reservation slot will be released back to the atelier schedule.
             </DialogDescription>
           </DialogHeader>
 
-          {appointmentToCancel && (
-            <div className="p-4 rounded-xl bg-secondary/50 border border-border text-xs space-y-1">
-              <p className="font-bold text-foreground">
-                {typeof appointmentToCancel.serviceId === "object"
-                  ? (appointmentToCancel.serviceId as { title?: string }).title
-                  : "Salon Treatment"}
-              </p>
-              <p className="text-muted-foreground">
-                Date: {formatDate(appointmentToCancel.appointmentDate || appointmentToCancel.date || "")} at {appointmentToCancel.timeSlot}
-              </p>
-            </div>
-          )}
-
-          <DialogFooter className="gap-2 sm:gap-0 pt-2">
+          <DialogFooter className="pt-4 flex gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCancelModalOpen(false)}
+              className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
               disabled={cancelling}
-              className="rounded-xl text-xs"
             >
               Keep Booking
             </Button>
             <Button
-              variant="destructive"
+              variant="default"
               size="sm"
               onClick={confirmCancelAppointment}
+              className="rounded-none text-xs uppercase tracking-wider bg-red-700 text-white hover:bg-red-800"
               disabled={cancelling}
-              className="rounded-xl text-xs gap-1.5"
             >
-              {cancelling ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Cancelling...
-                </>
-              ) : (
-                "Yes, Cancel Appointment"
-              )}
+              {cancelling ? "Cancelling..." : "Confirm Cancellation"}
             </Button>
           </DialogFooter>
         </DialogContent>

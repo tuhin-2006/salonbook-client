@@ -6,19 +6,12 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Clock,
-  Sparkles,
   ShieldCheck,
-  CheckCircle2,
-  Calendar,
   Share2,
-  Heart,
-  Droplets,
-  Award,
+  Calendar,
   Check,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { BookingModal } from "@/components/booking/BookingModal";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { Service, ApiResponse } from "@/types";
@@ -44,20 +37,20 @@ export default function ServiceDetailsPage() {
         const res = await api.get<ApiResponse<Service>>(`/services/${serviceId}`);
         setService(res.data.data);
       } catch (err) {
-        console.warn("Could not fetch service from API, using fallback details:", err);
+        console.warn("Using fallback service dossier:", err);
         setService({
           _id: serviceId,
           title: "Signature Balayage & Silk Glaze",
           slug: "signature-balayage-silk-glaze",
           category: "Hair",
           description:
-            "A hand-painted custom French balayage tailored to your unique complexion and bone structure. Finished with a luminous silk shine glaze and luxury botanical blowout that preserves hair integrity while imparting sublime dimension.",
-          price: 185,
+            "A hand-painted custom French balayage tailored to your cranial bone structure and natural growth fall. Finished with a luminous silk shine glaze and botanical blowout that preserves hair fiber integrity while imparting sublime, multidimensional depth.",
+          price: 195,
           durationMinutes: 120,
           images: [
-            "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85",
           ],
           isActive: true,
           specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
@@ -75,17 +68,17 @@ export default function ServiceDetailsPage() {
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Service link copied to clipboard!");
+      toast.success("Treatment dossier URL copied to clipboard.");
     }
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen py-24 flex items-center justify-center">
+      <div className="min-h-screen py-24 flex items-center justify-center bg-[#F5F1E8] dark:bg-[#151916]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-          <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">
-            Loading Service Details...
+          <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin" />
+          <p className="text-xs uppercase tracking-[0.2em] text-[#302821]/70">
+            Accessing Treatment Dossier...
           </p>
         </div>
       </div>
@@ -94,67 +87,69 @@ export default function ServiceDetailsPage() {
 
   if (!service) {
     return (
-      <div className="min-h-screen py-24 text-center container mx-auto px-4 max-w-md">
-        <h2 className="text-2xl font-bold">Service Not Found</h2>
-        <p className="text-muted-foreground text-sm mt-2 mb-6">
-          The requested service could not be located in our active catalog.
+      <div className="min-h-screen py-24 text-center container mx-auto px-4 max-w-md bg-[#F5F1E8] dark:bg-[#151916]">
+        <h2 className="font-serif text-3xl text-[#302821] dark:text-[#F5F1E8]">Treatment Not Located</h2>
+        <p className="text-[#302821]/70 text-xs mt-2 mb-6">
+          The requested formulation could not be located in the current atelier carte.
         </p>
         <Link href="/services">
-          <Button variant="default" className="rounded-xl">Return to Catalog</Button>
+          <Button variant="default" className="rounded-none text-xs uppercase tracking-wider bg-[#26372D] text-[#F5F1E8]">
+            Return to Carte
+          </Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-10 sm:py-16 bg-background">
+    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Navigation Back & Share */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 hover:text-[#26372D] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 text-primary" /> Back to Services
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>RETURN TO CARTE</span>
           </button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleShare}
-            className="gap-2 text-xs font-bold rounded-xl"
+            className="gap-2 text-[10px] tracking-[0.2em] uppercase rounded-none border-[#302821]/20 hover:bg-[#EAE3D6]/50"
           >
-            <Share2 className="w-3.5 h-3.5 text-primary" /> Share Service
+            <Share2 className="w-3 h-3 text-[#26372D]" />
+            <span>SHARE DOSSIER</span>
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Left Column: Visual Gallery & Description */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="space-y-3">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-border shadow-lg bg-muted relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Column: Visual Gallery & Clinical Protocol */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4">
+              <div className="aspect-[4/3] overflow-hidden border border-[#302821]/15 bg-[#EAE3D6] relative">
                 <SafeImage
                   src={service.images[activeImageIndex] || service.images[0]}
                   alt={service.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 rounded-lg text-xs font-bold bg-background/90 backdrop-blur-md text-foreground border border-border">
-                    {service.category}
-                  </span>
+                <div className="absolute top-4 left-4 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
+                  {service.category}
                 </div>
               </div>
 
               {/* Thumbnail Selector */}
               {service.images.length > 1 && (
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-3">
                   {service.images.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveImageIndex(idx)}
-                      className={`w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
+                      className={`w-20 h-20 overflow-hidden border transition-all ${
                         activeImageIndex === idx
-                          ? "border-primary shadow-md scale-105"
-                          : "border-transparent opacity-60 hover:opacity-100"
+                          ? "border-[#26372D] ring-1 ring-[#26372D]"
+                          : "border-[#302821]/20 opacity-60 hover:opacity-100"
                       }`}
                     >
                       <SafeImage
@@ -168,116 +163,109 @@ export default function ServiceDetailsPage() {
               )}
             </div>
 
-            {/* Protocol Steps */}
-            <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
-              <h3 className="text-lg font-bold text-foreground">
-                Treatment Experience
+            {/* Protocol Steps: Editorial Roman Numerals */}
+            <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-8 space-y-6">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+                LE PROTOCOLE DE SOIN
+              </span>
+              <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
+                The Three-Phase Treatment Journey
               </h3>
 
-              <div className="space-y-4 divide-y divide-border">
-                <div className="pt-2 first:pt-0 flex items-start gap-3.5">
-                  <span className="w-7 h-7 rounded-lg bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0">
-                    1
-                  </span>
-                  <div>
-                    <h4 className="font-bold text-sm text-foreground">
-                      Initial Consultation & Diagnostic
+              <div className="space-y-6 divide-y divide-[#302821]/10 dark:divide-[#EAE3D6]/10">
+                <div className="pt-4 first:pt-0 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">I.</span>
+                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
+                      Cranial Diagnostic &amp; Texture Mapping
                     </h4>
-                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                      Detailed consultation assessing your hair or skin porosity, undertone alignment, and specific styling goals.
-                    </p>
                   </div>
+                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
+                    Microscopic assessment of scalp barrier lipid balance, hair strand tensile strength, and facial symmetry mapping to establish bespoke geometric parameters.
+                  </p>
                 </div>
 
-                <div className="pt-4 flex items-start gap-3.5">
-                  <span className="w-7 h-7 rounded-lg bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0">
-                    2
-                  </span>
-                  <div>
-                    <h4 className="font-bold text-sm text-foreground">
-                      Bespoke Application & Processing
+                <div className="pt-6 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">II.</span>
+                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
+                      Cold-Pressed Botanical Formulation &amp; Infusion
                     </h4>
-                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                      Custom treatment application using clean, organic botanical formulas tailored specifically to your needs.
-                    </p>
                   </div>
+                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
+                    Hand-crafted blending of clean organic actives, silk amino acids, and pure plant lipids applied with intentional unhurried technique in our quiet washing sanctuary.
+                  </p>
                 </div>
 
-                <div className="pt-4 flex items-start gap-3.5">
-                  <span className="w-7 h-7 rounded-lg bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0">
-                    3
-                  </span>
-                  <div>
-                    <h4 className="font-bold text-sm text-foreground">
-                      Finishing Styling & Care Regimen
+                <div className="pt-6 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">III.</span>
+                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
+                      Precision Structural Finish &amp; Regimen Dossier
                     </h4>
-                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                      Professional signature blowout and a customized home maintenance routine designed by your stylist.
-                    </p>
                   </div>
+                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
+                    Unhurried structural drying, tailored thermal shaping, and the preparation of your personalized home maintenance formula guidelines.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Reservation Sidebar */}
+          {/* Right Column: Reservation Dossier Sidebar */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="sticky top-24 rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xl space-y-6">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary">
-                    {service.category} Service
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Verified Available
-                  </span>
-                </div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+            <div className="sticky top-28 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-8 space-y-6">
+              <div className="space-y-3">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+                  APPOINTMENT DOSSIER
+                </span>
+                <h1 className="font-serif text-3xl font-normal text-[#302821] dark:text-[#F5F1E8] leading-tight">
                   {service.title}
                 </h1>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
                   {service.description}
                 </p>
               </div>
 
-              {/* Price & Duration */}
-              <div className="p-4 rounded-xl bg-secondary/50 border border-border flex items-center justify-between">
+              {/* Price & Duration Box */}
+              <div className="p-5 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#F5F1E8] dark:bg-[#151916] flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Total Investment
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
+                    TOTAL INVESTMENT
                   </span>
-                  <div className="text-3xl font-black text-foreground">
+                  <div className="font-serif text-3xl font-medium text-[#26372D] dark:text-[#F5F1E8]">
                     {formatCurrency(service.price)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    Estimated Time
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
+                    DURATION
                   </span>
-                  <div className="text-sm font-bold text-foreground flex items-center gap-1.5 justify-end">
-                    <Clock className="w-4 h-4 text-primary" /> {service.durationMinutes} mins
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[#302821] dark:text-[#F5F1E8] flex items-center gap-1.5 justify-end mt-1">
+                    <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
+                    <span>{service.durationMinutes} MIN</span>
                   </div>
                 </div>
               </div>
 
               {/* Assigned Specialists */}
-              <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-foreground">
-                  Resident Specialists
+              <div className="space-y-3">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold">
+                  RESIDENT MASTER PRACTITIONERS
                 </span>
                 <div className="space-y-2">
                   {(service.specialists || ["Elena Vance (Master Colorist)", "Chloe Moreau"]).map((spec, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between p-2.5 rounded-xl border border-border bg-background text-xs"
+                      className="flex items-center justify-between p-3 border border-[#302821]/15 bg-[#F5F1E8] dark:bg-[#151916] text-xs"
                     >
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs">
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 bg-[#26372D] text-[#F5F1E8] font-serif font-bold text-xs flex items-center justify-center">
                           {spec[0]}
                         </div>
-                        <span className="font-semibold text-foreground">{spec}</span>
+                        <span className="font-medium text-[#302821] dark:text-[#F5F1E8]">{spec}</span>
                       </div>
-                      <span className="text-amber-500 font-bold text-[11px]">★ 5.0</span>
+                      <span className="text-[10px] uppercase tracking-wider text-[#B8755B]">Master</span>
                     </div>
                   ))}
                 </div>
@@ -286,28 +274,28 @@ export default function ServiceDetailsPage() {
               {/* Action Button */}
               <div className="space-y-3 pt-2">
                 <Button
-                  variant="gradient"
+                  variant="default"
                   size="lg"
                   onClick={() => setIsModalOpen(true)}
-                  className="w-full gap-2 text-sm font-bold rounded-xl h-12 shadow-md shadow-primary/25"
+                  className="w-full h-12 rounded-none text-xs uppercase tracking-[0.2em] bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
                 >
-                  <Calendar className="w-4 h-4" />
-                  <span>Reserve Appointment</span>
+                  <Calendar className="w-3.5 h-3.5 mr-2" />
+                  <span>RESERVE TREATMENT</span>
                 </Button>
-                <p className="text-[11px] text-center text-muted-foreground">
-                  Free cancellation up to 24 hours prior. Pay safely with Stripe.
+                <p className="text-[10px] text-center text-[#302821]/60 dark:text-[#EAE3D6]/60 uppercase tracking-wider">
+                  Unhurried chair reservation · Complimentary cancellation up to 24 hours prior.
                 </p>
               </div>
 
-              {/* Guarantee Badges */}
-              <div className="pt-4 border-t border-border space-y-2 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>100% Satisfaction Guarantee</span>
+              {/* Guarantees */}
+              <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 space-y-2 text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-[#26372D] dark:text-[#A4AA91] shrink-0" />
+                  <span>Single-guest dedicated chair duration</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-violet-500 shrink-0" />
-                  <span>Instant Booking Confirmation</span>
+                <div className="flex items-center gap-2.5">
+                  <Check className="w-4 h-4 text-[#26372D] dark:text-[#A4AA91] shrink-0" />
+                  <span>100% Certified organic &amp; cruelty-free formulations</span>
                 </div>
               </div>
             </div>

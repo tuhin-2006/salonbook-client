@@ -4,67 +4,67 @@
 
 @layer base {
   :root {
-    /* Modern Neo-Sleek Studio — Crisp Ice Canvas & Electric Indigo */
-    --background: 220 20% 98%; /* #F8FAFC */
-    --foreground: 222 47% 11%; /* #0F172A */
+    /* Luxury Editorial Atelier — Solid Warm Ivory & Forest Green */
+    --background: 40 33% 94%; /* #F5F1E8 Warm Ivory */
+    --foreground: 142 19% 18%; /* #26372D Forest Green */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 40 28% 97%; /* #FAF8F5 */
+    --card-foreground: 142 19% 18%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 40 33% 94%;
+    --popover-foreground: 142 19% 18%;
 
-    --primary: 246 80% 60%; /* #6366F1 Electric Indigo */
-    --primary-foreground: 0 0% 100%;
+    --primary: 142 19% 18%; /* #26372D Deep Forest */
+    --primary-foreground: 40 33% 94%; /* #F5F1E8 Ivory */
 
-    --secondary: 220 14% 96%; /* #F1F5F9 */
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 38 25% 88%; /* #EAE3D6 Soft Parchment */
+    --secondary-foreground: 142 19% 18%;
 
-    --muted: 220 14% 94%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 38 20% 86%;
+    --muted-foreground: 85 13% 40%; /* #5F6656 */
 
-    --accent: 262 83% 58%; /* #8B5CF6 Vibrant Violet */
-    --accent-foreground: 0 0% 100%;
+    --accent: 17 38% 54%; /* #B8755B Terracotta */
+    --accent-foreground: 40 33% 94%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 90%;
-    --input: 220 13% 90%;
-    --ring: 246 80% 60%;
+    --border: 27 18% 75%; /* subtle espresso-tinted hairline border */
+    --input: 27 18% 75%;
+    --ring: 142 19% 18%;
 
-    --radius: 0.85rem;
+    --radius: 0.125rem; /* Architectural sharp edges */
   }
 
   .dark {
-    /* Midnight Obsidian & Luminous Ultraviolet */
-    --background: 224 71% 4%; /* #070A11 */
-    --foreground: 210 40% 98%; /* #F8FAFC */
+    /* Evening Atelier — Deep Espresso & Warm Parchment */
+    --background: 27 18% 12%; /* #1C1713 Deep Espresso Noir */
+    --foreground: 40 33% 94%; /* #F5F1E8 Warm Ivory */
 
-    --card: 222 47% 8%; /* #0B1120 */
-    --card-foreground: 210 40% 98%;
+    --card: 27 16% 16%;
+    --card-foreground: 40 33% 94%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 27 16% 16%;
+    --popover-foreground: 40 33% 94%;
 
-    --primary: 246 80% 64%; /* #6366F1 */
-    --primary-foreground: 0 0% 100%;
+    --primary: 40 33% 94%;
+    --primary-foreground: 27 18% 12%;
 
-    --secondary: 217 33% 13%; /* #151E2E */
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 27 14% 20%;
+    --secondary-foreground: 40 33% 94%;
 
-    --muted: 217 33% 13%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 27 14% 22%;
+    --muted-foreground: 40 15% 70%;
 
-    --accent: 262 83% 65%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 17 38% 54%;
+    --accent-foreground: 40 33% 94%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 217 33% 15%;
-    --input: 217 33% 15%;
-    --ring: 246 80% 64%;
+    --border: 27 15% 26%;
+    --input: 27 15% 26%;
+    --ring: 40 33% 94%;
   }
 }
 
@@ -74,59 +74,42 @@
   }
   html {
     scroll-behavior: smooth;
+    background-color: #F5F1E8;
   }
   body {
-    @apply bg-background text-foreground antialiased font-sans;
+    @apply bg-[#F5F1E8] text-[#26372D] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   ::selection {
-    background-color: rgba(99, 102, 241, 0.25);
-    color: #4f46e5;
-  }
-  .dark ::selection {
-    background-color: rgba(139, 92, 246, 0.35);
-    color: #c4b5fd;
+    background-color: #26372D;
+    color: #F5F1E8;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans font-bold tracking-tight text-foreground;
+    font-family: var(--font-serif), Georgia, serif;
+    letter-spacing: -0.015em;
   }
 }
 
-/* Custom modern sleek scrollbar */
+/* Custom architectural scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #F5F1E8;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 9999px;
+  background: #A4AA91;
+  border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.5);
+  background: #343D2E;
 }
 
-/* Smooth glass effect helper */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-.dark .glass-panel {
-  background: rgba(11, 17, 32, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(30, 41, 59, 0.7);
-}
-
-/* Shimmer animation */
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
+/* Editorial line rule */
+.editorial-line {
+  height: 1px;
+  background-color: rgba(48, 40, 33, 0.15);
 }

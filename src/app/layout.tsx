@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
@@ -8,9 +8,10 @@ import { Navbar } from "@/components/shared/Navbar";
 import { Footer } from "@/components/shared/Footer";
 import { Toaster } from "sonner";
 
-const serifFont = Playfair_Display({
+const serifFont = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-serif",
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -21,9 +22,9 @@ const sansFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SalonBook — Luxury Haute Wellness & Salon Booking",
+  title: "SALONBOOK — Luxury Beauty & Wellness Atelier",
   description:
-    "An editorial beauty & wellness booking SaaS platform offering bespoke hair styling, luxury skin radiance treatments, and master spa therapies.",
+    "An architectural beauty & wellness sanctuary. Bespoke precision hair artistry, clinical botanical facials, and restorative body rituals.",
 };
 
 export default function RootLayout({
@@ -33,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${serifFont.variable} ${sansFont.variable}`}>
-      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className="min-h-screen flex flex-col bg-[#F5F1E8] text-[#26372D] font-sans antialiased selection:bg-[#343D2E] selection:text-[#F5F1E8]">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <QueryProvider>
             <AuthProvider>
               <Navbar />
@@ -45,7 +46,7 @@ export default function RootLayout({
                 toastOptions={{
                   duration: 4000,
                   className:
-                    "bg-card text-card-foreground border-border shadow-xl font-sans",
+                    "bg-[#EAE3D6] text-[#26372D] border border-[#302821]/20 font-sans text-xs",
                 }}
               />
             </AuthProvider>

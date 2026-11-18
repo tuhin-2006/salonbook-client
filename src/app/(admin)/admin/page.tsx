@@ -10,14 +10,10 @@ import {
   CheckCircle2,
   DollarSign,
   TrendingUp,
-  Sparkles,
   ArrowUpRight,
-  ShieldCheck,
-  CreditCard,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -44,7 +40,7 @@ interface AnalyticsData {
   monthlyRevenue: Array<{ month: string; revenue: number; bookings: number }>;
 }
 
-const PIE_COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#14b8a6", "#3b82f6", "#f59e0b"];
+const PIE_COLORS = ["#26372D", "#B8755B", "#343D2E", "#A4AA91", "#302821", "#7E856E"];
 
 export default function AdminOverviewPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -75,202 +71,187 @@ export default function AdminOverviewPage() {
 
   const statCards = [
     {
-      label: "Total Registered Patrons",
+      label: "REGISTERED PATRONS",
       value: data?.summary.totalUsers || 0,
       icon: Users,
-      color: "text-blue-600 dark:text-blue-400",
-      bg: "bg-blue-500/10",
       href: "/admin/customers",
     },
     {
-      label: "Active Services",
+      label: "ACTIVE CARTE OFFERINGS",
       value: data?.summary.totalServices || 0,
       icon: Scissors,
-      color: "text-violet-600 dark:text-violet-400",
-      bg: "bg-violet-500/10",
       href: "/admin/services",
     },
     {
-      label: "Total Reservations",
+      label: "TOTAL CHAIR BOOKINGS",
       value: data?.summary.totalAppointments || 0,
       icon: Calendar,
-      color: "text-indigo-600 dark:text-indigo-400",
-      bg: "bg-indigo-500/10",
       href: "/admin/appointments",
     },
     {
-      label: "Pending Inquiries",
+      label: "PENDING CONSULTATIONS",
       value: pendingCount,
       icon: Clock,
-      color: "text-amber-600 dark:text-amber-400",
-      bg: "bg-amber-500/10",
       href: "/admin/appointments?status=pending",
     },
     {
-      label: "Confirmed Visits",
+      label: "CONFIRMED SESSIONS",
       value: confirmedCount,
       icon: CheckCircle2,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bg: "bg-emerald-500/10",
       href: "/admin/appointments?status=confirmed",
     },
     {
-      label: "Stripe Revenue",
+      label: "STRIPE GROSS REVENUE",
       value: formatCurrency(data?.summary.totalRevenue || 0),
       icon: DollarSign,
-      color: "text-pink-600 dark:text-pink-400",
-      bg: "bg-pink-500/10",
       href: "/admin/transactions",
     },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Salon Operations</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-            Executive Telemetry & Metrics
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
+        <div className="space-y-1">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+            ATELIER TELEMETRY
+          </span>
+          <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+            Direction &amp; Operations Suite
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Real-time management across salon catalog, client appointments, and Stripe revenue.
+          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-xl leading-relaxed">
+            Real-time governance across treatment carte offerings, reservation diary approvals, and verified Stripe financial settlements.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           <Link href="/admin/services">
-            <Button variant="gradient" size="sm" className="gap-2 rounded-xl text-xs font-bold">
-              <Scissors className="w-3.5 h-3.5" />
-              <span>Manage Services</span>
+            <Button
+              variant="default"
+              size="sm"
+              className="rounded-none text-xs uppercase tracking-wider px-5 py-2.5 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+            >
+              <Scissors className="w-3.5 h-3.5 mr-2" />
+              <span>MANAGE CARTE</span>
             </Button>
           </Link>
         </div>
       </div>
 
       {/* 6 Key Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
             <Link key={i} href={card.href}>
-              <Card className="p-5 bg-card border-border hover:border-primary/50 hover:shadow-lg transition-all rounded-2xl group">
+              <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] hover:border-[#26372D] transition-colors group flex flex-col justify-between min-h-[140px]">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#302821]/60 dark:text-[#EAE3D6]/60">
                     {card.label}
                   </span>
-                  <div
-                    className={`w-10 h-10 rounded-xl ${card.bg} ${card.color} flex items-center justify-center group-hover:scale-105 transition-transform`}
-                  >
-                    <Icon className="w-5 h-5" />
+                  <div className="w-8 h-8 bg-[#26372D] text-[#F5F1E8] flex items-center justify-center">
+                    <Icon className="w-4 h-4" />
                   </div>
                 </div>
+
                 <div className="mt-4 flex items-baseline justify-between">
-                  <h3 className="text-2xl font-black text-foreground">
+                  <h3 className="font-serif text-3xl text-[#26372D] dark:text-[#F5F1E8]">
                     {loading ? "..." : card.value}
                   </h3>
-                  <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 font-bold">
-                    View <ArrowUpRight className="w-3.5 h-3.5" />
+                  <span className="text-[10px] uppercase tracking-wider text-[#302821]/60 group-hover:text-[#26372D] flex items-center gap-0.5">
+                    DETAILS <ArrowUpRight className="w-3 h-3" />
                   </span>
                 </div>
-              </Card>
+              </div>
             </Link>
           );
         })}
       </div>
 
       {/* Analytics Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Revenue Trend Area Chart */}
-        <div className="lg:col-span-2 bg-card rounded-2xl border border-border p-6 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
+        <div className="lg:col-span-2 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#302821]/10 pb-4">
             <div>
-              <h3 className="text-base font-bold text-foreground">
-                Revenue & Appointment Growth
+              <span className="text-[9px] uppercase tracking-[0.2em] text-[#B8755B] font-semibold block">
+                MONTHLY REVENUE
+              </span>
+              <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
+                Stripe Settlement Trajectory
               </h3>
-              <p className="text-xs text-muted-foreground">
-                Monthly verified Stripe payment collections.
-              </p>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-bold">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>+18.4% MoM</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#26372D] text-[#F5F1E8]">
+              <TrendingUp className="w-3 h-3" />
+              <span>Verified Webhook</span>
             </div>
           </div>
 
           <div className="h-64 w-full pt-4">
             {loading ? (
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+              <div className="h-full flex items-center justify-center text-xs text-[#302821]/60">
                 Loading revenue telemetry...
               </div>
             ) : data?.monthlyRevenue && data.monthlyRevenue.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data.monthlyRevenue}>
-                  <defs>
-                    <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
-                    </linearGradient>
-                  </defs>
                   <XAxis
                     dataKey="month"
-                    stroke="#94a3b8"
-                    fontSize={11}
+                    stroke="#7E856E"
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                   />
                   <YAxis
-                    stroke="#94a3b8"
-                    fontSize={11}
+                    stroke="#7E856E"
+                    fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(val) => `$${val}`}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(15, 23, 42, 0.95)",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(99, 102, 241, 0.3)",
-                      fontSize: "12px",
-                      color: "#fff",
+                      backgroundColor: "#F5F1E8",
+                      borderRadius: "0px",
+                      border: "1px solid #302821",
+                      fontSize: "11px",
+                      color: "#302821",
+                      textTransform: "uppercase",
                     }}
                     formatter={(val: unknown) => [formatCurrency(Number(val)), "Revenue"]}
                   />
                   <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#6366f1"
-                    strokeWidth={2.5}
-                    fillOpacity={1}
-                    fill="url(#revenueGrad)"
+                    stroke="#26372D"
+                    strokeWidth={2}
+                    fill="#343D2E"
+                    fillOpacity={0.2}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-                No revenue records available yet.
+              <div className="h-full flex items-center justify-center text-xs text-[#302821]/60">
+                No revenue records recorded in this billing cycle.
               </div>
             )}
           </div>
         </div>
 
         {/* Category Distribution Pie Chart */}
-        <div className="bg-card rounded-2xl border border-border p-6 space-y-4 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="text-base font-bold text-foreground">
-              Services by Category
+        <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 space-y-4 flex flex-col justify-between">
+          <div className="border-b border-[#302821]/10 pb-4">
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#B8755B] font-semibold block">
+              CARTE DISTRIBUTION
+            </span>
+            <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
+              Formulations by Specialty
             </h3>
-            <p className="text-xs text-muted-foreground">
-              Catalog breakdown across salon specialties.
-            </p>
           </div>
 
           <div className="h-56 w-full flex items-center justify-center">
             {loading ? (
-              <span className="text-xs text-muted-foreground">Analyzing offerings...</span>
+              <span className="text-xs text-[#302821]/60">Analyzing offerings...</span>
             ) : data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -280,9 +261,9 @@ export default function AdminOverviewPage() {
                     nameKey="_id"
                     cx="50%"
                     cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={3}
+                    innerRadius={45}
+                    outerRadius={75}
+                    paddingAngle={2}
                   >
                     {data.categoryDistribution.map((entry, index) => (
                       <Cell
@@ -293,25 +274,25 @@ export default function AdminOverviewPage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "rgba(15, 23, 42, 0.95)",
-                      borderRadius: "12px",
-                      border: "1px solid rgba(99, 102, 241, 0.3)",
-                      fontSize: "12px",
-                      color: "#fff",
+                      backgroundColor: "#F5F1E8",
+                      borderRadius: "0px",
+                      border: "1px solid #302821",
+                      fontSize: "11px",
+                      color: "#302821",
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <span className="text-xs text-muted-foreground">No categories defined yet</span>
+              <span className="text-xs text-[#302821]/60">No categories indexed</span>
             )}
           </div>
 
-          <div className="pt-2 border-t border-border flex flex-wrap items-center justify-center gap-3 text-[11px] text-muted-foreground">
+          <div className="pt-2 border-t border-[#302821]/10 flex flex-wrap items-center justify-center gap-3 text-[10px] uppercase tracking-wider text-[#302821]/70">
             {data?.categoryDistribution.slice(0, 4).map((cat, i) => (
-              <div key={i} className="flex items-center gap-1.5 font-medium">
+              <div key={i} className="flex items-center gap-1.5">
                 <span
-                  className="w-2.5 h-2.5 rounded-full"
+                  className="w-2 h-2"
                   style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
                 />
                 <span>{cat._id} ({cat.count})</span>

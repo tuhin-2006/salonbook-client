@@ -4,33 +4,35 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap text-xs uppercase tracking-[0.18em] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/95 hover:shadow-lg hover:shadow-primary/30",
+          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E] active:bg-[#1f2d24]",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-[#8c2e2e] text-[#F5F1E8] hover:bg-[#732424]",
         outline:
-          "border border-border/80 bg-background/80 backdrop-blur-sm shadow-sm hover:bg-accent/10 hover:border-primary/50 hover:text-foreground",
+          "border border-[#302821]/30 bg-transparent text-[#26372D] hover:bg-[#26372D] hover:text-[#F5F1E8]",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent/10 hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        gradient:
-          "bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:opacity-95 hover:scale-[1.01]",
+          "bg-[#EAE3D6] text-[#26372D] hover:bg-[#ded5c5]",
+        ghost:
+          "text-[#26372D] hover:bg-[#EAE3D6]/60",
+        link:
+          "text-[#26372D] underline underline-offset-8 hover:text-[#B8755B] tracking-wider normal-case font-normal",
+        terracotta:
+          "bg-[#B8755B] text-[#F5F1E8] hover:bg-[#a3644d]",
+        olive:
+          "bg-[#343D2E] text-[#F5F1E8] hover:bg-[#26372D]",
         luxury:
-          "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md shadow-indigo-500/20 hover:shadow-lg hover:from-violet-700 hover:to-indigo-700",
-        gold:
-          "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md hover:from-amber-600 hover:to-amber-700",
-        soft:
-          "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20",
+          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]",
+        gradient:
+          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]",
       },
       size: {
-        default: "h-10 px-5 py-2",
-        sm: "h-8 rounded-lg px-3 text-xs",
-        lg: "h-12 rounded-xl px-7 text-sm font-bold tracking-wide",
+        default: "h-11 px-6 py-2.5",
+        sm: "h-9 px-4 text-[11px]",
+        lg: "h-12 px-8 text-xs font-semibold tracking-[0.2em]",
         icon: "h-10 w-10",
       },
     },

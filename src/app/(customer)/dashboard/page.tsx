@@ -5,17 +5,12 @@ import Link from "next/link";
 import {
   Calendar,
   Clock,
-  CheckCircle2,
-  AlertCircle,
   ArrowRight,
-  Sparkles,
+  ShieldCheck,
   CreditCard,
-  Scissors,
-  Check,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
@@ -46,60 +41,60 @@ export default function CustomerDashboardOverview() {
   const totalAppointments = appointments.length;
   const pendingAppointments = appointments.filter((a) => a.status === "pending").length;
   const confirmedAppointments = appointments.filter((a) => a.status === "confirmed").length;
-  const nextAppointment = appointments.find((a) => a.status === "confirmed" || a.status === "pending");
+  const nextAppointment = appointments.find(
+    (a) => a.status === "confirmed" || a.status === "pending"
+  );
   const recentAppointments = appointments.slice(0, 5);
 
   return (
-    <div className="space-y-8">
-      {/* 1. Client Digital Pass & Next Upcoming Session */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* Digital Membership Pass */}
-        <div className="lg:col-span-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 p-6 sm:p-7 text-white border border-indigo-500/30 shadow-xl relative overflow-hidden flex flex-col justify-between min-h-[220px]">
-          <div className="absolute top-0 right-0 w-44 h-44 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
-                <Scissors className="w-4 h-4" />
-              </div>
-              <span className="font-extrabold text-lg tracking-tight text-white">
-                SalonBook
+    <div className="space-y-10">
+      {/* 1. Patron Certificate & Next Scheduled Session */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Editorial Patron Certificate — Warm Parchment & Deep Forest */}
+        <div className="lg:col-span-5 border border-[#302821]/20 dark:border-[#EAE3D6]/20 bg-[#EAE3D6] dark:bg-[#1a201c] p-7 text-[#302821] dark:text-[#F5F1E8] flex flex-col justify-between min-h-[220px]">
+          <div className="flex items-center justify-between border-b border-[#302821]/15 pb-4">
+            <div>
+              <span className="font-serif text-xl tracking-[0.2em] uppercase font-normal text-[#26372D] dark:text-[#F5F1E8] block">
+                SALONBOOK
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.25em] text-[#302821]/60 dark:text-[#EAE3D6]/60">
+                Atelier de Haute Beauté
               </span>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-violet-500/20 text-violet-300 border border-violet-500/40">
-              Verified Patron
+            <span className="px-2.5 py-1 text-[9px] uppercase tracking-[0.2em] font-semibold bg-[#26372D] text-[#F5F1E8]">
+              VERIFIED PATRON
             </span>
           </div>
 
-          <div className="space-y-1 relative z-10 py-5">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-              Patron Name
+          <div className="py-5 space-y-1">
+            <span className="text-[9px] uppercase tracking-[0.25em] text-[#302821]/60 dark:text-[#EAE3D6]/60 block font-semibold">
+              PATRON CERTIFICATE
             </span>
-            <h3 className="text-2xl font-black tracking-tight text-white">
-              {user?.name || "Valued Guest"}
+            <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
+              {user?.name || "Valued Patron"}
             </h3>
-            <p className="text-xs text-slate-400">{user?.email}</p>
+            <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">{user?.email}</p>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3 relative z-10">
-            <span>Membership: Standard</span>
-            <span className="text-indigo-300 font-bold">Madison Flagship</span>
+          <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 border-t border-[#302821]/15 pt-4">
+            <span>MEMBERSHIP: PRIVATE ATELIER</span>
+            <span className="text-[#B8755B]">FLAGSHIP SUITE 4</span>
           </div>
         </div>
 
         {/* Next Scheduled Appointment Spotlight */}
-        <div className="lg:col-span-7 rounded-2xl bg-card border border-border p-6 sm:p-7 shadow-sm flex flex-col justify-between">
-          <div className="space-y-3">
+        <div className="lg:col-span-7 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-7 flex flex-col justify-between">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" /> Next Scheduled Visit
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#B8755B] font-semibold flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#B8755B]" /> NEXT SCHEDULED TREATMENT
               </span>
               {nextAppointment && (
                 <span
-                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                  className={`px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-semibold border ${
                     nextAppointment.status === "confirmed"
-                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                      : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                      ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
+                      : "bg-[#B8755B]/15 text-[#B8755B] border-[#B8755B]/30"
                   }`}
                 >
                   {nextAppointment.status}
@@ -109,202 +104,189 @@ export default function CustomerDashboardOverview() {
 
             {loading ? (
               <div className="py-6 flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-                <span className="text-xs text-muted-foreground">Checking next booking...</span>
+                <div className="w-5 h-5 border-2 border-[#26372D] border-t-transparent animate-spin" />
+                <span className="text-xs text-[#302821]/60">Checking atelier schedule...</span>
               </div>
             ) : nextAppointment ? (
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">
+                <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
                   {typeof nextAppointment.serviceId === "object"
                     ? (nextAppointment.serviceId as { title?: string }).title || "Salon Treatment"
                     : "Salon Treatment"}
                 </h3>
-                <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1 font-semibold text-foreground">
-                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                <div className="flex flex-wrap items-center gap-5 text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 pt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
                     {formatDate(nextAppointment.appointmentDate || nextAppointment.date || "")}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-primary" />
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
                     {nextAppointment.timeSlot}
                   </span>
                   <span>•</span>
-                  <span className="font-bold text-foreground">
+                  <span className="font-medium text-[#26372D] dark:text-[#F5F1E8]">
                     {formatCurrency(nextAppointment.price || nextAppointment.servicePrice || 0)}
                   </span>
                 </div>
               </div>
             ) : (
               <div className="py-4 space-y-1">
-                <h3 className="text-base font-bold text-foreground">
-                  No Upcoming Appointments
+                <h3 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
+                  No Upcoming Reservations
                 </h3>
-                <p className="text-xs text-muted-foreground">
-                  You do not have any pending or confirmed bookings at the moment.
+                <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                  You do not have any pending or confirmed appointments in the atelier diary.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="pt-4 border-t border-border flex items-center justify-between mt-4">
+          <div className="pt-6 border-t border-[#302821]/10 flex items-center justify-between">
             <Link
               href="/dashboard/appointments"
-              className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1"
+              className="text-xs uppercase tracking-wider text-[#26372D] dark:text-[#B8755B] font-semibold hover:underline flex items-center gap-1"
             >
-              View All Appointments <ArrowRight className="w-3.5 h-3.5" />
+              Review All Reservations <ArrowRight className="w-3 h-3" />
             </Link>
-
-            {nextAppointment?.status === "confirmed" && nextAppointment?.paymentStatus === "unpaid" ? (
-              <Link href="/dashboard/appointments">
-                <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl gap-1.5">
-                  <CreditCard className="w-3.5 h-3.5" />
-                  Pay with Stripe
-                </Button>
-              </Link>
-            ) : (
-              <Link href="/services">
-                <Button variant="outline" size="sm" className="text-xs font-bold rounded-xl gap-1.5">
-                  <Scissors className="w-3.5 h-3.5" />
-                  Browse Menu
-                </Button>
-              </Link>
-            )}
+            <Link href="/services">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-none text-[10px] uppercase tracking-wider border-[#302821]/20"
+              >
+                Reserve Treatment
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* 2. Key Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-              Total Bookings
-            </span>
-            <div className="text-2xl font-black text-foreground">
-              {loading ? "..." : totalAppointments}
-            </div>
+      {/* 2. Key Metrics Grid: Architectural Hairline Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] space-y-2">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 font-semibold block">
+            TOTAL RESERVATIONS
+          </span>
+          <div className="font-serif text-3xl text-[#26372D] dark:text-[#F5F1E8]">
+            {totalAppointments}
           </div>
-          <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
-            <Calendar className="w-5 h-5" />
-          </div>
-        </Card>
+          <p className="text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60">
+            Recorded in your client ledger
+          </p>
+        </div>
 
-        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-              Pending Requests
-            </span>
-            <div className="text-2xl font-black text-foreground">
-              {loading ? "..." : pendingAppointments}
-            </div>
+        <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] space-y-2">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 font-semibold block">
+            CONFIRMED SESSIONS
+          </span>
+          <div className="font-serif text-3xl text-[#26372D] dark:text-[#F5F1E8]">
+            {confirmedAppointments}
           </div>
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
-            <Clock className="w-5 h-5" />
-          </div>
-        </Card>
+          <p className="text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60">
+            Active chairs locked on schedule
+          </p>
+        </div>
 
-        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-              Confirmed Visits
-            </span>
-            <div className="text-2xl font-black text-foreground">
-              {loading ? "..." : confirmedAppointments}
-            </div>
+        <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] space-y-2">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 font-semibold block">
+            PENDING REQUESTS
+          </span>
+          <div className="font-serif text-3xl text-[#B8755B]">
+            {pendingAppointments}
           </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
-            <CheckCircle2 className="w-5 h-5" />
+          <p className="text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60">
+            Awaiting master review
+          </p>
+        </div>
+
+        <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] space-y-2">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 font-semibold block">
+            STRIPE SSL GATEWAY
+          </span>
+          <div className="font-serif text-3xl text-[#26372D] dark:text-[#F5F1E8] flex items-center gap-2">
+            <ShieldCheck className="w-7 h-7 text-[#26372D] dark:text-[#A4AA91]" />
+            <span>Active</span>
           </div>
-        </Card>
+          <p className="text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60">
+            Direct card encryption
+          </p>
+        </div>
       </div>
 
-      {/* 3. Recent Bookings Table */}
-      <div className="bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+      {/* 3. Recent Reservations Table */}
+      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-foreground">
-              Recent Activity
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#B8755B] font-semibold block">
+              DIARY ACTIVITY
+            </span>
+            <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
+              Recent Atelier Bookings
             </h3>
-            <p className="text-xs text-muted-foreground">
-              Your latest salon appointments and service statuses.
-            </p>
           </div>
           <Link href="/dashboard/appointments">
-            <Button variant="ghost" size="sm" className="text-xs font-bold text-primary">
-              View All
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-none text-[10px] uppercase tracking-wider border-[#302821]/20"
+            >
+              View Full Diary
             </Button>
           </Link>
         </div>
 
-        {loading ? (
-          <div className="py-8 text-center text-xs text-muted-foreground">
-            Loading recent visits...
-          </div>
-        ) : recentAppointments.length === 0 ? (
-          <div className="py-10 text-center space-y-2">
-            <Scissors className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
-            <p className="text-xs text-muted-foreground">
-              No bookings yet. Ready for your first appointment?
-            </p>
-            <Link href="/services">
-              <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl mt-2">
-                Explore Services
-              </Button>
-            </Link>
+        {recentAppointments.length === 0 ? (
+          <div className="py-12 text-center text-xs text-[#302821]/60">
+            No booking records found in your profile history.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border text-muted-foreground font-bold uppercase tracking-wider text-[10px]">
-                  <th className="pb-3 pr-4">Service</th>
-                  <th className="pb-3 px-4">Date & Time</th>
-                  <th className="pb-3 px-4">Price</th>
+                <tr className="border-b border-[#302821]/15 text-[#302821]/60 font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="pb-3 pr-4">Treatment</th>
+                  <th className="pb-3 px-4">Date</th>
+                  <th className="pb-3 px-4">Slot</th>
+                  <th className="pb-3 px-4">Fee</th>
                   <th className="pb-3 px-4">Status</th>
-                  <th className="pb-3 pl-4 text-right">Action</th>
+                  <th className="pb-3 pl-4 text-right">Payment</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
-                {recentAppointments.map((app) => {
-                  const serviceTitle =
-                    typeof app.serviceId === "object"
-                      ? (app.serviceId as { title?: string }).title || "Salon Service"
-                      : "Salon Service";
-
-                  return (
-                    <tr key={app._id} className="hover:bg-secondary/40 transition-colors">
-                      <td className="py-3.5 pr-4 font-bold text-foreground">
-                        {serviceTitle}
-                      </td>
-                      <td className="py-3.5 px-4 text-muted-foreground">
-                        {formatDate(app.appointmentDate || app.date || "")} at {app.timeSlot}
-                      </td>
-                      <td className="py-3.5 px-4 font-semibold text-foreground">
-                        {formatCurrency(app.price || app.servicePrice || 0)}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            app.status === "confirmed"
-                              ? "bg-emerald-500/10 text-emerald-600"
-                              : app.status === "pending"
-                              ? "bg-amber-500/10 text-amber-600"
-                              : "bg-slate-500/10 text-slate-600"
-                          }`}
-                        >
-                          {app.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 pl-4 text-right">
-                        <Link href="/dashboard/appointments">
-                          <Button variant="ghost" size="sm" className="text-xs font-bold h-7 px-2 text-primary">
-                            Details
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
+              <tbody className="divide-y divide-[#302821]/10">
+                {recentAppointments.map((app) => (
+                  <tr key={app._id} className="hover:bg-[#EAE3D6]/60 transition-colors">
+                    <td className="py-3.5 pr-4 font-medium text-[#302821] dark:text-[#F5F1E8]">
+                      {typeof app.serviceId === "object"
+                        ? (app.serviceId as { title?: string }).title || "Salon Treatment"
+                        : "Salon Treatment"}
+                    </td>
+                    <td className="py-3.5 px-4 text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                      {formatDate(app.appointmentDate || app.date || "")}
+                    </td>
+                    <td className="py-3.5 px-4 text-[#302821]/70 dark:text-[#EAE3D6]/70">
+                      {app.timeSlot}
+                    </td>
+                    <td className="py-3.5 px-4 font-serif text-[#26372D] dark:text-[#F5F1E8]">
+                      {formatCurrency(app.price || app.servicePrice || 0)}
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 border border-[#302821]/20">
+                        {app.status}
+                      </span>
+                    </td>
+                    <td className="py-3.5 pl-4 text-right">
+                      <span
+                        className={`text-[10px] uppercase tracking-wider px-2 py-0.5 ${
+                          app.paymentStatus === "paid"
+                            ? "bg-[#26372D] text-[#F5F1E8]"
+                            : "bg-[#EAE3D6] text-[#302821] border border-[#302821]/20"
+                        }`}
+                      >
+                        {app.paymentStatus || "Unpaid"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

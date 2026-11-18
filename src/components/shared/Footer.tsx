@@ -1,160 +1,157 @@
 import React from "react";
 import Link from "next/link";
-import { Scissors, ShieldCheck, HeartHandshake, Award, ArrowUpRight, Sparkles, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowUpRight, MapPin, Phone, Mail } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="border-t border-border bg-card text-foreground transition-colors">
-      {/* Modern Newsletter Section */}
-      <div className="border-b border-border py-12 px-4 sm:px-6 lg:px-8 bg-secondary/30">
-        <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center lg:text-left max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">
-              Stay in the Loop
+    <footer className="bg-[#26372D] text-[#F5F1E8] border-t border-[#302821]/20">
+      {/* Editorial Gazette Dispatch Bar */}
+      <div className="border-b border-[#F5F1E8]/10 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div className="max-w-xl space-y-2">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#A4AA91]">
+              The Seasonal Dispatch
             </span>
-            <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">
-              Get Exclusive Offers & Hair Care Tips
+            <h3 className="font-serif text-2xl sm:text-3xl font-normal tracking-wide text-[#F5F1E8]">
+              Essays on Slow Restoration, Formulation &amp; Hair Architecture
             </h3>
-            <p className="text-xs text-muted-foreground">
-              Subscribe to receive weekly styling advice, seasonal treatment discounts, and VIP event access.
+            <p className="text-xs text-[#EAE3D6]/70 leading-relaxed">
+              Curated notes delivered fortnightly. Formulations, seasonal rituals, and private appointment priority.
             </p>
           </div>
 
-          <div className="w-full max-w-md flex flex-col sm:flex-row gap-2">
+          <div className="w-full max-w-md flex flex-col sm:flex-row gap-0 border border-[#F5F1E8]/20 bg-[#343D2E]/50">
             <input
               type="email"
-              placeholder="Enter your email address"
-              className="px-4 py-2.5 rounded-xl bg-background border border-border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 flex-1"
+              placeholder="Your email address"
+              className="px-4 py-3 bg-transparent text-xs text-[#F5F1E8] placeholder:text-[#A4AA91] focus:outline-none flex-1 border-b sm:border-b-0 sm:border-r border-[#F5F1E8]/20"
             />
-            <button className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 whitespace-nowrap">
-              Subscribe
+            <button className="px-6 py-3 bg-[#B8755B] text-[#F5F1E8] text-[11px] uppercase tracking-[0.2em] font-medium hover:bg-[#a0624a] transition-colors whitespace-nowrap">
+              SUBSCRIBE
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Footer Directory */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand Info */}
-          <div className="lg:col-span-2 space-y-3">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-                <Scissors className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-xl font-black tracking-tight text-foreground">
-                SalonBook
+      {/* Main Editorial Directory */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+          {/* Brand Manifesto Column */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex flex-col">
+              <span className="font-serif text-3xl tracking-[0.25em] font-normal text-[#F5F1E8]">
+                SALONBOOK
               </span>
-            </Link>
-            <p className="text-muted-foreground text-xs leading-relaxed max-w-sm">
-              The premier online booking platform for high-end salons, independent stylists, and luxury spa therapies. Effortless scheduling and secure Stripe checkout.
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#A4AA91] mt-1">
+                Atelier de Haute Beauté
+              </span>
+            </div>
+            <p className="text-[#EAE3D6]/75 text-xs leading-relaxed max-w-sm">
+              An architectural beauty atelier dedicated to restorative hair artistry, botanical skin therapy, and quiet ritual. Grounded in craft, intentionality, and biological care.
             </p>
-            <div className="flex items-center gap-2 pt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-primary/10 text-primary border border-primary/20">
-                <Award className="w-3.5 h-3.5" />
-                #1 Rated Salon SaaS 2025
-              </span>
+            <div className="pt-2 text-[11px] text-[#A4AA91] tracking-wider uppercase">
+              Member · Fédération de la Beauté &amp; de l&apos;Élégance
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Treatments Navigation */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground mb-3">
-              Explore
+            <h4 className="text-[10px] uppercase tracking-[0.25em] text-[#A4AA91] mb-4">
+              Treatments
             </h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
+            <ul className="space-y-2.5 text-xs text-[#EAE3D6]/80">
               <li>
-                <Link href="/services" className="hover:text-primary transition-colors">
-                  All Services
+                <Link href="/services?category=Hair" className="hover:text-[#F5F1E8] transition-colors">
+                  Architectural Haircut &amp; Styling
                 </Link>
               </li>
               <li>
-                <Link href="/services?category=Hair" className="hover:text-primary transition-colors">
-                  Hair Styling & Color
+                <Link href="/services?category=Color" className="hover:text-[#F5F1E8] transition-colors">
+                  Organic Balayage &amp; Tint
                 </Link>
               </li>
               <li>
-                <Link href="/services?category=Facial%20%26%20Skin" className="hover:text-primary transition-colors">
-                  Facials & Skincare
+                <Link href="/services?category=Facial%20%26%20Skin" className="hover:text-[#F5F1E8] transition-colors">
+                  Botanical Facial Therapy
                 </Link>
               </li>
               <li>
-                <Link href="/services?category=Massage" className="hover:text-primary transition-colors">
-                  Therapeutic Massage
+                <Link href="/services?category=Massage" className="hover:text-[#F5F1E8] transition-colors">
+                  Basalt Stone &amp; Herbal Massage
                 </Link>
               </li>
               <li>
-                <Link href="/experience" className="hover:text-primary transition-colors">
-                  The Studio Experience
+                <Link href="/services" className="hover:text-[#F5F1E8] transition-colors inline-flex items-center gap-1">
+                  Complete Carte <ArrowUpRight className="w-3 h-3 text-[#A4AA91]" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* The Atelier Navigation */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground mb-3">
-              Company
+            <h4 className="text-[10px] uppercase tracking-[0.25em] text-[#A4AA91] mb-4">
+              The Atelier
             </h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
+            <ul className="space-y-2.5 text-xs text-[#EAE3D6]/80">
               <li>
-                <Link href="/experience" className="hover:text-primary transition-colors">
-                  About Us
+                <Link href="/experience" className="hover:text-[#F5F1E8] transition-colors">
+                  Philosophy &amp; Space
                 </Link>
               </li>
               <li>
-                <Link href="/journal" className="hover:text-primary transition-colors">
-                  Beauty Journal
+                <Link href="/journal" className="hover:text-[#F5F1E8] transition-colors">
+                  The Atelier Journal
                 </Link>
               </li>
               <li>
-                <Link href="/sign-in" className="hover:text-primary transition-colors">
-                  Client Sign In
+                <Link href="/sign-in" className="hover:text-[#F5F1E8] transition-colors">
+                  Guest Consultation Access
                 </Link>
               </li>
               <li>
-                <Link href="/sign-up" className="hover:text-primary transition-colors">
-                  Create Account
+                <Link href="/sign-up" className="hover:text-[#F5F1E8] transition-colors">
+                  Create Private Profile
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-primary transition-colors">
-                  Admin Portal
+                <Link href="/admin" className="hover:text-[#F5F1E8] transition-colors">
+                  Staff &amp; Master Artist Portal
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground mb-3">
+          {/* Flagship Locations */}
+          <div className="space-y-3">
+            <h4 className="text-[10px] uppercase tracking-[0.25em] text-[#A4AA91] mb-4">
               Flagship Studio
             </h4>
-            <p className="text-xs text-muted-foreground flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-primary" />
-              450 Madison Avenue, New York, NY
+            <p className="text-xs text-[#EAE3D6]/80 flex items-start gap-2 leading-relaxed">
+              <MapPin className="w-3.5 h-3.5 text-[#B8755B] mt-0.5 shrink-0" />
+              <span>450 Madison Avenue, 4th Floor<br />New York, NY 10022</span>
             </p>
-            <p className="text-xs text-muted-foreground flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 text-primary" />
-              +1 (212) 555-0198
+            <p className="text-xs text-[#EAE3D6]/80 flex items-center gap-2">
+              <Phone className="w-3.5 h-3.5 text-[#B8755B] shrink-0" />
+              <span>+1 (212) 555-0198</span>
             </p>
-            <p className="text-xs text-muted-foreground flex items-center gap-2">
-              <Mail className="w-3.5 h-3.5 text-primary" />
-              concierge@salonbook.com
+            <p className="text-xs text-[#EAE3D6]/80 flex items-center gap-2">
+              <Mail className="w-3.5 h-3.5 text-[#B8755B] shrink-0" />
+              <span>concierge@salonbook.com</span>
             </p>
-            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold pt-1">
-              Open 7 Days · 9:00 AM – 8:00 PM
-            </p>
+            <div className="pt-2 text-[10px] uppercase tracking-[0.2em] text-[#A4AA91]">
+              Daily · 09:00 — 20:00 EST
+            </div>
           </div>
         </div>
 
-        {/* Bottom Strip */}
-        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} SalonBook Inc. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <span className="hover:text-foreground cursor-pointer transition-colors">Privacy Policy</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Terms of Service</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Security</span>
+        {/* Bottom hairline & legal */}
+        <div className="mt-14 pt-8 border-t border-[#F5F1E8]/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-[#A4AA91]">
+          <p>© 2025 SALONBOOK ATELIER. ALL RIGHTS RESERVED.</p>
+          <div className="flex gap-6 uppercase tracking-[0.16em] text-[10px]">
+            <span>TERMS OF SERVICE</span>
+            <span>PRIVACY DISCLOSURE</span>
+            <span>HYGIENE STANDARDS</span>
           </div>
         </div>
       </div>

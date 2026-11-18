@@ -4,16 +4,13 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  Sparkles,
   Mail,
   Lock,
   ArrowRight,
   ShieldCheck,
   User,
-  CheckCircle2,
   AlertCircle,
   Loader2,
-  Scissors,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +49,7 @@ export default function SignInPage() {
     try {
       setSubmitting(true);
       await login(email, password);
-      toast.success("Welcome back to SalonBook!");
+      toast.success("Welcome back to SalonBook Atelier.");
     } catch (err: unknown) {
       setFormError((err as Error).message || "Invalid authentication credentials.");
     } finally {
@@ -65,7 +62,7 @@ export default function SignInPage() {
     try {
       setSubmitting(true);
       await quickDemoLogin(role);
-      toast.success(`Logged in as ${role.toUpperCase()}`);
+      toast.success(`Access granted as ${role.toUpperCase()}`);
     } catch (err: unknown) {
       setFormError((err as Error).message || "Demo login failed");
     } finally {
@@ -74,63 +71,58 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-background">
+    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
       {/* Left Form Container */}
-      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24 relative overflow-hidden">
-        <div className="mx-auto w-full max-w-md space-y-6">
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-md space-y-8">
           {/* Header */}
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Client & Admin Portal</span>
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-              Sign In to SalonBook
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
+              ATELIER ACCESS
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+              Sign In to Your Dossier
             </h1>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Access your appointment bookings, Stripe receipts, and stylist messaging.
+            <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 leading-relaxed">
+              Access your appointments, biological care formulations, and concierge receipts.
             </p>
           </div>
 
           {/* Quick Evaluator Demo Fill Box */}
-          <div className="p-4 rounded-2xl bg-card border border-border shadow-sm space-y-3">
-            <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-wider">
-              <span className="flex items-center gap-1.5 text-primary">
-                <Sparkles className="w-3.5 h-3.5" /> Evaluator 1-Click Access
-              </span>
-              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                Instant Fill
-              </span>
+          <div className="p-5 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] space-y-3">
+            <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 font-semibold">
+              <span>EVALUATOR 1-CLICK ACCESS</span>
+              <span className="text-[#B8755B]">INSTANT CREDENTIALS</span>
             </div>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="w-full text-xs justify-center gap-1.5 rounded-xl h-10 font-bold hover:border-primary/50"
+                className="w-full text-[10px] uppercase tracking-[0.16em] rounded-none border-[#302821]/20 hover:bg-[#26372D] hover:text-[#F5F1E8] h-10"
                 onClick={() => handleDemoFill("customer")}
                 disabled={submitting || isLoading}
               >
-                <User className="w-3.5 h-3.5 text-primary" />
-                Customer Demo
+                <User className="w-3.5 h-3.5 mr-1.5" />
+                PATRON DEMO
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="w-full text-xs justify-center gap-1.5 rounded-xl h-10 font-bold hover:border-primary/50"
+                className="w-full text-[10px] uppercase tracking-[0.16em] rounded-none border-[#302821]/20 hover:bg-[#26372D] hover:text-[#F5F1E8] h-10"
                 onClick={() => handleDemoFill("admin")}
                 disabled={submitting || isLoading}
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-                Admin Demo
+                <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
+                ADMIN DEMO
               </Button>
             </div>
           </div>
 
           {/* Error Banner */}
           {formError && (
-            <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
+            <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-400 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
@@ -139,36 +131,36 @@ export default function SignInPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="email">
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="email">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="admin@salonbook.com or customer@salonbook.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="password">
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold" htmlFor="password">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
+                  className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                   required
                 />
               </div>
@@ -176,49 +168,49 @@ export default function SignInPage() {
 
             <Button
               type="submit"
-              variant="gradient"
-              className="w-full h-11 text-xs font-bold rounded-xl gap-2 shadow-md shadow-primary/25"
+              variant="default"
+              className="w-full h-11 text-xs uppercase tracking-[0.2em] rounded-none bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
               disabled={submitting || isLoading}
             >
               {submitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Signing In...
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" /> ACCESSING DOSSIER...
                 </>
               ) : (
                 <>
-                  Sign In to Account <ArrowRight className="w-4 h-4" />
+                  SIGN IN TO ATELIER <ArrowRight className="w-3.5 h-3.5 ml-2" />
                 </>
               )}
             </Button>
           </form>
 
           {/* Footer note */}
-          <div className="text-center text-xs text-muted-foreground">
-            Don&apos;t have an account yet?{" "}
-            <Link href="/sign-up" className="font-bold text-primary hover:underline">
-              Create an account
+          <div className="text-center text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 pt-2 border-t border-[#302821]/10">
+            First time at SalonBook?{" "}
+            <Link href="/sign-up" className="font-semibold text-[#26372D] dark:text-[#B8755B] hover:underline">
+              Create a patron profile
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Right Column: Hero Visual */}
-      <div className="hidden lg:block lg:flex-1 relative bg-muted overflow-hidden">
+      {/* Right Column: Editorial Visual */}
+      <div className="hidden lg:block lg:flex-1 relative bg-[#EAE3D6] overflow-hidden border-l border-[#302821]/15">
         <SafeImage
-          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85"
-          alt="Salon Experience"
+          src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
+          alt="European Atelier Sanctuary"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-        <div className="absolute bottom-12 left-12 right-12 text-white space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold">
-            <Scissors className="w-3.5 h-3.5" /> SalonBook Experience
-          </div>
-          <h3 className="text-2xl font-black">
-            The standard for modern salon & wellness reservations.
+        <div className="absolute inset-0 bg-[#26372D]/40" />
+        <div className="absolute bottom-12 left-12 right-12 text-[#F5F1E8] space-y-3 p-6 bg-[#26372D]/90 backdrop-blur-sm border border-[#F5F1E8]/20">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#A4AA91] font-semibold block">
+            SALONBOOK ARCHIVE
+          </span>
+          <h3 className="font-serif text-2xl font-normal leading-snug">
+            &ldquo;Hair is personal architecture. Treat it with unhurried craft.&rdquo;
           </h3>
-          <p className="text-xs text-slate-300 leading-relaxed max-w-md">
-            Join thousands of satisfied patrons booking their beauty rituals effortlessly.
+          <p className="text-xs text-[#EAE3D6]/70">
+            Madison Avenue Atelier · New York Flagship
           </p>
         </div>
       </div>
