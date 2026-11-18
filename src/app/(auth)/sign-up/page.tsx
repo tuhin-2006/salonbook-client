@@ -12,7 +12,6 @@ import {
   AlertCircle,
   Loader2,
   Star,
-  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -73,7 +72,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-[#FAF7F2] text-[#231C1E]">
+    <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
       {/* Left Form Container */}
       <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-md space-y-7">
@@ -82,17 +81,17 @@ export default function SignUpPage() {
             <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold block">
               NEW CLIENT REGISTRATION
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#231C1E]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">
               Create Your Account
             </h1>
-            <p className="text-xs sm:text-sm text-[#231C1E]/75 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
               Reserve hair styling, restorative skin rituals, and barbershop services with real-time slot confirmation.
             </p>
           </div>
 
           {/* Error Banner */}
           {formError && (
-            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-700 text-xs flex items-center gap-2">
+            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-400 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
@@ -101,71 +100,71 @@ export default function SignUpPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 block" htmlFor="name">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block" htmlFor="name">
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40 dark:text-[#FAF7F2]/40" />
                 <Input
                   id="name"
                   type="text"
                   placeholder="e.g. Julian Reynolds"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 bg-[#FFFFFF] text-xs text-[#231C1E] placeholder:text-[#231C1E]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
+                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#22161B] text-xs text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B] dark:focus-visible:ring-[#C5A880]"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 block" htmlFor="email">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block" htmlFor="email">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40 dark:text-[#FAF7F2]/40" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 bg-[#FFFFFF] text-xs text-[#231C1E] placeholder:text-[#231C1E]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
+                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#22161B] text-xs text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B] dark:focus-visible:ring-[#C5A880]"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 block" htmlFor="phone">
-                Contact Phone <span className="text-[#231C1E]/40 font-normal">(Optional)</span>
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block" htmlFor="phone">
+                Contact Phone <span className="text-[#231C1E]/40 dark:text-[#FAF7F2]/40 font-normal">(Optional)</span>
               </label>
               <div className="relative">
-                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40" />
+                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40 dark:text-[#FAF7F2]/40" />
                 <Input
                   id="phone"
                   type="tel"
                   placeholder="+1 (212) 555-0198"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 bg-[#FFFFFF] text-xs text-[#231C1E] placeholder:text-[#231C1E]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
+                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#22161B] text-xs text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B] dark:focus-visible:ring-[#C5A880]"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 block" htmlFor="password">
-                Password <span className="text-[#231C1E]/40 font-normal">(Minimum 6 characters)</span>
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block" htmlFor="password">
+                Password <span className="text-[#231C1E]/40 dark:text-[#FAF7F2]/40 font-normal">(Minimum 6 characters)</span>
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#231C1E]/40 dark:text-[#FAF7F2]/40" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 bg-[#FFFFFF] text-xs text-[#231C1E] placeholder:text-[#231C1E]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
+                  className="pl-10 h-11 rounded-xl border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#22161B] text-xs text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B] dark:focus-visible:ring-[#C5A880]"
                   required
                 />
               </div>
@@ -173,7 +172,7 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              className="w-full h-11 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035] shadow-md mt-2"
+              className="w-full h-11 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] shadow-md mt-2"
               disabled={submitting || isLoading}
             >
               {submitting ? (
@@ -189,14 +188,14 @@ export default function SignUpPage() {
           </form>
 
           {/* Notice text */}
-          <p className="text-[11px] text-[#231C1E]/65 leading-relaxed text-center px-2">
+          <p className="text-[11px] text-[#231C1E]/65 dark:text-[#FAF7F2]/60 leading-relaxed text-center px-2">
             By registering you agree to our salon booking terms. Admin accounts are provisioned privately.
           </p>
 
           {/* Footer note */}
-          <div className="text-center text-xs text-[#231C1E]/70 pt-2 border-t border-[#3B1F2B]/10">
+          <div className="text-center text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
             Already have an account?{" "}
-            <Link href="/sign-in" className="font-semibold text-[#3B1F2B] hover:underline">
+            <Link href="/sign-in" className="font-semibold text-[#3B1F2B] dark:text-[#C5A880] hover:underline">
               Sign In
             </Link>
           </div>
@@ -204,7 +203,7 @@ export default function SignUpPage() {
       </div>
 
       {/* Right Column: Visual Panel */}
-      <div className="hidden lg:block lg:flex-1 relative bg-[#EAE3D6] overflow-hidden border-l border-[#3B1F2B]/10">
+      <div className="hidden lg:block lg:flex-1 relative bg-[#EAE3D6] dark:bg-[#1E1317] overflow-hidden border-l border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
         <SafeImage
           src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85"
           alt="Facial and Skincare Sanctuary"

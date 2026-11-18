@@ -97,17 +97,17 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#231C1E] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] flex flex-col lg:flex-row transition-colors duration-200">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-[#3B1F2B]/10 bg-[#FFFFFF] p-6 justify-between shrink-0 shadow-sm">
+      <aside className="hidden lg:flex flex-col w-64 border-r border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B] p-6 justify-between shrink-0 shadow-sm">
         <div className="space-y-7">
           {/* Logo */}
           <Link href="/admin" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#3B1F2B] text-[#FAF7F2] flex items-center justify-center shadow-sm">
-              <Scissors className="w-4 h-4 text-[#C5A880]" />
+            <div className="w-9 h-9 rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] flex items-center justify-center shadow-sm">
+              <Scissors className="w-4 h-4 text-[#C5A880] dark:text-[#170F13]" />
             </div>
             <div>
-              <span className="font-serif text-xl font-bold tracking-tight text-[#231C1E] block leading-none">
+              <span className="font-serif text-xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2] block leading-none">
                 SalonBook
               </span>
               <span className="text-[10px] uppercase tracking-wider text-[#C5A880] font-semibold">
@@ -130,15 +130,15 @@ export default function AdminDashboardLayout({
                   href={item.href}
                   className={`flex items-center justify-between px-3.5 py-2.5 text-xs uppercase tracking-wider rounded-xl transition-all ${
                     isActive
-                      ? "bg-[#3B1F2B] text-[#FAF7F2] font-semibold shadow-sm"
-                      : "text-[#231C1E]/75 hover:bg-[#FAF7F2] hover:text-[#231C1E]"
+                      ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-semibold shadow-sm"
+                      : "text-[#231C1E]/75 dark:text-[#FAF7F2]/75 hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] hover:text-[#231C1E] dark:hover:text-[#FAF7F2]"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <Icon className="w-4 h-4" />
                     <span>{item.label}</span>
                   </div>
-                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#C5A880]" />}
+                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#C5A880] dark:text-[#170F13]" />}
                 </Link>
               );
             })}
@@ -146,16 +146,16 @@ export default function AdminDashboardLayout({
         </div>
 
         {/* User Card & Logout */}
-        <div className="pt-6 border-t border-[#3B1F2B]/10 space-y-4">
+        <div className="pt-6 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#3B1F2B] text-[#FAF7F2] font-serif font-bold text-xs flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-full bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif font-bold text-xs flex items-center justify-center shadow-sm">
               {getInitials(user?.name || "Admin")}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-bold text-[#231C1E] truncate">
+              <span className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2] truncate">
                 {user?.name}
               </span>
-              <span className="text-[10px] text-[#231C1E]/60 truncate">
+              <span className="text-[10px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60 truncate">
                 Salon Administrator
               </span>
             </div>
@@ -166,7 +166,7 @@ export default function AdminDashboardLayout({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-[#3B1F2B]/20 gap-1 hover:bg-[#FAF7F2]"
+                className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 gap-1 hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] text-[#231C1E] dark:text-[#FAF7F2]"
               >
                 <ExternalLink className="w-3 h-3" /> Live Site
               </Button>
@@ -175,7 +175,7 @@ export default function AdminDashboardLayout({
               variant="outline"
               size="sm"
               onClick={logout}
-              className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-red-300 text-red-700 hover:bg-red-50 gap-1"
+              className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-red-300 dark:border-red-900/40 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 gap-1"
             >
               <LogOut className="w-3 h-3" /> Sign Out
             </Button>
@@ -184,13 +184,13 @@ export default function AdminDashboardLayout({
       </aside>
 
       {/* Mobile Top Header */}
-      <div className="lg:hidden bg-[#FFFFFF] border-b border-[#3B1F2B]/10 p-4 flex items-center justify-between">
+      <div className="lg:hidden bg-[#FFFFFF] dark:bg-[#22161B] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[#3B1F2B] text-[#FAF7F2] flex items-center justify-center">
-            <Scissors className="w-3.5 h-3.5 text-[#C5A880]" />
+          <div className="w-7 h-7 rounded-lg bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] flex items-center justify-center">
+            <Scissors className="w-3.5 h-3.5 text-[#C5A880] dark:text-[#170F13]" />
           </div>
           <div>
-            <span className="font-serif text-base font-bold text-[#231C1E]">
+            <span className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
               SalonBook
             </span>
             <span className="text-[9px] uppercase tracking-wider text-[#C5A880] font-semibold block -mt-1">
@@ -200,7 +200,7 @@ export default function AdminDashboardLayout({
         </div>
         <button
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-          className="p-2 rounded-lg border border-[#3B1F2B]/15 text-[#231C1E]"
+          className="p-2 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 text-[#231C1E] dark:text-[#FAF7F2]"
         >
           {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
@@ -208,7 +208,7 @@ export default function AdminDashboardLayout({
 
       {/* Mobile Sidebar Drawer */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden bg-[#FFFFFF] border-b border-[#3B1F2B]/10 p-4 space-y-2">
+        <div className="lg:hidden bg-[#FFFFFF] dark:bg-[#22161B] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 p-4 space-y-2">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -222,8 +222,8 @@ export default function AdminDashboardLayout({
                 onClick={() => setMobileSidebarOpen(false)}
                 className={`flex items-center gap-2.5 px-3 py-2 text-xs uppercase tracking-wider rounded-xl ${
                   isActive
-                    ? "bg-[#3B1F2B] text-[#FAF7F2] font-semibold"
-                    : "text-[#231C1E]/75"
+                    ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-semibold"
+                    : "text-[#231C1E]/75 dark:text-[#FAF7F2]/75"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function AdminDashboardLayout({
       )}
 
       {/* Main Admin Content */}
-      <main className="flex-1 p-6 sm:p-8 lg:p-10 overflow-y-auto">
+      <main className="flex-1 p-6 sm:p-8 lg:p-10 overflow-y-auto bg-[#FAF7F2] dark:bg-[#170F13]">
         {children}
       </main>
     </div>

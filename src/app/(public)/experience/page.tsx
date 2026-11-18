@@ -37,24 +37,24 @@ export default function ExperiencePage() {
   ];
 
   return (
-    <div className="min-h-screen py-10 sm:py-20 bg-[#FAF7F2] text-[#231C1E]">
+    <div className="min-h-screen py-10 sm:py-20 bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-16 sm:space-y-20">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
             THE BOUTIQUE PHILOSOPHY
           </span>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#231C1E]">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#231C1E] dark:text-[#FAF7F2]">
             More Than an Appointment. Grooming Done Properly.
           </h1>
-          <p className="text-sm text-[#231C1E]/75 leading-relaxed max-w-xl mx-auto">
+          <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed max-w-xl mx-auto">
             SalonBook was created to banish conveyor-belt salons. We cultivate quiet spaces where certified master practitioners devote their undivided artistry to your chair.
           </p>
         </div>
 
         {/* Hero Visual & 3 Tenets */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-7 overflow-hidden rounded-3xl border-4 border-[#FFFFFF] bg-[#EAE3D6] relative aspect-[4/3] shadow-xl">
+          <div className="md:col-span-7 overflow-hidden rounded-3xl border-4 border-[#FFFFFF] dark:border-[#22161B] bg-[#EAE3D6] dark:bg-[#2D1D24] relative aspect-[4/3] shadow-xl">
             <SafeImage
               src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
               alt="Salon Interior Sanctuary"
@@ -67,32 +67,32 @@ export default function ExperiencePage() {
           </div>
 
           <div className="md:col-span-5 space-y-4">
-            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 bg-[#FFFFFF] shadow-sm space-y-2">
-              <div className="flex items-center gap-2 text-[#3B1F2B] font-bold text-xs uppercase tracking-wider">
+            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B] shadow-sm space-y-2">
+              <div className="flex items-center gap-2 text-[#3B1F2B] dark:text-[#C5A880] font-bold text-xs uppercase tracking-wider">
                 <Scissors className="w-4 h-4 text-[#C5A880]" />
                 <span>Zero Chair Overlapping</span>
               </div>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 When you reserve an experience, your practitioner is 100% focused on you. No leaving you under a dryer to rush to another station.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 bg-[#FFFFFF] shadow-sm space-y-2">
-              <div className="flex items-center gap-2 text-[#3B1F2B] font-bold text-xs uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B] shadow-sm space-y-2">
+              <div className="flex items-center gap-2 text-[#3B1F2B] dark:text-[#C5A880] font-bold text-xs uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>100% Clean European Actives</span>
               </div>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Formulations free of synthetic parabens, petroleum sulfates, and artificial perfumes. Cold-pressed botanical extracts only.
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 bg-[#FFFFFF] shadow-sm space-y-2">
-              <div className="flex items-center gap-2 text-[#3B1F2B] font-bold text-xs uppercase tracking-wider">
+            <div className="p-6 rounded-2xl border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B] shadow-sm space-y-2">
+              <div className="flex items-center gap-2 text-[#3B1F2B] dark:text-[#C5A880] font-bold text-xs uppercase tracking-wider">
                 <Clock className="w-4 h-4 text-[#C5A880]" />
                 <span>Honored Time Precision</span>
               </div>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Your appointment begins on time. Quiet checkout and seamless Stripe payment once services are concluded.
               </p>
             </div>
@@ -100,12 +100,12 @@ export default function ExperiencePage() {
         </div>
 
         {/* 4 Steps */}
-        <div className="space-y-10 pt-8 border-t border-[#3B1F2B]/10">
+        <div className="space-y-10 pt-8 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
           <div className="text-center space-y-2 max-w-xl mx-auto">
             <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
               THE 4-PHASE JOURNEY
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#231C1E]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">
               From Diagnostic to Lasting Form
             </h2>
           </div>
@@ -114,16 +114,16 @@ export default function ExperiencePage() {
             {steps.map((step, idx) => (
               <div
                 key={idx}
-                className="bg-[#FFFFFF] border border-[#3B1F2B]/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6]">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
                     <SafeImage
                       src={step.image}
                       alt={step.title}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-[#3B1F2B] text-[#FAF7F2] font-serif font-bold text-xs flex items-center justify-center shadow-sm">
+                    <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif font-bold text-xs flex items-center justify-center shadow-sm">
                       {step.num}
                     </div>
                   </div>
@@ -132,10 +132,10 @@ export default function ExperiencePage() {
                     <span className="text-[10px] uppercase tracking-wider text-[#C5A880] block font-bold">
                       {step.highlight}
                     </span>
-                    <h3 className="font-serif text-lg font-bold text-[#231C1E]">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                       {step.title}
                     </h3>
-                    <p className="text-xs text-[#231C1E]/75 leading-relaxed pt-1">
+                    <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed pt-1">
                       {step.desc}
                     </p>
                   </div>

@@ -8,8 +8,6 @@ import {
   Clock,
   ArrowUpDown,
   FilterX,
-  LayoutGrid,
-  List,
   ArrowRight,
   SlidersHorizontal,
   ChevronLeft,
@@ -228,7 +226,6 @@ function ServicesContent() {
 
   useEffect(() => {
     if (initialCategoryParam) {
-      // Normalize match
       const matched = categoriesList.find(
         (c) => c.toLowerCase() === initialCategoryParam.toLowerCase()
       );
@@ -265,7 +262,6 @@ function ServicesContent() {
     setCurrentPage(1);
   };
 
-  // Filtered & sorted array
   const filteredServices = useMemo(() => {
     return services
       .filter((service) => {
@@ -291,12 +287,10 @@ function ServicesContent() {
       });
   }, [services, selectedCategory, search, sortOption]);
 
-  // Reset page when filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [search, selectedCategory, sortOption]);
 
-  // Pagination calculation
   const totalItems = filteredServices.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -304,53 +298,44 @@ function ServicesContent() {
   const paginatedServices = filteredServices.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen py-10 sm:py-16 bg-[#FAF7F2] text-[#231C1E]">
+    <div className="min-h-screen py-10 sm:py-16 bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-        {/* 
-          =======================================================================
-          1. HEADER (Exactly per Specification)
-          - "Find your next ritual" + Total count badge ("10 services available")
-          =======================================================================
-        */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-[#3B1F2B]/10">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880]">
                 MENU &amp; RESERVATIONS
               </span>
-              <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-[#3B1F2B] text-[#FAF7F2]">
+              <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13]">
                 {totalItems} services available
               </span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-[#231C1E]">
+            <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
               Find your next ritual
             </h1>
-            <p className="text-sm text-[#231C1E]/75 max-w-xl leading-relaxed">
+            <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 max-w-xl leading-relaxed">
               Explore our curated menu of precision haircuts, clean botanical skincare, restorative massages, and traditional straight-razor barbering.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-medium text-[#231C1E]/70 bg-[#FFFFFF] px-3.5 py-2 rounded-xl border border-[#3B1F2B]/10 shadow-sm self-start md:self-end">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center gap-2 text-xs font-medium text-[#231C1E]/70 dark:text-[#FAF7F2]/70 bg-[#FFFFFF] dark:bg-[#22161B] px-3.5 py-2 rounded-xl border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm self-start md:self-end">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Instant Slot Locking · Zero Double-Booking</span>
           </div>
         </div>
 
-        {/* 
-          =======================================================================
-          2. INTERACTIVE CONTROLS BAR (Search, Category Dropdown, Sort Dropdown)
-          =======================================================================
-        */}
-        <div className="bg-[#FFFFFF] border border-[#3B1F2B]/10 rounded-2xl p-5 mb-8 shadow-sm space-y-4">
+        {/* Interactive Controls Bar */}
+        <div className="bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 rounded-2xl p-5 mb-8 shadow-sm space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             {/* 1. Search Input */}
             <div className="md:col-span-6 relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#231C1E]/50" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#231C1E]/50 dark:text-[#FAF7F2]/40" />
               <Input
                 placeholder="Search services by name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 h-11 bg-[#FAF7F2] rounded-xl border-[#3B1F2B]/15 text-xs text-[#231C1E] placeholder:text-[#231C1E]/50 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
+                className="pl-10 h-11 bg-[#FAF7F2] dark:bg-[#2D1D24] rounded-xl border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 text-xs text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/50 dark:placeholder:text-[#FAF7F2]/40 focus-visible:ring-1 focus-visible:ring-[#3B1F2B] dark:focus-visible:ring-[#C5A880]"
               />
             </div>
 
@@ -359,7 +344,7 @@ function ServicesContent() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 bg-[#FAF7F2] px-3 text-xs font-medium text-[#231C1E] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B]"
+                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FAF7F2] dark:bg-[#2D1D24] px-3 text-xs font-medium text-[#231C1E] dark:text-[#FAF7F2] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B] dark:focus:ring-[#C5A880]"
               >
                 {categoriesList.map((cat) => (
                   <option key={cat} value={cat}>
@@ -371,11 +356,11 @@ function ServicesContent() {
 
             {/* 3. Sort Dropdown */}
             <div className="md:col-span-3 flex items-center gap-2">
-              <ArrowUpDown className="w-4 h-4 text-[#231C1E]/60 shrink-0" />
+              <ArrowUpDown className="w-4 h-4 text-[#231C1E]/60 dark:text-[#FAF7F2]/60 shrink-0" />
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 bg-[#FAF7F2] px-3 text-xs font-medium text-[#231C1E] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B]"
+                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FAF7F2] dark:bg-[#2D1D24] px-3 text-xs font-medium text-[#231C1E] dark:text-[#FAF7F2] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B] dark:focus:ring-[#C5A880]"
               >
                 <option value="newest">Newest first</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -385,8 +370,8 @@ function ServicesContent() {
           </div>
 
           {/* Category Quick Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-[#3B1F2B]/10 scrollbar-none">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#3B1F2B] shrink-0 mr-1" />
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 scrollbar-none">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#3B1F2B] dark:text-[#C5A880] shrink-0 mr-1" />
             {categoriesList.map((cat) => {
               const isSelected = selectedCategory === cat;
               return (
@@ -395,8 +380,8 @@ function ServicesContent() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                     isSelected
-                      ? "bg-[#3B1F2B] text-[#FAF7F2] shadow-sm"
-                      : "bg-[#FAF7F2] text-[#231C1E]/75 hover:bg-[#F5EFEB] hover:text-[#231C1E]"
+                      ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm"
+                      : "bg-[#FAF7F2] dark:bg-[#2D1D24] text-[#231C1E]/75 dark:text-[#FAF7F2]/75 hover:bg-[#F5EFEB] dark:hover:bg-[#38252E]"
                   }`}
                 >
                   {cat}
@@ -407,45 +392,36 @@ function ServicesContent() {
         </div>
 
         {/* Counter & Active Filter Badge */}
-        <div className="flex items-center justify-between mb-6 text-xs text-[#231C1E]/70">
+        <div className="flex items-center justify-between mb-6 text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70">
           <p>
-            Showing <span className="font-semibold text-[#231C1E]">{startIndex + 1}</span>–
-            <span className="font-semibold text-[#231C1E]">{endIndex}</span> of{" "}
-            <span className="font-semibold text-[#231C1E]">{totalItems}</span> rituals
+            Showing <span className="font-semibold text-[#231C1E] dark:text-[#FAF7F2]">{startIndex + 1}</span>–
+            <span className="font-semibold text-[#231C1E] dark:text-[#FAF7F2]">{endIndex}</span> of{" "}
+            <span className="font-semibold text-[#231C1E] dark:text-[#FAF7F2]">{totalItems}</span> rituals
           </p>
           {(search || selectedCategory !== "All categories" || sortOption !== "newest") && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleResetFilters}
-              className="gap-1 text-xs text-[#B8755B] hover:bg-transparent hover:underline h-7 px-2 font-medium"
+              className="gap-1 text-xs text-[#B8755B] dark:text-[#C5A880] hover:bg-transparent hover:underline h-7 px-2 font-medium"
             >
               <FilterX className="w-3.5 h-3.5" /> Reset all filters
             </Button>
           )}
         </div>
 
-        {/* 
-          =======================================================================
-          3. SERVICE CARDS (Grid 3 Columns per Specification)
-          - Service image with category pill badge overlay (e.g. SPA & WELLNESS)
-          - Service Name + Price (e.g., Aromatherapy Spa Ritual — $150.00)
-          - Short summary description
-          - Duration indicator with clock icon (⏱ 90 min)
-          - Bottom row: At the salon tag (left) + View details ↗ (right) + Book Now
-          =======================================================================
-        */}
+        {/* Service Cards (3 Columns) */}
         {paginatedServices.length === 0 ? (
-          <div className="text-center py-20 bg-[#FFFFFF] rounded-2xl border border-dashed border-[#3B1F2B]/20 p-8 space-y-4 max-w-md mx-auto">
-            <h3 className="font-serif text-xl font-bold text-[#231C1E]">No Rituals Found</h3>
-            <p className="text-[#231C1E]/70 text-xs leading-relaxed">
+          <div className="text-center py-20 bg-[#FFFFFF] dark:bg-[#22161B] rounded-2xl border border-dashed border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 p-8 space-y-4 max-w-md mx-auto">
+            <h3 className="font-serif text-xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">No Rituals Found</h3>
+            <p className="text-[#231C1E]/70 dark:text-[#FAF7F2]/70 text-xs leading-relaxed">
               We couldn&apos;t find any treatment matching your filter criteria. Try searching with different keywords or reset filters.
             </p>
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetFilters}
-              className="rounded-xl text-xs font-semibold border-[#3B1F2B]/30"
+              className="rounded-xl text-xs font-semibold border-[#3B1F2B]/30 dark:border-[#FAF7F2]/30"
             >
               Reset Filters
             </Button>
@@ -455,11 +431,11 @@ function ServicesContent() {
             {paginatedServices.map((service) => (
               <div
                 key={service._id}
-                className="group rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                className="group rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#3B1F2B]/30 dark:hover:border-[#C5A880]/50 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Service Image with Category Pill Badge Overlay */}
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6]">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
                     <SafeImage
                       src={
                         service.images && service.images[0]
@@ -471,38 +447,38 @@ function ServicesContent() {
                     />
 
                     {/* Category Pill Badge Overlay */}
-                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/95 backdrop-blur-md text-[#231C1E] shadow-sm">
+                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/95 dark:bg-[#170F13]/95 backdrop-blur-md text-[#231C1E] dark:text-[#FAF7F2] shadow-sm">
                       {service.category}
                     </span>
 
                     {/* Price Overlay */}
-                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] text-[#FAF7F2] shadow-sm">
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm">
                       {formatCurrency(service.price)}
                     </span>
                   </div>
 
                   {/* Body Content */}
                   <div className="p-6 space-y-3">
-                    <div className="flex items-center justify-between text-xs text-[#231C1E]/70 font-medium">
+                    <div className="flex items-center justify-between text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium">
                       <span className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
                         ⏱ {service.durationMinutes} min
                       </span>
-                      <span className="text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      <span className="text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                         At the salon
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors leading-snug">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors leading-snug">
                       {service.title}
                     </h3>
 
-                    <p className="text-xs text-[#231C1E]/75 leading-relaxed line-clamp-2">
+                    <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed line-clamp-2">
                       {service.description}
                     </p>
 
                     {service.specialists && service.specialists.length > 0 && (
-                      <p className="text-[11px] text-[#231C1E]/60 pt-1">
+                      <p className="text-[11px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60 pt-1">
                         Specialists: {service.specialists.join(", ")}
                       </p>
                     )}
@@ -510,12 +486,12 @@ function ServicesContent() {
                 </div>
 
                 {/* Bottom Row: Details ↗ & Book Now Button */}
-                <div className="p-6 pt-0 border-t border-[#3B1F2B]/10 mt-2 flex items-center justify-between gap-3">
+                <div className="p-6 pt-0 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 mt-2 flex items-center justify-between gap-3">
                   <Link href={`/services/${service._id}`} className="flex-1">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2] text-xs font-medium"
+                      className="w-full rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] text-xs font-medium"
                     >
                       View details ↗
                     </Button>
@@ -524,7 +500,7 @@ function ServicesContent() {
                   <Button
                     size="sm"
                     onClick={() => handleOpenBooking(service)}
-                    className="flex-1 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] text-xs font-semibold shadow-sm"
+                    className="flex-1 rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] text-[#FAF7F2] dark:text-[#170F13] text-xs font-semibold shadow-sm"
                   >
                     Book Now
                   </Button>
@@ -534,14 +510,10 @@ function ServicesContent() {
           </div>
         )}
 
-        {/* 
-          =======================================================================
-          4. PAGINATION (Clean numbered pagination < 1 2 > with count text)
-          =======================================================================
-        */}
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-12 pt-6 border-t border-[#3B1F2B]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-[#231C1E]/70 font-medium">
+          <div className="mt-12 pt-6 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium">
               Showing {startIndex + 1}–{endIndex} of {totalItems}
             </p>
 
@@ -551,7 +523,7 @@ function ServicesContent() {
                 size="sm"
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 disabled:opacity-40"
+                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 disabled:opacity-40"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
@@ -567,8 +539,8 @@ function ServicesContent() {
                     onClick={() => setCurrentPage(pageNum)}
                     className={`w-9 h-9 p-0 rounded-xl text-xs font-semibold ${
                       isActive
-                        ? "bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035]"
-                        : "border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2]"
+                        ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13]"
+                        : "border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#22161B]"
                     }`}
                   >
                     {pageNum}
@@ -581,7 +553,7 @@ function ServicesContent() {
                 size="sm"
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 disabled:opacity-40"
+                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 disabled:opacity-40"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
@@ -608,7 +580,7 @@ export default function ServicesPage() {
       fallback={
         <div className="py-24 text-center">
           <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin mx-auto rounded-full" />
-          <p className="text-xs text-[#231C1E]/70 mt-3 uppercase tracking-wider font-semibold">
+          <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 mt-3 uppercase tracking-wider font-semibold">
             Loading Services...
           </p>
         </div>

@@ -119,15 +119,15 @@ export const Navbar = () => {
                   </Link>
                 )}
 
-                <div className="flex items-center gap-2 pl-2 border-l border-[#E8E2D8]">
-                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] text-[#FAF7F2] font-serif text-xs font-bold flex items-center justify-center">
+                <div className="flex items-center gap-2 pl-2 border-l border-[#E8E2D8] dark:border-[#38252E]">
+                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center">
                     {getInitials(user.name)}
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={logout}
-                    className="h-8 px-2 text-[#231C1E]/70 dark:text-[#FAF7F2]/70 hover:text-red-700 rounded-lg"
+                    className="h-8 px-2 text-[#231C1E]/70 dark:text-[#FAF7F2]/70 hover:text-red-700 dark:hover:text-red-400 rounded-lg"
                     title="Sign Out"
                   >
                     <LogOut className="w-3.5 h-3.5" />
@@ -149,7 +149,7 @@ export const Navbar = () => {
                   <Button
                     variant="default"
                     size="sm"
-                    className="gap-1.5 text-xs font-bold px-4 py-2 bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035] rounded-xl"
+                    className="gap-1.5 text-xs font-bold px-4 py-2 bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035] rounded-xl shadow-sm"
                   >
                     <span>Book now</span>
                     <ArrowRight className="w-3.5 h-3.5 text-[#C5A880]" />
@@ -164,11 +164,11 @@ export const Navbar = () => {
             <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#F5EFEB] border border-[#E8E2D8]"
+              className="p-2 rounded-xl text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#F5EFEB] dark:hover:bg-[#251B20] border border-[#E8E2D8] dark:border-[#38252E]"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? (
-                <X className="w-5 h-5 text-[#3B1F2B]" />
+                <X className="w-5 h-5 text-[#3B1F2B] dark:text-[#C5A880]" />
               ) : (
                 <Menu className="w-5 h-5" />
               )}
@@ -179,7 +179,7 @@ export const Navbar = () => {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-[#E8E2D8] bg-[#FAF7F2] dark:bg-[#1E1619] px-6 py-5 space-y-4">
+        <div className="md:hidden border-b border-[#E8E2D8] dark:border-[#38252E] bg-[#FAF7F2] dark:bg-[#1E1619] px-6 py-5 space-y-4">
           <nav className="flex flex-col space-y-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -191,7 +191,7 @@ export const Navbar = () => {
                   className={`text-xs font-semibold py-2.5 px-3 rounded-xl transition-colors ${
                     isActive
                       ? "bg-[#3B1F2B] text-[#FAF7F2]"
-                      : "text-[#231C1E]/80 hover:bg-[#F5EFEB]"
+                      : "text-[#231C1E]/80 dark:text-[#FAF7F2]/80 hover:bg-[#F5EFEB] dark:hover:bg-[#251B20]"
                   }`}
                 >
                   {link.label}
@@ -200,18 +200,18 @@ export const Navbar = () => {
             })}
           </nav>
 
-          <div className="pt-3 border-t border-[#E8E2D8] flex flex-col gap-2.5">
+          <div className="pt-3 border-t border-[#E8E2D8] dark:border-[#38252E] flex flex-col gap-2.5">
             {isAuthenticated && user ? (
               <>
-                <div className="flex items-center gap-3 p-3 bg-[#F5EFEB] rounded-xl">
-                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] text-[#FAF7F2] font-serif text-xs font-bold flex items-center justify-center">
+                <div className="flex items-center gap-3 p-3 bg-[#F5EFEB] dark:bg-[#251B20] rounded-xl border border-[#E8E2D8] dark:border-[#38252E]">
+                  <div className="w-8 h-8 rounded-full bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center">
                     {getInitials(user.name)}
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                       {user.name}
                     </span>
-                    <span className="text-[11px] text-[#231C1E]/60">
+                    <span className="text-[11px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60">
                       {user.email}
                     </span>
                   </div>

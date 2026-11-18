@@ -18,7 +18,6 @@ import {
   ChevronRight,
   ChevronDown,
   Quote,
-  Sparkle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -291,7 +290,7 @@ export default function HomePage() {
       : services.filter((s) => s.category.toLowerCase() === activeTab.toLowerCase());
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF7F2] text-[#231C1E]">
+    <div className="flex flex-col min-h-screen bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
       {/* 
         =======================================================================
         1. HERO SECTION (Exactly per Specification):
@@ -303,34 +302,34 @@ export default function HomePage() {
         - Hero Visual: Modern salon interior with overlaid mobile preview card
         =======================================================================
       */}
-      <section className="relative pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#3B1F2B]/10 overflow-hidden bg-gradient-to-b from-[#FAF7F2] via-[#FAF7F2] to-[#F5EFEB]/50">
+      <section className="relative pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 overflow-hidden bg-gradient-to-b from-[#FAF7F2] via-[#FAF7F2] to-[#F5EFEB]/50 dark:from-[#170F13] dark:via-[#170F13] dark:to-[#22161B]">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column: Typography & CTAs */}
             <div className="lg:col-span-7 space-y-6 text-left">
               {/* Status Pill */}
-              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FFFFFF] border border-[#3B1F2B]/15 shadow-sm">
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 shadow-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs font-semibold text-[#231C1E] tracking-tight">
+                <span className="text-xs font-semibold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
                   Open today until 8:00 PM
                 </span>
-                <span className="text-[#3B1F2B]/30">•</span>
-                <span className="text-xs text-[#231C1E]/75 flex items-center gap-1 font-medium">
+                <span className="text-[#3B1F2B]/30 dark:text-[#FAF7F2]/30">•</span>
+                <span className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 flex items-center gap-1 font-medium">
                   <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
                   Madison Avenue, NYC
                 </span>
               </div>
 
               {/* Serif Headline */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#231C1E] leading-[1.12]">
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2] leading-[1.12]">
                 Grooming, done properly.
               </h1>
 
               {/* Subtitle */}
-              <p className="text-base sm:text-lg text-[#231C1E]/80 leading-relaxed font-normal max-w-xl">
+              <p className="text-base sm:text-lg text-[#231C1E]/80 dark:text-[#FAF7F2]/75 leading-relaxed font-normal max-w-xl">
                 A neighbourhood barbershop for hair, skin, nails and spa rituals.
                 Browse our menu, request a time that suits you, and let our barbers take care of the rest.
               </p>
@@ -340,7 +339,7 @@ export default function HomePage() {
                 <Link href="/services">
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] text-[#FAF7F2] dark:text-[#170F13] font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
                   >
                     <span>Explore services</span>
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -351,7 +350,7 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-[#3B1F2B]/25 text-[#231C1E] bg-[#FFFFFF]/70 hover:bg-[#FFFFFF] font-semibold text-sm transition-all flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-[#3B1F2B]/25 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] bg-[#FFFFFF]/70 dark:bg-[#22161B] hover:bg-[#FFFFFF] dark:hover:bg-[#2D1D24] font-semibold text-sm transition-all flex items-center justify-center gap-2"
                   >
                     <Calendar className="w-4 h-4 text-[#C5A880]" />
                     <span>Create an account</span>
@@ -360,35 +359,35 @@ export default function HomePage() {
               </div>
 
               {/* Social Proof / Stats Bar */}
-              <div className="pt-6 border-t border-[#3B1F2B]/10 grid grid-cols-3 gap-4 max-w-lg">
+              <div className="pt-6 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 grid grid-cols-3 gap-4 max-w-lg">
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-serif text-2xl font-bold text-[#231C1E]">4.9/5</span>
+                    <span className="font-serif text-2xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">4.9/5</span>
                     <div className="flex text-amber-500">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-3.5 h-3.5 fill-current" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                  <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium mt-0.5">
                     Client rating
                   </p>
                 </div>
 
                 <div>
-                  <span className="font-serif text-2xl font-bold text-[#231C1E] block">
+                  <span className="font-serif text-2xl font-bold text-[#231C1E] dark:text-[#FAF7F2] block">
                     8k+
                   </span>
-                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                  <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium mt-0.5">
                     Appointments
                   </p>
                 </div>
 
                 <div>
-                  <span className="font-serif text-2xl font-bold text-[#231C1E] block">
+                  <span className="font-serif text-2xl font-bold text-[#231C1E] dark:text-[#FAF7F2] block">
                     12
                   </span>
-                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                  <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium mt-0.5">
                     Salon barbers
                   </p>
                 </div>
@@ -398,7 +397,7 @@ export default function HomePage() {
             {/* Right Column: Hero Visual with Overlaid Mobile Preview Card */}
             <div className="lg:col-span-5 relative">
               {/* Outer decorative card frame */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FFFFFF] bg-[#EAE3D6] aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5]">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FFFFFF] dark:border-[#22161B] bg-[#EAE3D6] dark:bg-[#1E1317] aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5]">
                 <SafeImage
                   src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=85"
                   alt="Modern boutique barbershop and salon interior"
@@ -409,17 +408,17 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#231C1E]/70 via-transparent to-transparent pointer-events-none" />
 
                 {/* Overlaid Badge Top Right */}
-                <div className="absolute top-4 right-4 bg-[#FFFFFF]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#FAF7F2] text-[11px] font-semibold text-[#231C1E] shadow-sm flex items-center gap-1.5">
-                  <Scissors className="w-3.5 h-3.5 text-[#3B1F2B]" />
+                <div className="absolute top-4 right-4 bg-[#FFFFFF]/90 dark:bg-[#1E1317]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#FAF7F2]/20 text-[11px] font-semibold text-[#231C1E] dark:text-[#FAF7F2] shadow-sm flex items-center gap-1.5">
+                  <Scissors className="w-3.5 h-3.5 text-[#3B1F2B] dark:text-[#C5A880]" />
                   <span>Est. 2018 · NYC</span>
                 </div>
 
                 {/* Overlaid Mobile Preview Card showing "NEXT OPENING: Today · 2:30 PM" */}
-                <div className="absolute bottom-5 left-5 right-5 bg-[#FFFFFF]/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#FAF7F2] shadow-xl text-[#231C1E] space-y-3">
+                <div className="absolute bottom-5 left-5 right-5 bg-[#FFFFFF]/95 dark:bg-[#22161B]/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#FAF7F2]/20 shadow-xl text-[#231C1E] dark:text-[#FAF7F2] space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">
                         NEXT OPENING: Today · 2:30 PM
                       </span>
                     </div>
@@ -430,25 +429,25 @@ export default function HomePage() {
 
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h4 className="font-serif text-base font-bold text-[#231C1E]">
+                      <h4 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                         Classic Cut &amp; Straight-Razor Detailing
                       </h4>
-                      <p className="text-xs text-[#231C1E]/70">
+                      <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70">
                         Marcus Sterling · 45 mins
                       </p>
                     </div>
-                    <span className="font-serif text-base font-bold text-[#3B1F2B]">
+                    <span className="font-serif text-base font-bold text-[#3B1F2B] dark:text-[#C5A880]">
                       $65
                     </span>
                   </div>
 
-                  <div className="pt-1 flex items-center justify-between gap-3 border-t border-[#231C1E]/10">
-                    <div className="flex items-center gap-1.5 text-xs text-[#231C1E]/80">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <div className="pt-1 flex items-center justify-between gap-3 border-t border-[#231C1E]/10 dark:border-[#FAF7F2]/10">
+                    <div className="flex items-center gap-1.5 text-xs text-[#231C1E]/80 dark:text-[#FAF7F2]/80">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       <span>Instant confirmation</span>
                     </div>
                     <Link href="/services">
-                      <span className="text-xs font-semibold text-[#3B1F2B] hover:text-[#4A2035] flex items-center gap-1">
+                      <span className="text-xs font-semibold text-[#3B1F2B] dark:text-[#C5A880] hover:underline flex items-center gap-1">
                         Reserve Slot <ArrowRight className="w-3 h-3" />
                       </span>
                     </Link>
@@ -468,49 +467,49 @@ export default function HomePage() {
         - 🤍 Personal care: One artist, all your attention
         =======================================================================
       */}
-      <section className="bg-[#FFFFFF] border-b border-[#3B1F2B]/10 py-7">
+      <section className="bg-[#FFFFFF] dark:bg-[#1E1317] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 py-7 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {/* Indicator 1 */}
             <div className="flex items-center gap-3.5 px-3 py-2">
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
-                <ShieldCheck className="w-5 h-5 text-[#3B1F2B]" />
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
+                <ShieldCheck className="w-5 h-5 text-[#3B1F2B] dark:text-[#C5A880]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
                   Secure booking
                 </h4>
-                <p className="text-xs text-[#231C1E]/70 font-normal">
+                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
                   Your details stay private
                 </p>
               </div>
             </div>
 
             {/* Indicator 2 */}
-            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10">
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
-                <Clock className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
+                <Clock className="w-5 h-5 text-[#3B1F2B] dark:text-[#C5A880]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
                   Thoughtful timing
                 </h4>
-                <p className="text-xs text-[#231C1E]/70 font-normal">
+                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
                   Real openings, no guesswork
                 </p>
               </div>
             </div>
 
             {/* Indicator 3 */}
-            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10">
-              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
-                <Heart className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] dark:text-[#C5A880] shadow-sm">
+                <Heart className="w-5 h-5 text-[#3B1F2B] dark:text-[#C5A880]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                <h4 className="text-sm font-bold text-[#231C1E] dark:text-[#FAF7F2] tracking-tight">
                   Personal care
                 </h4>
-                <p className="text-xs text-[#231C1E]/70 font-normal">
+                <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-normal">
                   One artist, all your attention
                 </p>
               </div>
@@ -522,28 +521,20 @@ export default function HomePage() {
       {/* 
         =======================================================================
         3. CATEGORY GRID ("Find Your Ritual — A category for every kind of pause")
-        8 Interactive Category Cards:
-        1. Hair: Precision cuts, colour and gloss treatments.
-        2. Nails: Considered manicures and pedicures.
-        3. Facial & Skin: Glow-giving facials and skin rituals.
-        4. Massage: Restorative bodywork, tailored to you.
-        5. Makeup: Soft glam and occasion-ready artistry.
-        6. Barbering: Classic cuts, fades and beard care.
-        7. Spa & Wellness: Slow-down rituals for body and mind.
-        8. Waxing: Gentle, meticulous hair removal.
+        8 Interactive Category Cards
         =======================================================================
       */}
-      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] dark:bg-[#170F13] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div className="space-y-2">
               <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
                 EXPLORE BY CATEGORY
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
                 Find Your Ritual
               </h2>
-              <p className="text-sm text-[#231C1E]/75 max-w-lg">
+              <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 max-w-lg">
                 A category for every kind of pause. Select a ritual below to explore treatments, transparent durations, and pricing.
               </p>
             </div>
@@ -552,7 +543,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FFFFFF] text-xs font-semibold"
+                className="rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FFFFFF] dark:hover:bg-[#22161B] text-xs font-semibold"
               >
                 <span>View all treatments</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -566,10 +557,10 @@ export default function HomePage() {
               <Link
                 key={cat.name}
                 href={`/services?category=${encodeURIComponent(cat.name)}`}
-                className="group relative rounded-2xl overflow-hidden bg-[#FFFFFF] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                className="group relative rounded-2xl overflow-hidden bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#3B1F2B]/30 dark:hover:border-[#C5A880]/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
               >
                 {/* Visual Image */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#EAE3D6]">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
                   <SafeImage
                     src={cat.image}
                     alt={cat.name}
@@ -578,7 +569,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#231C1E]/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                   
                   {/* Category Pill Tag */}
-                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 text-[#231C1E] backdrop-blur-md shadow-sm">
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 dark:bg-[#170F13]/90 text-[#231C1E] dark:text-[#FAF7F2] backdrop-blur-md shadow-sm">
                     {cat.name}
                   </span>
 
@@ -591,16 +582,16 @@ export default function HomePage() {
                 {/* Card Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors flex items-center justify-between">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors flex items-center justify-between">
                       <span>{cat.name}</span>
                       <ArrowRight className="w-4 h-4 text-[#C5A880] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
                     </h3>
-                    <p className="text-xs text-[#231C1E]/70 leading-relaxed mt-1">
+                    <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 leading-relaxed mt-1">
                       {cat.tagline}
                     </p>
                   </div>
 
-                  <div className="pt-2 border-t border-[#3B1F2B]/10 flex items-center justify-between text-xs font-semibold text-[#3B1F2B]">
+                  <div className="pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex items-center justify-between text-xs font-semibold text-[#3B1F2B] dark:text-[#C5A880]">
                     <span>Browse Rituals</span>
                     <span className="text-[11px] text-[#C5A880]">Book →</span>
                   </div>
@@ -616,16 +607,16 @@ export default function HomePage() {
         4. FEATURED SIGNATURE TREATMENTS (Popular Menu with 1-Click Booking)
         =======================================================================
       */}
-      <section className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#3B1F2B]/10">
+      <section className="py-16 sm:py-24 bg-[#FFFFFF] dark:bg-[#1E1317] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
             <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
               MOST REQUESTED RITUALS
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
               Featured Salon Menu
             </h2>
-            <p className="text-sm text-[#231C1E]/75 leading-relaxed">
+            <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
               Every appointment includes an unhurried consultation, cruelty-free botanical formulas, and private dedicated chair time.
             </p>
 
@@ -638,8 +629,8 @@ export default function HomePage() {
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
                       activeTab === tab
-                        ? "bg-[#3B1F2B] text-[#FAF7F2] shadow-sm"
-                        : "bg-[#FAF7F2] text-[#231C1E]/75 hover:bg-[#F5EFEB] hover:text-[#231C1E]"
+                        ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm"
+                        : "bg-[#FAF7F2] dark:bg-[#2D1D24] text-[#231C1E]/75 dark:text-[#FAF7F2]/75 hover:bg-[#F5EFEB] dark:hover:bg-[#38252E]"
                     }`}
                   >
                     {tab}
@@ -654,73 +645,73 @@ export default function HomePage() {
             {filteredServices.map((service) => (
               <div
                 key={service._id}
-                className="group rounded-2xl bg-[#FAF7F2] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+                className="group rounded-2xl bg-[#FAF7F2] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 hover:border-[#3B1F2B]/30 dark:hover:border-[#C5A880]/50 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
               >
-                {/* Image Container with Category Badge */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6]">
-                  <SafeImage
-                    src={
-                      service.images && service.images[0]
-                        ? service.images[0]
-                        : "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
-                    }
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Category Pill Overlay */}
-                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 backdrop-blur-md text-[#231C1E] shadow-sm">
-                    {service.category}
-                  </span>
+                <div>
+                  {/* Image Container with Category Badge */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
+                    <SafeImage
+                      src={
+                        service.images && service.images[0]
+                          ? service.images[0]
+                          : "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
+                      }
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {/* Category Pill Overlay */}
+                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 dark:bg-[#170F13]/90 backdrop-blur-md text-[#231C1E] dark:text-[#FAF7F2] shadow-sm">
+                      {service.category}
+                    </span>
 
-                  {/* Price Tag Overlay */}
-                  <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] text-[#FAF7F2] shadow-sm">
-                    {formatCurrency(service.price)}
-                  </span>
-                </div>
+                    {/* Price Tag Overlay */}
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm">
+                      {formatCurrency(service.price)}
+                    </span>
+                  </div>
 
-                {/* Card Body */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs text-[#231C1E]/70 font-medium">
+                  {/* Card Body */}
+                  <div className="p-6 space-y-3">
+                    <div className="flex items-center gap-2 text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium">
                       <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
                       <span>⏱ {service.durationMinutes} min</span>
-                      <span className="text-[#3B1F2B]/30">•</span>
-                      <span className="text-emerald-700 font-medium">At the salon</span>
+                      <span className="text-[#3B1F2B]/30 dark:text-[#FAF7F2]/30">•</span>
+                      <span className="text-emerald-700 dark:text-emerald-400 font-medium">At the salon</span>
                     </div>
 
-                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors leading-snug">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] dark:text-[#FAF7F2] group-hover:text-[#3B1F2B] dark:group-hover:text-[#C5A880] transition-colors leading-snug">
                       {service.title}
                     </h3>
 
-                    <p className="text-xs text-[#231C1E]/75 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 line-clamp-2 leading-relaxed">
                       {service.description}
                     </p>
                   </div>
+                </div>
 
-                  {/* Specialists & Actions */}
-                  <div className="pt-3 border-t border-[#3B1F2B]/10 space-y-3">
-                    {service.specialists && service.specialists.length > 0 && (
-                      <p className="text-[11px] text-[#231C1E]/70 font-medium">
-                        By {service.specialists.join(", ")}
-                      </p>
-                    )}
+                {/* Specialists & Actions */}
+                <div className="p-6 pt-0 space-y-3">
+                  {service.specialists && service.specialists.length > 0 && (
+                    <p className="text-[11px] text-[#231C1E]/70 dark:text-[#FAF7F2]/60 font-medium border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 pt-3">
+                      By {service.specialists.join(", ")}
+                    </p>
+                  )}
 
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={() => handleBookNow(service)}
+                      className="flex-1 rounded-xl bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] text-[#FAF7F2] dark:text-[#170F13] text-xs font-semibold py-2.5 shadow-sm"
+                    >
+                      Book Now
+                    </Button>
+                    <Link href={`/services/${service._id}`}>
                       <Button
-                        onClick={() => handleBookNow(service)}
-                        className="flex-1 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] text-xs font-semibold py-2.5 shadow-sm"
+                        variant="outline"
+                        className="rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FFFFFF] dark:hover:bg-[#2D1D24] text-xs font-medium py-2.5 px-3"
                       >
-                        Book Now
+                        Details ↗
                       </Button>
-                      <Link href={`/services/${service._id}`}>
-                        <Button
-                          variant="outline"
-                          className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FFFFFF] text-xs font-medium py-2.5 px-3"
-                        >
-                          Details ↗
-                        </Button>
-                      </Link>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -733,7 +724,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-xl border-[#3B1F2B]/25 text-[#231C1E] hover:bg-[#FAF7F2] font-semibold text-xs uppercase tracking-wider px-8"
+                className="rounded-xl border-[#3B1F2B]/25 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#22161B] font-semibold text-xs uppercase tracking-wider px-8"
               >
                 <span>View Complete Service Menu (30+ Offerings)</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -748,69 +739,69 @@ export default function HomePage() {
         5. WHY SALONBOOK / THE BOUTIQUE STANDARDS (BENTO GRID)
         =======================================================================
       */}
-      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] dark:bg-[#170F13] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
             <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
               THE SALONBOOK DIFFERENCE
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
               Why Clients Choose Our Chairs
             </h2>
-            <p className="text-sm text-[#231C1E]/75 leading-relaxed">
+            <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
               We reimagined modern salon booking from the ground up: zero overlapping chairs, true appointment punctuality, and certified master artists.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Bento 1: Zero double-booking */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
-                <Clock className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center text-[#3B1F2B] dark:text-[#C5A880]">
+                <Clock className="w-5 h-5" />
               </div>
-              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+              <h3 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                 Zero Double-Booking
               </h3>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 When you reserve a slot, that time belongs strictly to you. No rushed turnarounds, no waiting in line, and no overlapping clients.
               </p>
             </div>
 
             {/* Bento 2: Hand-selected specialists */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
-                <Scissors className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center text-[#3B1F2B] dark:text-[#C5A880]">
+                <Scissors className="w-5 h-5" />
               </div>
-              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+              <h3 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                 12 Master Artisans
               </h3>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Each barber, colorist, and esthetician brings extensive international training, Vidal Sassoon fellowships, and dedicated craft mastery.
               </p>
             </div>
 
             {/* Bento 3: Clean & non-toxic formulas */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
-                <Sparkles className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center text-[#3B1F2B] dark:text-[#C5A880]">
+                <Sparkles className="w-5 h-5" />
               </div>
-              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+              <h3 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                 Clean Botanical Care
               </h3>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Cruelty-free, paraben-free European scalp washes, cold-pressed plant squalane, and organic gloss infusions safe for all skin types.
               </p>
             </div>
 
             {/* Bento 4: Stripe transparent payments */}
-            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
-                <ShieldCheck className="w-5 h-5 text-[#3B1F2B]" />
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 flex items-center justify-center text-[#3B1F2B] dark:text-[#C5A880]">
+                <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+              <h3 className="font-serif text-base font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                 Transparent Checkout
               </h3>
-              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Book without upfront lock-in; confirm your reservation first, then complete payment securely via Stripe with automated invoices.
               </p>
             </div>
@@ -823,17 +814,17 @@ export default function HomePage() {
         6. RESIDENT ARTISTS / SPECIALISTS
         =======================================================================
       */}
-      <section className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#3B1F2B]/10">
+      <section className="py-16 sm:py-24 bg-[#FFFFFF] dark:bg-[#1E1317] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div className="space-y-2">
               <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
                 THE TEAM
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
                 Resident Barbers &amp; Specialists
               </h2>
-              <p className="text-sm text-[#231C1E]/75 max-w-lg">
+              <p className="text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 max-w-lg">
                 Meet the licensed artisans who bring years of precision cutting, custom hair coloring, and clinical skincare mastery to Madison Avenue.
               </p>
             </div>
@@ -842,7 +833,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2] text-xs font-semibold"
+                className="rounded-xl border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#FAF7F2] dark:hover:bg-[#22161B] text-xs font-semibold"
               >
                 <span>Read artist biographies</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -854,9 +845,9 @@ export default function HomePage() {
             {residentBarbers.map((barber) => (
               <div
                 key={barber.name}
-                className="rounded-2xl bg-[#FAF7F2] border border-[#3B1F2B]/10 overflow-hidden shadow-sm hover:shadow-md transition-all group"
+                className="rounded-2xl bg-[#FAF7F2] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 overflow-hidden shadow-sm hover:shadow-md transition-all group"
               >
-                <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6]">
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6] dark:bg-[#2D1D24]">
                   <SafeImage
                     src={barber.image}
                     alt={barber.name}
@@ -874,16 +865,16 @@ export default function HomePage() {
                 </div>
 
                 <div className="p-4 space-y-2">
-                  <p className="text-xs font-semibold text-[#3B1F2B]">
+                  <p className="text-xs font-semibold text-[#3B1F2B] dark:text-[#C5A880]">
                     {barber.role}
                   </p>
-                  <p className="text-xs text-[#231C1E]/70 leading-relaxed">
+                  <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 leading-relaxed">
                     {barber.specialty}
                   </p>
                   <div className="pt-2">
                     <Link
                       href="/services"
-                      className="text-xs font-semibold text-[#3B1F2B] hover:text-[#4A2035] flex items-center gap-1"
+                      className="text-xs font-semibold text-[#3B1F2B] dark:text-[#C5A880] hover:underline flex items-center gap-1"
                     >
                       <span>Book with {barber.name.split(" ")[0]}</span>
                       <ArrowRight className="w-3 h-3" />
@@ -901,20 +892,20 @@ export default function HomePage() {
         7. CLIENT STORIES & TESTIMONIALS
         =======================================================================
       */}
-      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] dark:bg-[#170F13] border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 transition-colors">
         <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-xl mx-auto space-y-2 mb-12">
             <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
               PATRON REVIEWS
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2]">
               What Our Clients Say
             </h2>
             <div className="flex items-center justify-center gap-1 text-amber-500 pt-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
-              <span className="text-xs font-bold text-[#231C1E] ml-2">
+              <span className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2] ml-2">
                 4.9 / 5 from over 8,000 appointments
               </span>
             </div>
@@ -924,7 +915,7 @@ export default function HomePage() {
             {clientTestimonials.map((review, i) => (
               <div
                 key={i}
-                className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm flex flex-col justify-between space-y-4"
+                className="p-6 rounded-2xl bg-[#FFFFFF] dark:bg-[#22161B] border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 shadow-sm flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   <div className="flex text-amber-500">
@@ -932,21 +923,21 @@ export default function HomePage() {
                       <Star key={idx} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-[#231C1E]/80 leading-relaxed italic">
+                  <p className="text-xs sm:text-sm text-[#231C1E]/80 dark:text-[#FAF7F2]/80 leading-relaxed italic">
                     &ldquo;{review.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#3B1F2B]/10 flex items-center justify-between">
+                <div className="pt-3 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 flex items-center justify-between">
                   <div>
-                    <h4 className="text-xs font-bold text-[#231C1E]">
+                    <h4 className="text-xs font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                       {review.author}
                     </h4>
-                    <p className="text-[11px] text-[#231C1E]/60">
+                    <p className="text-[11px] text-[#231C1E]/60 dark:text-[#FAF7F2]/60">
                       {review.location}
                     </p>
                   </div>
-                  <span className="text-[11px] font-semibold text-[#3B1F2B] bg-[#FAF7F2] px-2.5 py-1 rounded-full border border-[#3B1F2B]/10">
+                  <span className="text-[11px] font-semibold text-[#3B1F2B] dark:text-[#C5A880] bg-[#FAF7F2] dark:bg-[#2D1D24] px-2.5 py-1 rounded-full border border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
                     {review.service}
                   </span>
                 </div>

@@ -92,7 +92,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleBookNow = async () => {
     if (!isAuthenticated) {
-      toast.error("Please sign in to reserve an atelier consultation.");
+      toast.error("Please sign in to reserve an appointment.");
       router.push(`/sign-in?redirect=/services/${service._id}`);
       onClose();
       return;
@@ -146,44 +146,44 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto p-8 bg-[#F5F1E8] border-[#302821]/20 shadow-2xl rounded-none text-[#302821]">
-        <DialogHeader className="space-y-2 text-left pb-4 border-b border-[#302821]/10">
+      <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto p-7 sm:p-8 bg-[#FAF7F2] dark:bg-[#1E1519] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 shadow-2xl rounded-2xl text-[#231C1E] dark:text-[#FAF7F2] transition-colors">
+        <DialogHeader className="space-y-2 text-left pb-4 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
           <div className="flex items-center gap-3">
-            <span className="px-2.5 py-0.5 text-[9px] uppercase tracking-[0.2em] font-semibold bg-[#26372D] text-[#F5F1E8]">
+            <span className="px-2.5 py-0.5 text-[9px] uppercase tracking-[0.2em] font-semibold rounded-md bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13]">
               {service.category}
             </span>
-            <span className="text-[10px] uppercase tracking-wider text-[#302821]/70 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-[#26372D]" /> {service.durationMinutes} MIN
+            <span className="text-xs uppercase tracking-wider text-[#231C1E]/70 dark:text-[#FAF7F2]/70 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-[#C5A880]" /> ⏱ {service.durationMinutes} MIN
             </span>
           </div>
 
-          <DialogTitle className="font-serif text-2xl sm:text-3xl font-normal leading-tight text-[#302821]">
+          <DialogTitle className="font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#231C1E] dark:text-[#FAF7F2]">
             {service.title}
           </DialogTitle>
-          <DialogDescription className="text-xs text-[#302821]/70 leading-relaxed">
+          <DialogDescription className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 leading-relaxed">
             Select your preferred consultation date and dedicated chair time slot.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-5 py-3">
           {/* Date Picker Input & Quick Chips */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#302821]/70 flex items-center gap-1.5">
-                <CalendarIcon className="w-3.5 h-3.5 text-[#26372D]" /> SELECT DATE
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 flex items-center gap-1.5">
+                <CalendarIcon className="w-3.5 h-3.5 text-[#C5A880]" /> Select Date
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setQuickDate(1)}
-                  className="px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#EAE3D6] hover:bg-[#26372D] hover:text-[#F5F1E8] text-[#302821] transition-colors border border-[#302821]/15"
+                  className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#FFFFFF] dark:bg-[#2D1D24] hover:bg-[#3B1F2B] hover:text-[#FAF7F2] dark:hover:bg-[#C5A880] dark:hover:text-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15"
                 >
                   Tomorrow
                 </button>
                 <button
                   type="button"
                   onClick={() => setQuickDate(2)}
-                  className="px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#EAE3D6] hover:bg-[#26372D] hover:text-[#F5F1E8] text-[#302821] transition-colors border border-[#302821]/15"
+                  className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-[#FFFFFF] dark:bg-[#2D1D24] hover:bg-[#3B1F2B] hover:text-[#FAF7F2] dark:hover:bg-[#C5A880] dark:hover:text-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15"
                 >
                   In 2 Days
                 </button>
@@ -195,32 +195,32 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               value={selectedDate}
               min={new Date().toISOString().split("T")[0]}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full h-11 px-3.5 rounded-none border border-[#302821]/20 bg-[#F5F1E8] text-xs uppercase tracking-wider text-[#302821] focus:outline-none focus:ring-1 focus:ring-[#26372D]"
+              className="w-full h-11 px-3.5 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#2D1D24] text-xs font-medium text-[#231C1E] dark:text-[#FAF7F2] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B] dark:focus:ring-[#C5A880]"
             />
           </div>
 
           {/* Time Slot Picker */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#302821]/70 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#26372D]" /> AVAILABLE CHAIR SLOTS
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#C5A880]" /> Available Chair Slots
               </label>
               {selectedSlot && (
-                <span className="text-[10px] uppercase tracking-wider text-[#B8755B] font-semibold">
-                  SELECTED: {selectedSlot}
+                <span className="text-xs uppercase tracking-wider text-[#C5A880] font-bold">
+                  Selected: {selectedSlot}
                 </span>
               )}
             </div>
 
             {isLoadingSlots ? (
               <div className="py-8 text-center space-y-2">
-                <Loader2 className="w-5 h-5 text-[#26372D] animate-spin mx-auto" />
-                <p className="text-[10px] uppercase tracking-wider text-[#302821]/60">
-                  Checking atelier schedule...
+                <Loader2 className="w-5 h-5 text-[#3B1F2B] dark:text-[#C5A880] animate-spin mx-auto" />
+                <p className="text-xs text-[#231C1E]/60 dark:text-[#FAF7F2]/60">
+                  Checking salon schedule...
                 </p>
               </div>
             ) : availableSlots.length === 0 ? (
-              <div className="p-4 bg-[#EAE3D6]/60 border border-[#302821]/15 text-[#302821]/70 text-xs text-center">
+              <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#2D1D24] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 text-[#231C1E]/70 dark:text-[#FAF7F2]/70 text-xs text-center">
                 All chairs are fully reserved on this date. Please select another day.
               </div>
             ) : (
@@ -232,10 +232,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       key={slot}
                       type="button"
                       onClick={() => setSelectedSlot(slot)}
-                      className={`h-10 text-[11px] uppercase tracking-wider transition-all border ${
+                      className={`h-10 text-xs font-semibold rounded-xl uppercase tracking-wider transition-all border ${
                         isSelected
-                          ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D] font-medium"
-                          : "bg-[#EAE3D6]/50 text-[#302821] border-[#302821]/15 hover:border-[#26372D]"
+                          ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] border-[#3B1F2B] dark:border-[#C5A880] shadow-sm"
+                          : "bg-[#FFFFFF] dark:bg-[#2D1D24] text-[#231C1E] dark:text-[#FAF7F2] border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 hover:border-[#3B1F2B] dark:hover:border-[#C5A880]"
                       }`}
                     >
                       {slot}
@@ -248,30 +248,30 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
           {/* Notes Input */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#302821]/70 block">
-              Patron Notes &amp; Requests (Optional)
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block">
+              Appointment Notes &amp; Requests (Optional)
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
-              placeholder="e.g. Scalp sensitivity, requested specialist, allergy to specific essential oils..."
-              className="w-full p-3 rounded-none border border-[#302821]/20 bg-[#F5F1E8] text-xs text-[#302821] focus:outline-none focus:ring-1 focus:ring-[#26372D]"
+              placeholder="e.g. Scalp sensitivity, requested specialist, allergy to specific products..."
+              className="w-full p-3 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#2D1D24] text-xs text-[#231C1E] dark:text-[#FAF7F2] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B] dark:focus:ring-[#C5A880]"
             />
           </div>
 
           {/* Summary Strip */}
-          <div className="p-4 border border-[#302821]/15 bg-[#EAE3D6]/50 flex items-center justify-between">
+          <div className="p-4 rounded-xl border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 bg-[#FFFFFF] dark:bg-[#2D1D24] flex items-center justify-between">
             <div>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-[#302821]/60 block font-semibold">
-                TREATMENT INVESTMENT
+              <span className="text-[10px] uppercase tracking-wider text-[#231C1E]/60 dark:text-[#FAF7F2]/60 block font-semibold">
+                TREATMENT FEE
               </span>
-              <div className="font-serif text-2xl font-medium text-[#26372D]">
+              <div className="font-serif text-2xl font-bold text-[#3B1F2B] dark:text-[#C5A880]">
                 {formatCurrency(service.price)}
               </div>
             </div>
-            <span className="text-[10px] uppercase tracking-wider text-[#26372D] font-semibold flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-[#26372D]" /> Single-Guest Duration
+            <span className="text-xs text-[#231C1E]/80 dark:text-[#FAF7F2]/80 font-medium flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Dedicated Chair
             </span>
           </div>
 
@@ -282,26 +282,25 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               variant="outline"
               size="sm"
               onClick={onClose}
-              className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
+              className="rounded-xl text-xs uppercase tracking-wider border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2]"
             >
               Cancel
             </Button>
             <Button
               type="button"
-              variant="default"
               size="sm"
               onClick={handleBookNow}
               disabled={isSubmitting || !selectedSlot}
-              className="rounded-none text-xs uppercase tracking-wider h-11 px-6 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+              className="rounded-xl text-xs font-bold uppercase tracking-wider h-11 px-6 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] shadow-sm"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
-                  RESERVING...
+                  Reserving...
                 </>
               ) : (
                 <>
-                  CONFIRM RESERVATION <ArrowRight className="w-3.5 h-3.5 ml-2" />
+                  Confirm Reservation <ArrowRight className="w-3.5 h-3.5 ml-2" />
                 </>
               )}
             </Button>

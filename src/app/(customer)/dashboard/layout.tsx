@@ -92,9 +92,9 @@ export default function CustomerDashboardLayout({
   ];
 
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-[#FAF7F2] text-[#231C1E]">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
       {/* Top Banner */}
-      <div className="border-b border-[#3B1F2B]/10 bg-[#FFFFFF]">
+      <div className="border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div className="space-y-1.5">
@@ -104,10 +104,10 @@ export default function CustomerDashboardLayout({
                   CUSTOMER LOUNGE
                 </span>
               </div>
-              <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#231C1E]">
+              <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">
                 Welcome, {user?.name || "Valued Patron"}
               </h1>
-              <p className="text-xs sm:text-sm text-[#231C1E]/75 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
                 Manage upcoming chair bookings, review treatment regimens, and access verified Stripe receipts.
               </p>
             </div>
@@ -116,7 +116,7 @@ export default function CustomerDashboardLayout({
               <Link href="/services">
                 <Button
                   size="sm"
-                  className="rounded-xl text-xs font-bold uppercase tracking-wider px-5 py-2.5 bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035] shadow-sm"
+                  className="rounded-xl text-xs font-bold uppercase tracking-wider px-5 py-2.5 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] shadow-sm"
                 >
                   <span>Book New Appointment</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-2" />
@@ -126,7 +126,7 @@ export default function CustomerDashboardLayout({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-6 border-t border-[#3B1F2B]/10 mt-6 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pt-6 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 mt-6 scrollbar-none">
             {tabs.map((tab) => {
               const isActive = tab.exact
                 ? pathname === tab.href
@@ -138,8 +138,8 @@ export default function CustomerDashboardLayout({
                   href={tab.href}
                   className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-[#3B1F2B] text-[#FAF7F2] shadow-sm"
-                      : "bg-transparent text-[#231C1E]/75 hover:bg-[#FAF7F2] hover:text-[#231C1E]"
+                      ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm"
+                      : "bg-transparent text-[#231C1E]/75 dark:text-[#FAF7F2]/75 hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] hover:text-[#231C1E] dark:hover:text-[#FAF7F2]"
                   }`}
                 >
                   {tab.label}

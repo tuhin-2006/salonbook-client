@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* SalonBook Palette (Assignment 9 Category 002 Spec) */
+    /* SalonBook Light Palette */
     /* Warm cream / beige background: #FAF7F2 */
     --background: 38 43% 97%;
     /* Deep charcoal text: #231C1E */
@@ -27,14 +27,14 @@
     --muted: 36 20% 90%;
     --muted-foreground: 343 8% 46%;
 
-    /* Subtle olive gold / soft terracotta: #C5A880 */
+    /* Subtle olive gold: #C5A880 */
     --accent: 35 38% 64%;
     --accent-foreground: 343 11% 13%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 36 20% 88%; /* #E8E2D8 */
+    --border: 36 20% 88%;
     --input: 36 20% 88%;
     --ring: 332 31% 18%;
 
@@ -42,33 +42,34 @@
   }
 
   .dark {
-    --background: 343 18% 10%; /* #1E1619 Deep Burgundy Black */
-    --foreground: 38 43% 97%;
+    /* SalonBook Dark Palette — Opulent Noir & Deep Wine */
+    --background: 343 18% 8%; /* #170F13 Deep luxury noir */
+    --foreground: 38 43% 97%; /* #FAF7F2 Warm cream */
 
-    --card: 343 16% 14%;
+    --card: 343 16% 12%; /* #22161B Luxury dark card */
     --card-foreground: 38 43% 97%;
 
-    --popover: 343 16% 14%;
+    --popover: 343 16% 12%;
     --popover-foreground: 38 43% 97%;
 
-    --primary: 38 43% 97%;
-    --primary-foreground: 332 31% 18%;
+    --primary: 35 38% 64%; /* #C5A880 Gold highlight */
+    --primary-foreground: 343 18% 8%;
 
-    --secondary: 343 14% 18%;
+    --secondary: 343 14% 18%; /* #2D1D24 Deep plum */
     --secondary-foreground: 38 43% 97%;
 
-    --muted: 343 12% 22%;
-    --muted-foreground: 38 15% 70%;
+    --muted: 343 12% 18%;
+    --muted-foreground: 38 15% 68%;
 
-    --accent: 35 38% 64%;
-    --accent-foreground: 38 43% 97%;
+    --accent: 35 38% 64%; /* #C5A880 Gold */
+    --accent-foreground: 343 18% 8%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 343 14% 22%;
-    --input: 343 14% 22%;
-    --ring: 38 43% 97%;
+    --border: 343 14% 20%; /* #38252E */
+    --input: 343 14% 20%;
+    --ring: 35 38% 64%;
   }
 }
 
@@ -78,16 +79,20 @@
   }
   html {
     scroll-behavior: smooth;
-    background-color: #FAF7F2;
   }
   body {
-    @apply bg-[#FAF7F2] text-[#231C1E] antialiased;
+    @apply bg-background text-foreground antialiased transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   ::selection {
     background-color: #3B1F2B;
     color: #FAF7F2;
+  }
+
+  .dark ::selection {
+    background-color: #C5A880;
+    color: #170F13;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -102,27 +107,30 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FAF7F2;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #D9D0C3;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
+.dark ::-webkit-scrollbar-thumb {
   background: #3B1F2B;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A880;
 }
 
 @layer utilities {
   .hairline-b {
     border-bottom: 1px solid rgba(59, 31, 43, 0.1);
   }
+  .dark .hairline-b {
+    border-bottom: 1px solid rgba(250, 247, 242, 0.1);
+  }
   .hairline-t {
     border-top: 1px solid rgba(59, 31, 43, 0.1);
   }
-  .hairline-r {
-    border-right: 1px solid rgba(59, 31, 43, 0.1);
-  }
-  .hairline-l {
-    border-left: 1px solid rgba(59, 31, 43, 0.1);
+  .dark .hairline-t {
+    border-top: 1px solid rgba(250, 247, 242, 0.1);
   }
 }

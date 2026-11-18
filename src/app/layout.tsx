@@ -34,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${serifFont.variable} ${sansFont.variable}`}>
-      <body className="min-h-screen flex flex-col bg-[#F5F1E8] text-[#26372D] font-sans antialiased selection:bg-[#343D2E] selection:text-[#F5F1E8]">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased selection:bg-[#3B1F2B] selection:text-[#FAF7F2] transition-colors duration-200">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
           <QueryProvider>
             <AuthProvider>
               <Navbar />
@@ -46,7 +46,7 @@ export default function RootLayout({
                 toastOptions={{
                   duration: 4000,
                   className:
-                    "bg-[#EAE3D6] text-[#26372D] border border-[#302821]/20 font-sans text-xs",
+                    "bg-card text-card-foreground border border-border font-sans text-xs shadow-lg",
                 }}
               />
             </AuthProvider>
