@@ -12,6 +12,8 @@ import {
   Sparkles,
   ArrowRight,
   Filter,
+  Loader2,
+  ShieldCheck,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
@@ -63,7 +65,7 @@ export default function CustomerAppointmentsPage() {
 
   const handleCancelClick = (appointment: Appointment) => {
     if (appointment.status !== "pending") {
-      toast.error("Only pending appointments can be cancelled.");
+      toast.error("Per atelier policy, only pending appointment requests can be cancelled.");
       return;
     }
     setAppointmentToCancel(appointment);
@@ -80,8 +82,8 @@ export default function CustomerAppointmentsPage() {
       );
 
       if (res.data.success) {
-        toast.success("Appointment has been cancelled successfully.");
-        // Refresh local list
+        toast.success("Appointment reservation has been cancelled.");
+        // Refresh local state
         setAppointments((prev) =>
           prev.map((app) =>
             app._id === appointmentToCancel._id
@@ -108,10 +110,10 @@ export default function CustomerAppointmentsPage() {
       );
 
       if (res.data.success && res.data.data.checkoutUrl) {
-        toast.info("Redirecting to secure Stripe Checkout...");
+        toast.info("Connecting to secure Stripe Checkout gateway...");
         window.location.href = res.data.data.checkoutUrl;
       } else {
-        toast.error("Could not initialize Stripe Checkout session.");
+        toast.error("Could not generate Stripe Checkout session.");
       }
     } catch (err: unknown) {
       toast.error((err as Error).message || "Payment initialization failed.");
@@ -130,23 +132,23 @@ export default function CustomerAppointmentsPage() {
     switch (status) {
       case "confirmed":
         return (
-          <Badge className="bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 gap-1 capitalize">
-            <CheckCircle2 className="w-3 h-3" />
+          <Badge className="bg-emerald-600/15 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 gap-1 capitalize font-semibold">
+            <CheckCircle2 className="w-3.5 h-3.5" />
             Confirmed
           </Badge>
         );
       case "cancelled":
         return (
-          <Badge variant="destructive" className="gap-1 capitalize">
-            <XCircle className="w-3 h-3" />
+          <Badge variant="destructive" className="gap-1 capitalize font-semibold">
+            <XCircle className="w-3.5 h-3.5" />
             Cancelled
           </Badge>
         );
       default:
         return (
-          <Badge variant="secondary" className="bg-gold-500/10 text-gold-700 dark:text-gold-400 border border-gold-500/30 gap-1 capitalize">
-            <Clock className="w-3 h-3" />
-            Pending
+          <Badge variant="secondary" className="bg-gold-500/15 text-gold-700 dark:text-gold-400 border border-gold-500/30 gap-1 capitalize font-semibold">
+            <Clock className="w-3.5 h-3.5" />
+            Pending Approval
           </Badge>
         );
     }
@@ -155,14 +157,14 @@ export default function CustomerAppointmentsPage() {
   const getPaymentBadge = (paymentStatus?: string) => {
     if (paymentStatus === "paid") {
       return (
-        <Badge className="bg-emerald-600 text-white gap-1 text-[10px] uppercase font-semibold">
+        <Badge className="bg-emerald-600 text-white gap-1 text-[10px] uppercase font-bold tracking-wider">
           <CheckCircle2 className="w-3 h-3" />
           Paid
         </Badge>
       );
     }
     return (
-      <Badge variant="outline" className="text-muted-foreground text-[10px] uppercase font-semibold">
+      <Badge variant="outline" className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider border-border">
         Unpaid
       </Badge>
     );
@@ -173,23 +175,23 @@ export default function CustomerAppointmentsPage() {
       {/* Header & Filter Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-foreground">
-            My Appointments
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+            My Salon Reservations
           </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Manage your booked salon rituals, complete pending payments, or cancel scheduled visits.
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+            Review booked treatments, complete Stripe payments on confirmed sessions, or manage pending requests.
           </p>
         </div>
 
         {/* Tab Filters */}
-        <div className="inline-flex items-center p-1 rounded-xl bg-card border border-border text-xs">
+        <div className="inline-flex items-center p-1 rounded-2xl bg-card border border-border/80 text-xs">
           {(["all", "pending", "confirmed", "cancelled"] as FilterTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-lg capitalize font-medium transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl capitalize font-semibold transition-all ${
                 activeTab === tab
-                  ? "bg-primary text-white shadow-sm font-semibold"
+                  ? "bg-gradient-to-r from-gold-500 to-terracotta-500 text-white shadow-md font-bold"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -200,28 +202,28 @@ export default function CustomerAppointmentsPage() {
       </div>
 
       {/* Main Table / List */}
-      <div className="bg-card rounded-2xl border border-border/70 p-6 sm:p-8">
+      <div className="bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 shadow-xl">
         {loading ? (
           <div className="py-20 text-center text-muted-foreground text-sm space-y-3">
-            <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
-            <p>Loading your appointments...</p>
+            <div className="w-8 h-8 rounded-full border-2 border-gold-500 border-t-transparent animate-spin mx-auto" />
+            <p className="text-xs font-semibold text-muted-foreground">Loading appointments ledger...</p>
           </div>
         ) : filteredAppointments.length === 0 ? (
           <div className="py-16 text-center space-y-4 max-w-sm mx-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-gold-500/10 text-gold-500 mx-auto flex items-center justify-center">
               <Calendar className="w-6 h-6" />
             </div>
-            <h4 className="font-serif text-lg font-semibold text-foreground">
+            <h4 className="font-serif text-xl font-bold text-foreground">
               No {activeTab !== "all" ? activeTab : ""} Appointments
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
               {activeTab === "all"
-                ? "You haven't requested any salon appointments yet."
-                : `You currently have no ${activeTab} appointments in your salon schedule.`}
+                ? "You have not scheduled any appointments at SalonBook yet."
+                : `You currently have no ${activeTab} reservations in your calendar.`}
             </p>
             <Link href="/services">
-              <Button variant="luxury" size="sm" className="mt-2">
-                Browse Services Catalog
+              <Button variant="luxury" size="sm" className="mt-2 rounded-full text-xs font-semibold">
+                Browse Rituals Menu
               </Button>
             </Link>
           </div>
@@ -232,7 +234,7 @@ export default function CustomerAppointmentsPage() {
                 <tr className="border-b border-border/80 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
                   <th className="pb-3 pr-4">Service</th>
                   <th className="pb-3 px-4">Date & Time</th>
-                  <th className="pb-3 px-4">Price</th>
+                  <th className="pb-3 px-4">Fee</th>
                   <th className="pb-3 px-4">Booking Status</th>
                   <th className="pb-3 px-4">Payment</th>
                   <th className="pb-3 pl-4 text-right">Actions</th>
@@ -256,15 +258,15 @@ export default function CustomerAppointmentsPage() {
                             <img
                               src={service.images[0]}
                               alt={service.title}
-                              className="w-14 h-14 rounded-lg object-cover border border-border shrink-0"
+                              className="w-14 h-14 rounded-2xl object-cover border border-border shrink-0"
                             />
                           ) : (
-                            <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
+                            <div className="w-14 h-14 rounded-2xl bg-gold-500/10 flex items-center justify-center text-gold-600 font-serif font-bold shrink-0">
                               SB
                             </div>
                           )}
                           <div>
-                            <p className="font-semibold text-foreground text-sm leading-tight">
+                            <p className="font-serif font-bold text-foreground text-sm leading-tight">
                               {service?.title || "Bespoke Treatment"}
                             </p>
                             <span className="text-[11px] text-muted-foreground">
@@ -276,7 +278,7 @@ export default function CustomerAppointmentsPage() {
 
                       {/* Date & Time */}
                       <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="font-medium text-foreground">
+                        <div className="font-semibold text-foreground">
                           {formatDate(app.appointmentDate)}
                         </div>
                         <div className="text-xs text-muted-foreground">
@@ -285,7 +287,7 @@ export default function CustomerAppointmentsPage() {
                       </td>
 
                       {/* Price */}
-                      <td className="py-4 px-4 font-semibold text-foreground whitespace-nowrap">
+                      <td className="py-4 px-4 font-serif font-bold text-foreground whitespace-nowrap">
                         {formatCurrency(service?.price || 0)}
                       </td>
 
@@ -307,31 +309,40 @@ export default function CustomerAppointmentsPage() {
                             <Button
                               variant="luxury"
                               size="sm"
-                              className="h-8 text-xs gap-1.5"
+                              className="h-9 text-xs gap-1.5 rounded-full px-4 font-semibold shadow-md shadow-gold-500/20"
                               onClick={() => handlePayNow(app)}
                               disabled={payingAppointmentId === app._id}
                             >
-                              <CreditCard className="w-3.5 h-3.5" />
-                              {payingAppointmentId === app._id ? "Connecting..." : "Pay Now"}
+                              {payingAppointmentId === app._id ? (
+                                <>
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  <span>Connecting...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <CreditCard className="w-3.5 h-3.5" />
+                                  <span>Pay with Stripe</span>
+                                </>
+                              )}
                             </Button>
                           )}
 
-                          {/* Cancel Button (Only allowed on Pending) */}
+                          {/* Cancel Button (Strictly only allowed on Pending) */}
                           {isPending && (
                             <Button
                               variant="outline"
                               size="sm"
-                              className="h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/10"
+                              className="h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/10 rounded-full"
                               onClick={() => handleCancelClick(app)}
                             >
-                              Cancel
+                              Cancel Request
                             </Button>
                           )}
 
-                          {/* Completed or already paid indicator */}
+                          {/* Confirmed & Paid indicator */}
                           {isConfirmed && !isUnpaid && (
-                            <span className="text-xs text-emerald-600 font-medium">
-                              Ready for Visit
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5" /> Ready for Visit
                             </span>
                           )}
 
@@ -353,13 +364,13 @@ export default function CustomerAppointmentsPage() {
 
       {/* Cancel Confirmation Dialog */}
       <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-serif text-xl">
+        <DialogContent className="max-w-md bg-card border-gold-500/20 p-6 sm:p-8 rounded-3xl shadow-2xl">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="font-serif text-2xl font-bold">
               Cancel Appointment Request?
             </DialogTitle>
-            <DialogDescription className="text-xs leading-relaxed pt-2">
-              Are you sure you want to cancel your appointment for{" "}
+            <DialogDescription className="text-xs leading-relaxed pt-1 text-muted-foreground">
+              Are you sure you want to cancel your pending reservation for{" "}
               <strong className="text-foreground">
                 {appointmentToCancel?.serviceId?.title}
               </strong>{" "}
@@ -367,20 +378,22 @@ export default function CustomerAppointmentsPage() {
               {appointmentToCancel?.timeSlot}? This action cannot be reversed.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="mt-4 gap-2">
+          <DialogFooter className="mt-6 gap-2 sm:gap-0">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCancelModalOpen(false)}
               disabled={cancelling}
+              className="rounded-full"
             >
-              Keep Booking
+              Keep Reservation
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={confirmCancelAppointment}
               disabled={cancelling}
+              className="rounded-full"
             >
               {cancelling ? "Cancelling..." : "Confirm Cancellation"}
             </Button>
