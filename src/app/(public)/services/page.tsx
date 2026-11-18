@@ -29,7 +29,7 @@ import { formatCurrency } from "@/lib/utils";
 const fallbackServices: Service[] = [
   {
     _id: "s1",
-    title: "Signature Balayage & Silk Glaze",
+    title: "Signature French Balayage & Silk Glaze",
     slug: "signature-balayage-silk-glaze",
     category: "Hair",
     description:
@@ -37,27 +37,27 @@ const fallbackServices: Service[] = [
     price: 185,
     durationMinutes: 120,
     images: [
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
+    specialists: ["Céline Laurent (Creative Director)", "Chloe Moreau"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "s2",
-    title: "Precision Editorial Cut & Blowout",
-    slug: "precision-editorial-cut-blowout",
+    title: "Precision Architectural Cut & Silk Blowout",
+    slug: "precision-architectural-cut-silk-blowout",
     category: "Hair",
     description:
-      "A bespoke precision haircut tailored to your hair texture, scalp detox ritual, customized deep conditioning masque, and signature blowout.",
-    price: 95,
+      "Geometric precision cutting tailored to hair density and growth direction, scalp detox massage, customized deep conditioning masque, and signature blowout.",
+    price: 110,
     durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Chloe Moreau", "David Rossi"],
+    specialists: ["Céline Laurent", "David Rossi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -71,10 +71,10 @@ const fallbackServices: Service[] = [
     price: 220,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Dr. Aurelia Chen (Aesthetician)"],
+    specialists: ["Dr. Mathis Vance (Aesthetician)"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -88,7 +88,7 @@ const fallbackServices: Service[] = [
     price: 140,
     durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1512290900672-1f41d996d926?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1512290900672-1f41d996d926?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Sarah Jenkins"],
@@ -105,7 +105,7 @@ const fallbackServices: Service[] = [
     price: 75,
     durationMinutes: 75,
     images: [
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Mia Lindqvist"],
@@ -114,18 +114,18 @@ const fallbackServices: Service[] = [
   },
   {
     _id: "s6",
-    title: "Deep Tissue Aromatherapy Hot Stone Ritual",
-    slug: "deep-tissue-aromatherapy-hot-stone-ritual",
+    title: "Deep Tissue Volcanic Basalt Stone Ritual",
+    slug: "deep-tissue-volcanic-stone-ritual",
     category: "Massage",
     description:
       "Heated basalt stones infused with organic lavender and frankincense essential oils to melt away chronic muscular tension and restore nervous equilibrium.",
     price: 160,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Alexander Wright (RMT)"],
+    specialists: ["Siobhan O'Connor (RMT)"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -139,7 +139,7 @@ const fallbackServices: Service[] = [
     price: 320,
     durationMinutes: 150,
     images: [
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Victoria Sterling (Bridal Director)"],
@@ -156,10 +156,10 @@ const fallbackServices: Service[] = [
     price: 65,
     durationMinutes: 45,
     images: [
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Marco Rossi"],
+    specialists: ["Kenzo Takahashi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -173,7 +173,7 @@ const fallbackServices: Service[] = [
     price: 150,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Camilla Dubois"],
@@ -190,7 +190,7 @@ const fallbackServices: Service[] = [
     price: 110,
     durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Chloe Moreau"],
@@ -423,7 +423,7 @@ function ServicesContent() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                     isSelected
-                      ? "bg-gradient-to-r from-gold-500 to-terracotta-500 text-white shadow-md shadow-gold-500/20"
+                      ? "bg-gradient-to-r from-forest-900 to-forest-800 text-white shadow-md dark:from-gold-500 dark:to-terracotta-500"
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-transparent"
                   }`}
                 >
@@ -475,7 +475,7 @@ function ServicesContent() {
                 <div className="relative aspect-[16/10] overflow-hidden bg-muted">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={service.images[0] || "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"}
+                    src={service.images[0] || "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1200&q=85"}
                     alt={service.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
@@ -484,7 +484,7 @@ function ServicesContent() {
                       {service.category}
                     </Badge>
                   </div>
-                  <div className="absolute bottom-3 right-3 px-3.5 py-1 rounded-full bg-noir-900/85 backdrop-blur-md text-white font-serif font-bold text-sm border border-gold-500/25">
+                  <div className="absolute bottom-3 right-3 px-3.5 py-1 rounded-full bg-forest-950/85 backdrop-blur-md text-white font-serif font-bold text-sm border border-gold-500/25">
                     {formatCurrency(service.price)}
                   </div>
                 </div>
@@ -511,13 +511,13 @@ function ServicesContent() {
                       href={`/services/${service._id}`}
                       className="text-xs font-semibold text-muted-foreground hover:text-foreground underline underline-offset-4"
                     >
-                      Protocol Details
+                      Protocol Dossier
                     </Link>
                     <Button
                       variant="luxury"
                       size="sm"
                       onClick={() => handleOpenBooking(service)}
-                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-gold-500/20"
+                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-forest-950/10"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       Reserve Chair
@@ -580,7 +580,7 @@ function ServicesContent() {
                       variant="luxury"
                       size="sm"
                       onClick={() => handleOpenBooking(service)}
-                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-gold-500/20"
+                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-forest-950/10"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       Reserve

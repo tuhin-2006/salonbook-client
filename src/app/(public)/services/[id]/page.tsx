@@ -55,12 +55,12 @@ export default function ServiceDetailsPage() {
           price: 185,
           durationMinutes: 120,
           images: [
-            "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85",
-            "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85",
-            "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?auto=format&fit=crop&w=1200&q=85",
           ],
           isActive: true,
-          specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
+          specialists: ["Céline Laurent (Creative Director)", "Chloe Moreau"],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
@@ -75,7 +75,7 @@ export default function ServiceDetailsPage() {
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Service link copied to clipboard!");
+      toast.success("Ritual dossier link copied to clipboard!");
     }
   };
 
@@ -183,7 +183,7 @@ export default function ServiceDetailsPage() {
 
               <div className="space-y-4 divide-y divide-border/60">
                 <div className="pt-3 first:pt-0 flex items-start gap-4">
-                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                  <span className="w-8 h-8 rounded-full bg-forest-900/10 text-forest-900 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-forest-900/20">
                     1
                   </span>
                   <div>
@@ -197,7 +197,7 @@ export default function ServiceDetailsPage() {
                 </div>
 
                 <div className="pt-4 flex items-start gap-4">
-                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                  <span className="w-8 h-8 rounded-full bg-forest-900/10 text-forest-900 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-forest-900/20">
                     2
                   </span>
                   <div>
@@ -211,7 +211,7 @@ export default function ServiceDetailsPage() {
                 </div>
 
                 <div className="pt-4 flex items-start gap-4">
-                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                  <span className="w-8 h-8 rounded-full bg-forest-900/10 text-forest-900 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-forest-900/20">
                     3
                   </span>
                   <div>
@@ -225,7 +225,7 @@ export default function ServiceDetailsPage() {
                 </div>
 
                 <div className="pt-4 flex items-start gap-4">
-                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                  <span className="w-8 h-8 rounded-full bg-forest-900/10 text-forest-900 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-forest-900/20">
                     4
                   </span>
                   <div>
@@ -243,7 +243,7 @@ export default function ServiceDetailsPage() {
             {/* Botanical Compounds & Inclusions */}
             <div className="rounded-3xl border border-gold-500/20 bg-secondary/30 dark:bg-card/40 p-6 sm:p-8 space-y-4">
               <div className="flex items-center gap-2 text-gold-600 dark:text-gold-400 text-xs font-bold uppercase tracking-wider">
-                <Leaf className="w-4 h-4" /> Clean Formulation Charter
+                <Leaf className="w-4 h-4 text-sage-600" /> Clean Formulation Charter
               </div>
               <h3 className="font-serif text-lg font-bold text-foreground">
                 Organic & Botanical Guarantee
@@ -324,7 +324,7 @@ export default function ServiceDetailsPage() {
                 variant="luxury"
                 size="lg"
                 onClick={() => setIsModalOpen(true)}
-                className="w-full text-sm font-semibold rounded-2xl h-13 gap-2 shadow-xl shadow-gold-500/20"
+                className="w-full text-sm font-semibold rounded-2xl h-13 gap-2 shadow-xl shadow-forest-950/15"
               >
                 <Sparkles className="w-4 h-4" /> Reserve Appointment Chair
               </Button>

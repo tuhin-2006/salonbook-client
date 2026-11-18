@@ -4,67 +4,67 @@
 
 @layer base {
   :root {
-    /* Luxury Atelier Silk & Champagne Light Mode */
-    --background: 40 25% 97%;
-    --foreground: 220 18% 12%;
+    /* Editorial Botanical Luxury — Warm Ivory & Deep Forest */
+    --background: 40 28% 97%; /* #FAF7F2 Warm Ivory */
+    --foreground: 155 20% 10%; /* #141C18 Deep Forest Noir */
 
     --card: 0 0% 100%;
-    --card-foreground: 220 18% 12%;
+    --card-foreground: 155 20% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 18% 12%;
+    --popover-foreground: 155 20% 10%;
 
-    --primary: 15 48% 54%; /* Terracotta Couture */
-    --primary-foreground: 0 0% 100%;
+    --primary: 157 28% 14%; /* #1A2E26 Deep Forest Green */
+    --primary-foreground: 40 25% 97%;
 
-    --secondary: 40 20% 92%;
-    --secondary-foreground: 220 18% 15%;
+    --secondary: 40 22% 93%; /* Soft Cream */
+    --secondary-foreground: 155 20% 14%;
 
-    --muted: 40 15% 92%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 40 18% 92%;
+    --muted-foreground: 155 10% 45%;
 
-    --accent: 42 62% 48%; /* Luminous Gold */
+    --accent: 42 50% 56%; /* #C5A059 Champagne Gold */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 40 18% 88%;
-    --input: 40 18% 88%;
-    --ring: 15 48% 54%;
+    --border: 40 16% 87%;
+    --input: 40 16% 87%;
+    --ring: 157 28% 14%;
 
-    --radius: 0.85rem;
+    --radius: 1rem;
   }
 
   .dark {
-    /* Haute Noir & Obsidian Velvet Dark Mode */
-    --background: 230 18% 7%;
-    --foreground: 40 25% 96%;
+    /* Haute Nocturne — Velvet Forest & Luminous Champagne */
+    --background: 156 30% 6%; /* #0B130F Velvet Obsidian */
+    --foreground: 40 25% 96%; /* #F8F5EE Warm Champagne */
 
-    --card: 230 16% 10%;
+    --card: 156 24% 9%; /* #111D17 Dark Forest Velvet */
     --card-foreground: 40 25% 96%;
 
-    --popover: 230 16% 10%;
+    --popover: 156 24% 9%;
     --popover-foreground: 40 25% 96%;
 
-    --primary: 15 60% 64%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 42 55% 60%; /* Champagne Gold in Dark Mode */
+    --primary-foreground: 156 30% 6%;
 
-    --secondary: 230 14% 15%;
+    --secondary: 156 20% 13%;
     --secondary-foreground: 40 25% 92%;
 
-    --muted: 230 14% 15%;
-    --muted-foreground: 40 10% 65%;
+    --muted: 156 18% 13%;
+    --muted-foreground: 100 10% 65%;
 
-    --accent: 42 68% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 100 15% 65%; /* Muted Sage */
+    --accent-foreground: 156 30% 6%;
 
     --destructive: 0 62% 35%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 230 14% 18%;
-    --input: 230 14% 18%;
-    --ring: 15 60% 64%;
+    --border: 156 20% 16%;
+    --input: 156 20% 16%;
+    --ring: 42 55% 60%;
   }
 }
 
@@ -76,94 +76,70 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-gold-500/20 selection:text-gold-900 dark:selection:text-gold-200;
+    @apply bg-background text-foreground antialiased selection:bg-sage-300/30 selection:text-forest-900 dark:selection:text-champagne-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif), Georgia, serif;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Custom Scrollbar for Luxury Editorial feel */
+/* Custom Scrollbar for Editorial Sanctuary */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(190, 150, 67, 0.25);
+  background: rgba(111, 130, 107, 0.3);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(190, 150, 67, 0.45);
+  background: rgba(197, 160, 89, 0.55);
 }
 
-/* Glassmorphism & Visual Tokens */
-.glass {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-.dark .glass {
-  background: rgba(14, 15, 22, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
+/* Glassmorphism & Visual Polish */
 .glass-luxury {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  border: 1px solid rgba(197, 160, 89, 0.22);
+  box-shadow: 0 10px 30px -10px rgba(26, 46, 38, 0.06);
 }
 .dark .glass-luxury {
-  background: rgba(14, 15, 23, 0.82);
+  background: rgba(17, 29, 23, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
 }
 
-/* Text Gradients */
+/* Subtle Editorial Gradients */
 .text-gradient-gold {
-  background: linear-gradient(135deg, #be9643 0%, #ecd38c 50%, #9e792a 100%);
+  background: linear-gradient(135deg, #c5a059 0%, #e2c785 50%, #aa8036 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-noir {
-  background: linear-gradient(135deg, #1b1c24 0%, #464857 100%);
+.text-gradient-forest {
+  background: linear-gradient(135deg, #1a2e26 0%, #3c6152 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.dark .text-gradient-noir {
-  background: linear-gradient(135deg, #ffffff 0%, #a0a4b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-terracotta {
-  background: linear-gradient(135deg, #c4755f 0%, #e09f8d 100%);
+.dark .text-gradient-forest {
+  background: linear-gradient(135deg, #f5f0e6 0%, #adc0ac 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Subtle Glow Effects */
-.glow-gold {
-  box-shadow: 0 0 40px -10px rgba(212, 175, 55, 0.35);
-}
-.glow-subtle {
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
-}
-.dark .glow-subtle {
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+/* Subtle botanical hairline */
+.border-botanical {
+  border-color: rgba(138, 154, 134, 0.25);
 }
 
-/* Golden hairline borders */
 .border-gold-subtle {
-  border-color: rgba(212, 175, 55, 0.22);
+  border-color: rgba(197, 160, 89, 0.28);
 }

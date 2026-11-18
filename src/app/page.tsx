@@ -22,7 +22,8 @@ import {
   Compass,
   MapPin,
   Coffee,
-  Sparkle,
+  Leaf,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,14 +39,14 @@ const curatedFeaturedServices: Service[] = [
     slug: "signature-balayage-silk-glaze",
     category: "Hair",
     description:
-      "Hand-painted custom French balayage tailored to your complexion and bone structure, finished with a luminous silk shine glaze and luxury botanical blowout.",
+      "Hand-painted custom French balayage tailored to your bone structure and complexion, finished with a luminous silk shine glaze and botanical blowout.",
     price: 185,
     durationMinutes: 120,
     images: [
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
+    specialists: ["Céline Laurent (Creative Director)", "Chloe Moreau"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -55,48 +56,48 @@ const curatedFeaturedServices: Service[] = [
     slug: "caviar-gold-youth-radiance-facial",
     category: "Facial & Skin",
     description:
-      "An opulent anti-aging journey featuring wild French caviar extract, 24K colloidal gold infusion, micro-current contour lifting, and cryo oxygen therapy.",
+      "An opulent anti-aging journey featuring wild French caviar extract, 24K colloidal gold infusion, micro-current lifting, and cryo oxygen therapy.",
     price: 220,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Dr. Aurelia Chen (Aesthetician)"],
+    specialists: ["Dr. Mathis Vance (Aesthetician)"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "demo-s3",
-    title: "Deep Tissue Aromatherapy Hot Stone Ritual",
-    slug: "deep-tissue-aromatherapy-hot-stone-ritual",
+    title: "Deep Tissue Volcanic Basalt Stone Ritual",
+    slug: "deep-tissue-volcanic-stone-ritual",
     category: "Massage",
     description:
-      "Heated basalt stones infused with organic lavender and frankincense essential oils to melt away chronic muscular tension and restore nervous balance.",
+      "Heated basalt stones infused with organic lavender and frankincense essential oils to melt away chronic muscular tension and restore equilibrium.",
     price: 160,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Alexander Wright (RMT)"],
+    specialists: ["Siobhan O'Connor (RMT)"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "demo-s4",
-    title: "Royal Bridal Couture Glamour Package",
-    slug: "royal-bridal-couture-glamour-package",
-    category: "Makeup",
+    title: "Precision Architectural Cut & Silk Blowout",
+    slug: "precision-architectural-cut-silk-blowout",
+    category: "Hair",
     description:
-      "The definitive bridal transformation featuring high-definition airbrush makeup, couture hair styling, veil positioning, and luxury mink lash application.",
-    price: 320,
-    durationMinutes: 150,
+      "Geometric precision cutting tailored to hair density and growth direction, scalp detox massage, and signature organic botanical blowout.",
+    price: 110,
+    durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Victoria Sterling (Bridal Director)"],
+    specialists: ["Céline Laurent"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -106,11 +107,11 @@ const curatedFeaturedServices: Service[] = [
     slug: "russian-gel-manicure-botanical-spa",
     category: "Nails",
     description:
-      "Flawless dry e-file cuticle work, structural apex gel reinforcement, nourishing organic rose petal soak, and organic argan oil arm massage.",
+      "Flawless dry e-file cuticle work, structural apex gel reinforcement, organic rose petal hand soak, and cold-pressed argan oil massage.",
     price: 75,
     durationMinutes: 75,
     images: [
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
     specialists: ["Mia Lindqvist"],
@@ -123,14 +124,14 @@ const curatedFeaturedServices: Service[] = [
     slug: "executive-beard-sculpt-hot-towel-shave",
     category: "Barbering",
     description:
-      "Traditional straight razor precision line work, eucalyptus steam towels, sandalwood pre-shave oil massage, and organic cold-pressed beard balm.",
+      "Traditional straight razor precision line work, eucalyptus steam towels, sandalwood pre-shave oil massage, and organic beard conditioning balm.",
     price: 65,
     durationMinutes: 45,
     images: [
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Marco Rossi"],
+    specialists: ["Kenzo Takahashi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -138,88 +139,88 @@ const curatedFeaturedServices: Service[] = [
 
 const categoriesData = [
   {
-    name: "Hair",
-    desc: "Precision French cuts, balayage and silk glazes.",
+    name: "Hair Architecture",
+    desc: "Precision French cuts, dimensional balayage and silk glazes.",
     icon: Scissors,
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=800&q=80",
     count: "4 Rituals",
   },
   {
-    name: "Facial & Skin",
-    desc: "24K colloidal gold, caviar and cryo oxygen lifting.",
+    name: "Facial Radiance",
+    desc: "24K colloidal gold, marine caviar and cryo contour lifting.",
     icon: Smile,
-    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1512290900672-1f41d996d926?auto=format&fit=crop&w=800&q=80",
     count: "3 Rituals",
   },
   {
-    name: "Massage",
-    desc: "Volcanic hot stone and restorative aromatherapy.",
+    name: "Restorative Body Spa",
+    desc: "Volcanic basalt stones and organic herbal aromatherapy.",
     icon: Flower2,
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
     count: "2 Rituals",
   },
   {
-    name: "Nails",
-    desc: "Russian dry e-file apex gel & botanical baths.",
+    name: "Haute Nails",
+    desc: "Russian dry e-file apex gel & botanical rose soaks.",
     icon: Sparkles,
-    image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
     count: "3 Rituals",
   },
   {
-    name: "Makeup",
-    desc: "Editorial HD airbrush & couture bridal styling.",
+    name: "Couture Makeup",
+    desc: "Editorial HD airbrush & bespoke wedding day artistry.",
     icon: Sparkles,
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=800&q=80",
     count: "2 Rituals",
   },
   {
-    name: "Barbering",
-    desc: "Straight razor sculpt, steam towels & beard care.",
+    name: "Executive Barbering",
+    desc: "Traditional straight razor work, steam towels & beard care.",
     icon: Scissors,
-    image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
     count: "2 Rituals",
   },
 ];
 
 const residentMasters = [
   {
-    name: "Elena Vance",
-    role: "Master Colorist & Creative Director",
+    name: "Céline Laurent",
+    role: "Creative Director of Hair Architecture",
     origin: "Paris & NYC Atelier Fellow",
-    specialty: "French Balayage & Dimensional Gloss",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+    specialty: "French Balayage & Dimensional Silk Gloss",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=85",
     years: "14 yrs experience",
   },
   {
-    name: "Dr. Aurelia Chen",
-    role: "Senior Clinical Aesthetician",
+    name: "Dr. Mathis Vance",
+    role: "Senior Botanical Aesthetician",
     origin: "Zurich Dermatology Fellow",
-    specialty: "Caviar Infusion & Cryo Sculpt",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
-    years: "11 yrs experience",
+    specialty: "Caviar Peptides & Cryo Sculpt",
+    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=600&q=85",
+    years: "12 yrs experience",
   },
   {
-    name: "Alexander Wright",
+    name: "Siobhan O'Connor",
     role: "Neuromuscular & Spa Therapist",
     origin: "London Institute of Bodywork",
     specialty: "Basalt Stone & Deep Nervous Reset",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-    years: "9 yrs experience",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=85",
+    years: "10 yrs experience",
   },
   {
-    name: "Victoria Sterling",
-    role: "Haute Bridal & Glamour Director",
-    origin: "Milan Fashion Week Veteran",
-    specialty: "Runway Airbrush & Couture Veiling",
-    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80",
-    years: "12 yrs experience",
+    name: "Kenzo Takahashi",
+    role: "Master Barber & Sculptor",
+    origin: "Tokyo & Milan Academy",
+    specialty: "Straight Razor Precision & Hot Shave",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=85",
+    years: "11 yrs experience",
   },
 ];
 
 const testimonials = [
   {
     quote:
-      "The caviar facial is simply transcendental. The sanctuary feels like a private townhouse on the Seine, and my skin had an unmistakable glass glow for weeks.",
+      "The caviar facial is simply transcendental. The sanctuary feels like a private townhouse on the Seine, and my skin retained an unmistakable glass glow for weeks.",
     author: "Genevieve Dubois",
     role: "Fashion Director, Vogue",
     rating: 5,
@@ -227,7 +228,7 @@ const testimonials = [
   },
   {
     quote:
-      "Booking through SalonBook was effortless. Stripe checkout was completely frictionless, and Elena delivered the most natural balayage I've had in Manhattan.",
+      "Booking through SalonBook was effortless. Stripe checkout was completely frictionless, and Céline delivered the most natural, dimensional balayage I've had in Manhattan.",
     author: "Camille Laurent",
     role: "Senior Architecture Editor",
     rating: 5,
@@ -235,7 +236,7 @@ const testimonials = [
   },
   {
     quote:
-      "The basalt hot stone massage is pure therapeutic art. The specialists are master practitioners who listen to your body and tailor every stroke.",
+      "The volcanic basalt stone massage is pure therapeutic art. The specialists are master practitioners who listen to your body and tailor every stroke.",
     author: "Marcus Vance",
     role: "Private Equity Partner",
     rating: 5,
@@ -250,7 +251,7 @@ const faqData = [
   },
   {
     q: "How does the Stripe checkout payment work?",
-    a: "When you book, your reservation request is registered with zero upfront charge. Once our master artist verifies the schedule and marks it confirmed, a secure Stripe checkout button becomes active in your Client Lounge.",
+    a: "When you book, your reservation request is registered with zero upfront charge. Once our master artist verifies the schedule and marks it confirmed, a secure Stripe checkout button becomes active in your Patron Lounge.",
   },
   {
     q: "What is your appointment cancellation charter?",
@@ -269,7 +270,7 @@ export default function HomePage() {
 
   // Quick Concierge Search States
   const [quickCategory, setQuickCategory] = useState("Hair");
-  const [quickTimeWindow, setQuickTimeWindow] = useState("Afternoon (12 PM - 5 PM)");
+  const [quickTimeWindow, setQuickTimeWindow] = useState("Afternoon");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const handleOpenBooking = (service: Service) => {
@@ -283,21 +284,21 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* 1. Architectural Haute Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-24 md:pt-16 md:pb-32 bg-gradient-to-b from-secondary/50 via-background to-background">
-        {/* Subtle Ambient Aura Background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-tr from-gold-500/10 via-terracotta-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
+      {/* 1. Architectural Botanical Hero Section */}
+      <section className="relative overflow-hidden pt-12 pb-24 md:pt-16 md:pb-32 bg-gradient-to-b from-secondary/60 via-background to-background">
+        {/* Subtle Ambient Background Aura */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-gradient-to-tr from-sage-500/10 via-gold-500/10 to-transparent blur-3xl pointer-events-none -z-10" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Editorial Typography & Concierge Search */}
             <div className="lg:col-span-7 space-y-6">
               {/* Flagship Atelier Pill */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10 text-gold-700 dark:text-gold-300 text-xs font-semibold tracking-wide">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-forest-900/20 bg-forest-950/5 dark:bg-forest-950/40 text-forest-900 dark:text-sage-300 text-xs font-semibold tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Open Today · 450 Madison Avenue, NYC</span>
+                <span>Madison Avenue Flagship</span>
                 <span className="opacity-40">|</span>
-                <span className="text-[11px] uppercase tracking-wider">Madison Flagship</span>
+                <span className="text-[11px] uppercase tracking-wider text-gold-600 dark:text-gold-400">Open Today</span>
               </div>
 
               {/* Grand Headline */}
@@ -312,10 +313,10 @@ export default function HomePage() {
               </p>
 
               {/* Interactive Hero Concierge Search Widget */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-card border border-gold-500/25 shadow-xl space-y-4 max-w-xl">
+              <div className="p-4 sm:p-5 rounded-3xl bg-card border border-gold-500/25 shadow-2xl space-y-4 max-w-xl">
                 <div className="flex items-center justify-between pb-3 border-b border-border/80">
                   <span className="text-xs uppercase font-bold tracking-widest text-gold-600 dark:text-gold-400 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5" /> Instant Atelier Concierge
+                    <Sparkles className="w-3.5 h-3.5 text-gold-500" /> Instant Atelier Concierge
                   </span>
                   <span className="text-[11px] text-muted-foreground">Select Treatment & Timing</span>
                 </div>
@@ -329,11 +330,11 @@ export default function HomePage() {
                     <select
                       value={quickCategory}
                       onChange={(e) => setQuickCategory(e.target.value)}
-                      className="w-full h-10 px-3 rounded-xl border border-input bg-background text-xs font-medium focus:outline-none focus:ring-2 focus:ring-gold-500/50"
+                      className="w-full h-11 px-3 rounded-2xl border border-input bg-background text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-gold-500/50"
                     >
                       <option value="Hair">Hair Styling & Balayage</option>
                       <option value="Facial & Skin">Caviar & 24K Gold Facial</option>
-                      <option value="Massage">Volcanic Hot Stone Therapy</option>
+                      <option value="Massage">Volcanic Basalt Stone Therapy</option>
                       <option value="Nails">Russian Apex Gel Manicure</option>
                       <option value="Makeup">Royal Bridal Artistry</option>
                       <option value="Barbering">Executive Beard Sculpt</option>
@@ -343,12 +344,12 @@ export default function HomePage() {
                   {/* Time Window Selector */}
                   <div className="space-y-1">
                     <label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      Time Window
+                      Preferred Time
                     </label>
                     <select
                       value={quickTimeWindow}
                       onChange={(e) => setQuickTimeWindow(e.target.value)}
-                      className="w-full h-10 px-3 rounded-xl border border-input bg-background text-xs font-medium focus:outline-none focus:ring-2 focus:ring-gold-500/50"
+                      className="w-full h-11 px-3 rounded-2xl border border-input bg-background text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-gold-500/50"
                     >
                       <option value="Morning">Morning (9:00 AM – 12:00 PM)</option>
                       <option value="Afternoon">Afternoon (12:00 PM – 5:00 PM)</option>
@@ -361,14 +362,15 @@ export default function HomePage() {
                   <Button
                     onClick={handleQuickConciergeSearch}
                     variant="luxury"
-                    className="w-full sm:flex-1 gap-2 rounded-xl h-11 text-xs font-semibold shadow-md shadow-gold-500/20"
+                    className="w-full sm:flex-1 gap-2 rounded-2xl h-12 text-xs font-semibold shadow-md shadow-forest-950/10"
                   >
-                    Explore Open Appointments <ArrowRight className="w-4 h-4" />
+                    <span>Check Open Appointments</span>
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
                   <Link href="/services" className="w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      className="w-full sm:w-auto rounded-xl h-11 text-xs font-semibold"
+                      className="w-full sm:w-auto rounded-2xl h-12 text-xs font-semibold border-border/80"
                     >
                       Browse Full Menu
                     </Button>
@@ -385,7 +387,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <span className="font-semibold text-foreground">4.98 / 5</span>
-                  <span>(500+ Verified Guests)</span>
+                  <span>(500+ Discerning Patrons)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" />
@@ -393,7 +395,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-4 h-4 text-gold-500" />
-                  <span>Paris & London Trained Artists</span>
+                  <span>Paris & London Trained Masters</span>
                 </div>
               </div>
             </div>
@@ -401,15 +403,15 @@ export default function HomePage() {
             {/* Right Column: Visual Centerpiece with Floating Cards */}
             <div className="lg:col-span-5 relative">
               <div className="relative mx-auto max-w-md lg:max-w-none">
-                {/* Main Hero Visual */}
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-2 border-gold-500/20">
+                {/* Main Hero Visual: Minimalist Architectural Salon Interior */}
+                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-gold-500/25">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85"
+                    src="https://images.unsplash.com/photo-1629882201977-941d8e12f3bc?auto=format&fit=crop&w=1200&q=85"
                     alt="SalonBook Madison Avenue Sanctuary"
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-noir-900/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-transparent" />
 
                   {/* Overlaid Bottom Title */}
                   <div className="absolute bottom-6 left-6 right-6 text-white">
@@ -417,7 +419,7 @@ export default function HomePage() {
                       Private Salon Suite 04
                     </span>
                     <h3 className="font-serif text-xl font-bold">Madison Avenue Sanctuary</h3>
-                    <p className="text-xs text-zinc-300">Acoustic serenity & rare botanical hair spa</p>
+                    <p className="text-xs text-zinc-300">Travertine stone, limewash & botanical hair spa</p>
                   </div>
                 </div>
 
@@ -432,7 +434,7 @@ export default function HomePage() {
                         NEXT CURATED OPENING
                       </p>
                       <p className="font-serif text-xs font-bold text-foreground">
-                        Today · 2:30 PM with Elena Vance
+                        Today · 2:30 PM with Céline Laurent
                       </p>
                     </div>
                   </div>
@@ -460,40 +462,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. The Three Pillars of Distinction */}
-      <section className="py-8 bg-card border-y border-gold-500/15">
+      {/* 2. The Three Botanical Pillars of Distinction */}
+      <section className="py-8 bg-card border-y border-forest-900/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex items-start gap-4">
-              <div className="w-11 h-11 rounded-2xl bg-gold-500/10 text-gold-600 dark:text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/20">
-                <ShieldCheck className="w-5 h-5" />
+              <div className="w-12 h-12 rounded-2xl bg-sage-500/15 text-sage-700 dark:text-sage-300 flex items-center justify-center shrink-0 border border-sage-500/20">
+                <Leaf className="w-5 h-5 text-sage-600 dark:text-sage-400" />
               </div>
               <div className="space-y-1">
                 <h4 className="font-serif font-bold text-sm text-foreground">
-                  Wild-Harvested Botanical Formulas
+                  Wild Botanical Compounds
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Every product is free of harsh sulfates, parabens, and synthetic dyes. Pure organic extracts imported from Grasse, France.
+                  Every product is free of harsh sulfates, parabens, and synthetic silicones. Pure organic extracts imported from Grasse, France.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-11 h-11 rounded-2xl bg-terracotta-500/10 text-terracotta-600 flex items-center justify-center shrink-0 border border-terracotta-500/20">
-                <Award className="w-5 h-5" />
+              <div className="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-700 dark:text-gold-300 flex items-center justify-center shrink-0 border border-gold-500/20">
+                <Award className="w-5 h-5 text-gold-600 dark:text-gold-400" />
               </div>
               <div className="space-y-1">
                 <h4 className="font-serif font-bold text-sm text-foreground">
                   Master Resident Artisans
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Our specialists hold senior credentials from Paris, Tokyo, and London academies, dedicating 100% focused attention to one patron at a time.
+                  Our specialists hold senior credentials from Paris, Zurich, and London academies, dedicating 100% focused attention to one patron at a time.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-11 h-11 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
                 <Heart className="w-5 h-5" />
               </div>
               <div className="space-y-1">
@@ -509,13 +511,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Category Carousel Grid ("Find Your Essential Ritual") */}
+      {/* 3. Category Grid ("Find Your Essential Ritual") */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            badge="The Curated Collections"
+            badge="The Curated Disciplines"
             title="Choose Your Essential Ritual"
-            subtitle="Explore our specialized disciplines. Each department is curated with proprietary organic elixirs and dedicated private rooms."
+            subtitle="Explore our specialized departments. Each discipline is curated with proprietary organic elixirs and dedicated private suites."
             center
           />
 
@@ -535,7 +537,7 @@ export default function HomePage() {
                       alt={cat.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-forest-950/30 to-transparent" />
                     
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/60 backdrop-blur-md text-gold-300 border border-gold-500/20">
@@ -572,7 +574,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. Asymmetric Editorial Bento Grid ("Atelier Masterpieces") */}
-      <section className="py-24 bg-secondary/30 dark:bg-card/40 border-y border-gold-500/15">
+      <section className="py-24 bg-secondary/30 dark:bg-card/40 border-y border-forest-900/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <SectionHeading
@@ -606,7 +608,7 @@ export default function HomePage() {
                       {service.category}
                     </Badge>
                   </div>
-                  <div className="absolute bottom-3 right-3 px-3.5 py-1.5 rounded-full bg-noir-900/85 backdrop-blur-md text-white font-serif font-bold text-sm border border-gold-500/25">
+                  <div className="absolute bottom-3 right-3 px-3.5 py-1.5 rounded-full bg-forest-950/85 backdrop-blur-md text-white font-serif font-bold text-sm border border-gold-500/25">
                     {formatCurrency(service.price)}
                   </div>
                 </div>
@@ -633,13 +635,13 @@ export default function HomePage() {
                       href={`/services/${service._id}`}
                       className="text-xs font-semibold text-muted-foreground hover:text-foreground underline underline-offset-4"
                     >
-                      Protocol Details
+                      Protocol Dossier
                     </Link>
                     <Button
                       variant="luxury"
                       size="sm"
                       onClick={() => handleOpenBooking(service)}
-                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-gold-500/20"
+                      className="gap-1.5 rounded-full px-4 text-xs font-semibold shadow-md shadow-forest-950/10"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       Reserve Chair
@@ -653,7 +655,7 @@ export default function HomePage() {
       </section>
 
       {/* 5. The Atelier Experience (4-Step Sensory Timeline) */}
-      <section id="experience" className="py-24 bg-background">
+      <section className="py-24 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="The Process"
@@ -663,7 +665,6 @@ export default function HomePage() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-14 relative">
-            {/* Step 1 */}
             <div className="p-6 rounded-3xl bg-card border border-border/80 space-y-4 relative group hover:border-gold-500/40 transition-colors">
               <span className="font-serif text-5xl font-bold text-gold-500/25 group-hover:text-gold-500/40 transition-colors">
                 01
@@ -676,7 +677,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Step 2 */}
             <div className="p-6 rounded-3xl bg-card border border-border/80 space-y-4 relative group hover:border-gold-500/40 transition-colors">
               <span className="font-serif text-5xl font-bold text-gold-500/25 group-hover:text-gold-500/40 transition-colors">
                 02
@@ -689,7 +689,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Step 3 */}
             <div className="p-6 rounded-3xl bg-card border border-border/80 space-y-4 relative group hover:border-gold-500/40 transition-colors">
               <span className="font-serif text-5xl font-bold text-gold-500/25 group-hover:text-gold-500/40 transition-colors">
                 03
@@ -702,7 +701,6 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Step 4 */}
             <div className="p-6 rounded-3xl bg-card border border-border/80 space-y-4 relative group hover:border-gold-500/40 transition-colors">
               <span className="font-serif text-5xl font-bold text-gold-500/25 group-hover:text-gold-500/40 transition-colors">
                 04
@@ -719,7 +717,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Meet the Resident Masters */}
-      <section className="py-24 bg-card/60 border-y border-gold-500/15">
+      <section className="py-24 bg-card/60 border-y border-forest-900/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="Resident Artists"
@@ -741,7 +739,7 @@ export default function HomePage() {
                     alt={master.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <span className="text-[10px] uppercase font-bold tracking-widest text-gold-400">
                       {master.origin}
@@ -777,7 +775,7 @@ export default function HomePage() {
       </section>
 
       {/* 7. Client Reflections & Press Testimonials */}
-      <section id="reviews" className="py-24 bg-background">
+      <section className="py-24 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="The Client Journal"
@@ -818,7 +816,7 @@ export default function HomePage() {
       </section>
 
       {/* 8. VIP FAQ Accordion */}
-      <section className="py-20 bg-card/40 border-t border-gold-500/15">
+      <section className="py-20 bg-card/40 border-t border-forest-900/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
           <SectionHeading
             badge="Guest Guidance"
@@ -860,7 +858,7 @@ export default function HomePage() {
       </section>
 
       {/* 9. Cinematic CTA Banner */}
-      <section className="py-20 bg-noir-900 text-white relative overflow-hidden">
+      <section className="py-20 bg-forest-950 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold-500/15 via-transparent to-transparent" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl relative space-y-6">
           <span className="text-[11px] uppercase tracking-[0.25em] text-gold-400 font-semibold">
