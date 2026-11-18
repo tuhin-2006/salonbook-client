@@ -28,12 +28,12 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { api } from "@/lib/api";
 import { Service, ApiResponse } from "@/types";
 
-// Fullscreen Hero Slideshow Assets (4 Cinematic Views of the Salon Atelier)
+// Fullscreen Hero Slideshow Assets (4 Cinematic Views of the Salon Atelier - optimized for instant loading)
 const heroSlides = [
   {
     id: 1,
     image:
-      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1920&q=85",
+      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=75",
     tagline: "FLAGSHIP SANCTUARY · MADISON AVENUE",
     title: "Grooming, done properly.",
     subtitle:
@@ -44,7 +44,7 @@ const heroSlides = [
   {
     id: 2,
     image:
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=85",
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=75",
     tagline: "HAIR ARCHITECTURE & ORGANIC GLOSS",
     title: "The art of lived-in hair.",
     subtitle:
@@ -55,7 +55,7 @@ const heroSlides = [
   {
     id: 3,
     image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1920&q=85",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1400&q=75",
     tagline: "TRADITIONAL GENTLEMEN'S BARBERING",
     title: "Unhurried, razor-sharp craft.",
     subtitle:
@@ -66,7 +66,7 @@ const heroSlides = [
   {
     id: 4,
     image:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=85",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=75",
     tagline: "HOLISTIC SKIN & HYDRO-SPA RITUALS",
     title: "Slow restoration for body and mind.",
     subtitle:
@@ -76,7 +76,7 @@ const heroSlides = [
   },
 ];
 
-// Curated Fallback Services
+// Curated Fallback Services (Optimized WebP URLs for instant loading)
 const curatedServices: Service[] = [
   {
     _id: "srv-1",
@@ -88,7 +88,7 @@ const curatedServices: Service[] = [
     price: 195,
     durationMinutes: 120,
     images: [
-      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Elena Vance", "Chloe Moreau"],
@@ -105,7 +105,7 @@ const curatedServices: Service[] = [
     price: 85,
     durationMinutes: 50,
     images: [
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Marcus Sterling"],
@@ -122,7 +122,7 @@ const curatedServices: Service[] = [
     price: 155,
     durationMinutes: 75,
     images: [
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Sofia Rossi"],
@@ -139,7 +139,7 @@ const curatedServices: Service[] = [
     price: 165,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Liam Thorne"],
@@ -156,7 +156,7 @@ const curatedServices: Service[] = [
     price: 85,
     durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Mia Lindqvist"],
@@ -173,7 +173,7 @@ const curatedServices: Service[] = [
     price: 150,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=75",
     ],
     isActive: true,
     specialists: ["Chloe Moreau", "Liam Thorne"],
@@ -188,56 +188,56 @@ const canonicalCategories = [
     name: "Hair",
     tagline: "Precision cuts, colour and gloss treatments.",
     image:
-      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=75",
     count: "12 Treatments",
   },
   {
     name: "Nails",
     tagline: "Considered manicures and pedicures.",
     image:
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=75",
     count: "6 Treatments",
   },
   {
     name: "Facial & Skin",
     tagline: "Glow-giving facials and skin rituals.",
     image:
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=75",
     count: "8 Treatments",
   },
   {
     name: "Massage",
     tagline: "Restorative bodywork, tailored to you.",
     image:
-      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=600&q=75",
     count: "7 Treatments",
   },
   {
     name: "Makeup",
     tagline: "Soft glam and occasion-ready artistry.",
     image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=75",
     count: "5 Treatments",
   },
   {
     name: "Barbering",
     tagline: "Classic cuts, fades and beard care.",
     image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=75",
     count: "9 Treatments",
   },
   {
     name: "Spa & Wellness",
     tagline: "Slow-down rituals for body and mind.",
     image:
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=75",
     count: "6 Treatments",
   },
   {
     name: "Waxing",
     tagline: "Gentle, meticulous hair removal.",
     image:
-      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=75",
     count: "4 Treatments",
   },
 ];
@@ -250,7 +250,7 @@ const residentBarbers = [
     experience: "14 Years in Soho & London",
     specialty: "Traditional straight-razor hot towel shaves & precision fades",
     image:
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=75",
   },
   {
     name: "Elena Vance",
@@ -258,7 +258,7 @@ const residentBarbers = [
     experience: "Trained in Paris & Florence",
     specialty: "Lived-in multidimensional balayage & organic glossing",
     image:
-      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=600&q=75",
   },
   {
     name: "Sofia Rossi",
@@ -266,7 +266,7 @@ const residentBarbers = [
     experience: "Certified Swiss Dermo-Practitioner",
     specialty: "Lymphatic drainage, ultrasound peel & barrier restoration",
     image:
-      "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=75",
   },
   {
     name: "Liam Thorne",
@@ -274,7 +274,7 @@ const residentBarbers = [
     experience: "Stockholm Holistic Institute",
     specialty: "Basalt heated stone therapy & deep postural tension release",
     image:
-      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=600&q=75",
   },
 ];
 
@@ -331,6 +331,16 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [isAutoPlaying, nextSlide]);
 
+  // Preload all hero slideshow images into browser cache immediately on page load
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      heroSlides.forEach((slide) => {
+        const img = new Image();
+        img.src = slide.image;
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -364,39 +374,58 @@ export default function HomePage() {
       {/* 
         =======================================================================
         1. HERO SECTION — FULLSCREEN ANIMATED BACKGROUND (KEN BURNS EFFECT)
-        - Multi-image auto-transitioning background slideshow
-        - Smooth Ken Burns zoom / crossfade transitions
-        - Cinematic dark overlay for crystal clear contrast & readability
-        - Animated text entrances
-        - Navigation indicators & manual slide controls
+        - Preloaded instant-display images with concurrent layer crossfade
+        - Zero blank gap or black flicker between transitions
+        - Ambient luxury warmth underlay so it never shows cold black void
+        - Animated text entrances & manual slide controls
         =======================================================================
       */}
       <section className="relative w-full min-h-[92vh] lg:min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Fullscreen Animated Background Slideshow */}
-        <div className="absolute inset-0 z-0">
-          <AnimatePresence initial={false} mode="wait">
-            <motion.div
-              key={activeSlideData.id}
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1.1 }}
-              exit={{ opacity: 0, scale: 1.15 }}
-              transition={{
-                opacity: { duration: 1.2, ease: "easeInOut" },
-                scale: { duration: 7, ease: "linear" },
-              }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <SafeImage
-                src={activeSlideData.image}
-                alt={activeSlideData.title}
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-          </AnimatePresence>
+        {/* Fullscreen Animated Background Slideshow (Persistent Concurrent Layers, Zero Blank Gap) */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-[#1B1116]">
+          {/* Ambient Warm Underlay — visible immediately so it NEVER stays cold black */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#2D1B24] via-[#1E1217] to-[#120A0E] z-0" />
 
-          {/* Cinematic Multi-Layer Gradient Overlays for Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/35 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#170F13] via-transparent to-black/40 z-10" />
+          {/* Persistent Stack of All Slide Images (All loaded concurrently, crossfades seamlessly) */}
+          {heroSlides.map((slide, index) => {
+            const isActive = index === currentSlide;
+            return (
+              <div
+                key={slide.id}
+                aria-hidden={!isActive}
+                className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                  isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  // @ts-ignore
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                  className={`w-full h-full object-cover transform transition-transform duration-[7000ms] ease-out will-change-transform ${
+                    isActive ? "scale-105" : "scale-100"
+                  }`}
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.src.includes("photo-1560066984")) {
+                      target.src =
+                        "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=75";
+                    }
+                  }}
+                />
+              </div>
+            );
+          })}
+
+          {/* Cinematic Multi-Layer Gradient Overlays for High Contrast Readability & Vibrant Atelier Warmth */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/25 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#170F13] via-transparent to-black/35 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#170F13]/90 z-20 pointer-events-none" />
         </div>
 
         {/* Hero Foreground Content Container */}
