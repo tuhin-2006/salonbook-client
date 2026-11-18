@@ -121,6 +121,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setToken(null);
     setUser(null);
     toast.info("Logged out successfully");
+    if (typeof window !== "undefined") {
+      window.location.href = "/signed-out";
+    }
   };
 
   const updateProfile = async (data: Partial<User>) => {
