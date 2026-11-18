@@ -40,6 +40,20 @@ export const Navbar = () => {
     { label: "Visit Us", href: "/journal" },
   ];
 
+  const isAuthRoute =
+    pathname === "/sign-in" ||
+    pathname === "/sign-up" ||
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password" ||
+    pathname === "/signed-out";
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  if (isAuthRoute || isAdminRoute) {
+    return null;
+  }
+
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${

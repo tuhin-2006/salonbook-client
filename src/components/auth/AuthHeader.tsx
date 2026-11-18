@@ -3,15 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { Scissors } from "lucide-react";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
-interface AuthHeaderProps {
-  showThemeToggle?: boolean;
-}
-
-export const AuthHeader: React.FC<AuthHeaderProps> = ({
-  showThemeToggle = true,
-}) => {
+export const AuthHeader: React.FC = () => {
   return (
     <div className="flex items-center justify-between pb-4">
       {/* Brand Logo with Atelier Badge */}
@@ -31,13 +24,6 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
           </span>
         </div>
       </Link>
-
-      {/* Theme Toggle Button */}
-      {showThemeToggle && (
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
-        </div>
-      )}
     </div>
   );
 };
