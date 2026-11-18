@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Clock, Star } from "lucide-react";
+import { ArrowRight, Clock, Star, MapPin, Phone, Mail, Navigation, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function JournalPage() {
@@ -10,7 +11,7 @@ export default function JournalPage() {
       category: "Hair Artistry",
       readTime: "4 MIN READ",
       author: "Elena Vance (Master Colorist)",
-      date: "AUTUMN / WINTER 2025",
+      date: "AUTUMN / WINTER 2026",
       image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
       excerpt:
         "Why bespoke hand-painted highlights must follow skull bone contours to blend organically as hair grows, eliminating harsh regrowth lines for up to 14 weeks.",
@@ -20,7 +21,7 @@ export default function JournalPage() {
       category: "Dermo-Biology",
       readTime: "5 MIN READ",
       author: "Sofia Rossi (Aesthetician)",
-      date: "AUTUMN / WINTER 2025",
+      date: "AUTUMN / WINTER 2026",
       image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
       excerpt:
         "An exploration of cold sub-zero cryo therapy combined with cold-pressed botanical squalane to reduce inflammation and stimulate cellular collagen synthesis.",
@@ -30,7 +31,7 @@ export default function JournalPage() {
       category: "Nail Health",
       readTime: "3 MIN READ",
       author: "Mia Lindqvist",
-      date: "AUTUMN / WINTER 2025",
+      date: "AUTUMN / WINTER 2026",
       image: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85",
       excerpt:
         "The anatomical science of dry diamond cuticle work that preserves the delicate eponychium while allowing organic builder gels to bond without lifting.",
@@ -49,116 +50,177 @@ export default function JournalPage() {
       quote:
         "A quiet, civilized experience. No phone chatter, no blaring pop music, no waiting 40 minutes past your reservation. Just master-level craft.",
       author: "Julian Mercer",
-      title: "Managing Director · Milan",
+      title: "Managing Director · New York",
       service: "Executive Beard & Precision Cut",
     },
     {
       quote:
         "The botanical facial cleared months of persistent dryness in one session. You can immediately feel the quality of their organic European formulas.",
       author: "Genevieve H.",
-      title: "Editor · Paris",
+      title: "Editor · Paris & NYC",
       service: "Botanical Recovery Facial",
     },
   ];
 
   return (
-    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-20">
+    <div className="min-h-screen py-10 sm:py-20 bg-[#FAF7F2] text-[#231C1E]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-16 sm:space-y-20">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-            THE ATELIER JOURNAL
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
+            VISIT US &amp; EDITORIAL JOURNAL
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl font-normal leading-tight text-[#302821] dark:text-[#F5F1E8]">
-            Essays on Biology, Form &amp; Slow Aesthetics
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#231C1E]">
+            Flagship Studio &amp; Insights
           </h1>
-          <p className="text-xs sm:text-sm text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed max-w-lg mx-auto">
-            Dispatches from our resident master artisans on cranial cutting techniques, botanical skin science, and restorative rituals.
+          <p className="text-sm text-[#231C1E]/75 leading-relaxed max-w-lg mx-auto">
+            Find directions to our Madison Avenue sanctuary and explore essays on hair architecture, botanical skincare, and grooming rituals.
           </p>
         </div>
 
-        {/* Featured Articles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {articles.map((article, idx) => (
-            <div
-              key={idx}
-              className="bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 overflow-hidden flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/11] overflow-hidden bg-[#EAE3D6] border-b border-[#302821]/15">
-                  <SafeImage
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-full object-cover grayscale-[10%]"
-                  />
-                  <div className="absolute top-3 left-3 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
-                    {article.category}
-                  </div>
-                </div>
+        {/* Flagship Location Card */}
+        <div className="rounded-3xl bg-[#FFFFFF] border border-[#3B1F2B]/10 p-8 sm:p-10 shadow-lg grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-5">
+            <div>
+              <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold block">
+                FLAGSHIP LOCATION
+              </span>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#231C1E] mt-1">
+                Madison Avenue Studio
+              </h2>
+            </div>
 
-                <div className="p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-[10px] text-[#302821]/60 dark:text-[#EAE3D6]/60 uppercase tracking-widest">
-                    <span>{article.readTime}</span>
-                    <span>•</span>
-                    <span>{article.date}</span>
-                  </div>
-
-                  <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8] leading-snug">
-                    {article.title}
-                  </h3>
-
-                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-                    {article.excerpt}
-                  </p>
-                </div>
+            <div className="space-y-3 text-xs sm:text-sm text-[#231C1E]/80">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-[#C5A880] mt-1 shrink-0" />
+                <span>450 Madison Avenue, 4th Floor<br />New York, NY 10022</span>
               </div>
-
-              <div className="p-6 pt-0 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 mt-3 flex items-center justify-between text-xs">
-                <span className="text-[10px] uppercase tracking-wider text-[#302821]/70 dark:text-[#EAE3D6]/70">
-                  {article.author}
-                </span>
-                <Link href="/services">
-                  <span className="text-[11px] uppercase tracking-wider text-[#26372D] dark:text-[#B8755B] font-semibold hover:underline flex items-center gap-1">
-                    Reserve <ArrowRight className="w-3 h-3" />
-                  </span>
-                </Link>
+              <div className="flex items-center gap-3">
+                <Clock className="w-4 h-4 text-[#C5A880] shrink-0" />
+                <span>Daily · 9:00 AM – 8:00 PM EST</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-[#C5A880] shrink-0" />
+                <span>+1 (212) 555-0198</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-[#C5A880] shrink-0" />
+                <span>concierge@salonbook.com</span>
               </div>
             </div>
-          ))}
+
+            <div className="pt-2 flex flex-wrap gap-3">
+              <Link href="/services">
+                <Button className="rounded-xl text-xs font-bold uppercase tracking-wider bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035]">
+                  <Calendar className="w-3.5 h-3.5 mr-2" />
+                  <span>Reserve a Chair</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-[#3B1F2B]/10 bg-[#EAE3D6] relative shadow-md">
+            <SafeImage
+              src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
+              alt="Madison Avenue Salon Entrance"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
 
-        {/* Patron Reviews */}
-        <div className="space-y-8 pt-8 border-t border-[#302821]/15 dark:border-[#EAE3D6]/15">
-          <div className="text-center space-y-2">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-              GUEST CITATIONS
+        {/* Featured Articles Grid */}
+        <div className="space-y-8">
+          <div className="space-y-2 text-center md:text-left">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
+              THE SALONBOOK JOURNAL
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-              Words from Discerning Patrons
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#231C1E]">
+              Essays &amp; Care Guidance
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {articles.map((article, idx) => (
+              <div
+                key={idx}
+                className="bg-[#FFFFFF] border border-[#3B1F2B]/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[16/11] overflow-hidden bg-[#EAE3D6]">
+                    <SafeImage
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-3 left-3 bg-[#FFFFFF]/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#231C1E] shadow-sm">
+                      {article.category}
+                    </div>
+                  </div>
+
+                  <div className="p-6 space-y-3">
+                    <div className="flex items-center gap-2 text-[10px] text-[#231C1E]/60 uppercase tracking-widest font-semibold">
+                      <span>{article.readTime}</span>
+                      <span>•</span>
+                      <span>{article.date}</span>
+                    </div>
+
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] leading-snug">
+                      {article.title}
+                    </h3>
+
+                    <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0 border-t border-[#3B1F2B]/10 mt-3 flex items-center justify-between text-xs">
+                  <span className="text-[11px] text-[#231C1E]/70 font-medium">
+                    {article.author}
+                  </span>
+                  <Link href="/services">
+                    <span className="text-xs uppercase tracking-wider text-[#3B1F2B] font-bold hover:underline flex items-center gap-1">
+                      Book Now <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Patron Reviews */}
+        <div className="space-y-8 pt-8 border-t border-[#3B1F2B]/10">
+          <div className="text-center space-y-2">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
+              GUEST CITATIONS
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#231C1E]">
+              Words from Discerning Patrons
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {citations.map((c, idx) => (
               <div
                 key={idx}
-                className="bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 space-y-4 flex flex-col justify-between"
+                className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#3B1F2B]/10 shadow-sm space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
-                  <div className="flex text-[#B8755B] gap-1">
+                  <div className="flex text-amber-500 gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-[#B8755B]" />
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#231C1E]/80 leading-relaxed italic">
                     &ldquo;{c.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 text-[10px] uppercase tracking-wider text-[#302821]/70 dark:text-[#EAE3D6]/70">
-                  <p className="font-bold text-[#26372D] dark:text-[#F5F1E8]">{c.author}</p>
-                  <p>{c.title}</p>
-                  <p className="text-[#B8755B] pt-0.5">{c.service}</p>
+                <div className="pt-3 border-t border-[#3B1F2B]/10 text-xs text-[#231C1E]/70">
+                  <p className="font-bold text-[#231C1E]">{c.author}</p>
+                  <p className="text-[11px] text-[#231C1E]/60">{c.title}</p>
+                  <p className="text-[#3B1F2B] font-semibold pt-1">{c.service}</p>
                 </div>
               </div>
             ))}

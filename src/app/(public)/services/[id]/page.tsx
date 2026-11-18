@@ -10,6 +10,8 @@ import {
   Share2,
   Calendar,
   Check,
+  MapPin,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/booking/BookingModal";
@@ -68,17 +70,17 @@ export default function ServiceDetailsPage() {
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
-      toast.success("Treatment dossier URL copied to clipboard.");
+      toast.success("Treatment link copied to clipboard.");
     }
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen py-24 flex items-center justify-center bg-[#F5F1E8] dark:bg-[#151916]">
+      <div className="min-h-screen py-24 flex items-center justify-center bg-[#FAF7F2]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin" />
-          <p className="text-xs uppercase tracking-[0.2em] text-[#302821]/70">
-            Accessing Treatment Dossier...
+          <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin rounded-full" />
+          <p className="text-xs uppercase tracking-[0.2em] text-[#231C1E]/70 font-semibold">
+            Loading Ritual Dossier...
           </p>
         </div>
       </div>
@@ -87,14 +89,14 @@ export default function ServiceDetailsPage() {
 
   if (!service) {
     return (
-      <div className="min-h-screen py-24 text-center container mx-auto px-4 max-w-md bg-[#F5F1E8] dark:bg-[#151916]">
-        <h2 className="font-serif text-3xl text-[#302821] dark:text-[#F5F1E8]">Treatment Not Located</h2>
-        <p className="text-[#302821]/70 text-xs mt-2 mb-6">
-          The requested formulation could not be located in the current atelier carte.
+      <div className="min-h-screen py-24 text-center container mx-auto px-4 max-w-md bg-[#FAF7F2]">
+        <h2 className="font-serif text-3xl font-bold text-[#231C1E]">Service Not Found</h2>
+        <p className="text-[#231C1E]/70 text-xs mt-2 mb-6">
+          The requested treatment could not be found or has been retired from the active menu.
         </p>
         <Link href="/services">
-          <Button variant="default" className="rounded-none text-xs uppercase tracking-wider bg-[#26372D] text-[#F5F1E8]">
-            Return to Carte
+          <Button variant="default" className="rounded-xl text-xs uppercase tracking-wider bg-[#3B1F2B] text-[#FAF7F2]">
+            Return to Menu
           </Button>
         </Link>
       </div>
@@ -102,39 +104,39 @@ export default function ServiceDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
+    <div className="min-h-screen py-10 sm:py-16 bg-[#FAF7F2] text-[#231C1E]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Navigation Back & Share */}
-        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#3B1F2B]/10">
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 hover:text-[#26372D] transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#231C1E]/70 hover:text-[#3B1F2B] transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>RETURN TO CARTE</span>
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to services</span>
           </button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleShare}
-            className="gap-2 text-[10px] tracking-[0.2em] uppercase rounded-none border-[#302821]/20 hover:bg-[#EAE3D6]/50"
+            className="gap-2 text-xs font-semibold rounded-xl border-[#3B1F2B]/20 hover:bg-[#FFFFFF]"
           >
-            <Share2 className="w-3 h-3 text-[#26372D]" />
-            <span>SHARE DOSSIER</span>
+            <Share2 className="w-3.5 h-3.5 text-[#3B1F2B]" />
+            <span>Share</span>
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Column: Visual Gallery & Clinical Protocol */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+          {/* Left Column: Visual Gallery & Protocol */}
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-4">
-              <div className="aspect-[4/3] overflow-hidden border border-[#302821]/15 bg-[#EAE3D6] relative">
+              <div className="aspect-[4/3] overflow-hidden rounded-3xl border-2 border-[#FFFFFF] bg-[#EAE3D6] relative shadow-lg">
                 <SafeImage
                   src={service.images[activeImageIndex] || service.images[0]}
                   alt={service.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 left-4 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
+                <div className="absolute top-4 left-4 bg-[#FFFFFF]/90 backdrop-blur-md px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#231C1E] rounded-full shadow-sm">
                   {service.category}
                 </div>
               </div>
@@ -146,10 +148,10 @@ export default function ServiceDetailsPage() {
                     <button
                       key={idx}
                       onClick={() => setActiveImageIndex(idx)}
-                      className={`w-20 h-20 overflow-hidden border transition-all ${
+                      className={`w-20 h-20 overflow-hidden rounded-2xl border-2 transition-all ${
                         activeImageIndex === idx
-                          ? "border-[#26372D] ring-1 ring-[#26372D]"
-                          : "border-[#302821]/20 opacity-60 hover:opacity-100"
+                          ? "border-[#3B1F2B] shadow-md"
+                          : "border-transparent opacity-60 hover:opacity-100"
                       }`}
                     >
                       <SafeImage
@@ -163,109 +165,112 @@ export default function ServiceDetailsPage() {
               )}
             </div>
 
-            {/* Protocol Steps: Editorial Roman Numerals */}
-            <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-8 space-y-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-                LE PROTOCOLE DE SOIN
-              </span>
-              <h3 className="font-serif text-2xl text-[#302821] dark:text-[#F5F1E8]">
-                The Three-Phase Treatment Journey
+            {/* Protocol Steps / Experience Journey */}
+            <div className="rounded-2xl border border-[#3B1F2B]/10 bg-[#FFFFFF] p-8 space-y-6 shadow-sm">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C5A880]" />
+                <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
+                  APPOINTMENT JOURNEY
+                </span>
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#231C1E]">
+                What to Expect During Your Session
               </h3>
 
-              <div className="space-y-6 divide-y divide-[#302821]/10 dark:divide-[#EAE3D6]/10">
+              <div className="space-y-6 divide-y divide-[#3B1F2B]/10">
                 <div className="pt-4 first:pt-0 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">I.</span>
-                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
-                      Cranial Diagnostic &amp; Texture Mapping
+                    <span className="font-serif text-base font-bold text-[#3B1F2B]">1.</span>
+                    <h4 className="font-serif text-base font-bold text-[#231C1E]">
+                      One-on-One Personalized Consultation
                     </h4>
                   </div>
-                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
-                    Microscopic assessment of scalp barrier lipid balance, hair strand tensile strength, and facial symmetry mapping to establish bespoke geometric parameters.
+                  <p className="text-xs text-[#231C1E]/75 leading-relaxed pl-5">
+                    We assess hair fiber integrity, cranial structure, skin undertones, or muscle tension points to tailor the ritual precisely to your goals.
                   </p>
                 </div>
 
-                <div className="pt-6 space-y-2">
+                <div className="pt-5 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">II.</span>
-                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
-                      Cold-Pressed Botanical Formulation &amp; Infusion
+                    <span className="font-serif text-base font-bold text-[#3B1F2B]">2.</span>
+                    <h4 className="font-serif text-base font-bold text-[#231C1E]">
+                      European Botanical Formulations &amp; Technique
                     </h4>
                   </div>
-                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
-                    Hand-crafted blending of clean organic actives, silk amino acids, and pure plant lipids applied with intentional unhurried technique in our quiet washing sanctuary.
+                  <p className="text-xs text-[#231C1E]/75 leading-relaxed pl-5">
+                    Clean organic actives, silk amino acids, and plant lipids applied with unhurried care in our quiet treatment spaces.
                   </p>
                 </div>
 
-                <div className="pt-6 space-y-2">
+                <div className="pt-5 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-serif text-lg font-bold text-[#26372D] dark:text-[#A4AA91]">III.</span>
-                    <h4 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
-                      Precision Structural Finish &amp; Regimen Dossier
+                    <span className="font-serif text-base font-bold text-[#3B1F2B]">3.</span>
+                    <h4 className="font-serif text-base font-bold text-[#231C1E]">
+                      Styling Finish &amp; Regimen Guidance
                     </h4>
                   </div>
-                  <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed pl-5">
-                    Unhurried structural drying, tailored thermal shaping, and the preparation of your personalized home maintenance formula guidelines.
+                  <p className="text-xs text-[#231C1E]/75 leading-relaxed pl-5">
+                    Unhurried finish, tailored shaping, and expert recommendations for sustaining salon-fresh vitality between visits.
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Reservation Dossier Sidebar */}
+          {/* Right Column: Reservation Sidebar */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="sticky top-28 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-8 space-y-6">
+            <div className="sticky top-28 rounded-2xl border border-[#3B1F2B]/10 bg-[#FFFFFF] p-8 space-y-6 shadow-sm">
               <div className="space-y-3">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-                  APPOINTMENT DOSSIER
+                <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold block">
+                  SERVICE OVERVIEW
                 </span>
-                <h1 className="font-serif text-3xl font-normal text-[#302821] dark:text-[#F5F1E8] leading-tight">
+                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#231C1E] leading-tight">
                   {service.title}
                 </h1>
-                <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#231C1E]/75 leading-relaxed">
                   {service.description}
                 </p>
               </div>
 
               {/* Price & Duration Box */}
-              <div className="p-5 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#F5F1E8] dark:bg-[#151916] flex items-center justify-between">
+              <div className="p-5 rounded-2xl border border-[#3B1F2B]/10 bg-[#FAF7F2] flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
-                    TOTAL INVESTMENT
+                  <span className="text-[10px] uppercase tracking-wider text-[#231C1E]/60 font-semibold block">
+                    PRICE
                   </span>
-                  <div className="font-serif text-3xl font-medium text-[#26372D] dark:text-[#F5F1E8]">
+                  <div className="font-serif text-3xl font-bold text-[#3B1F2B]">
                     {formatCurrency(service.price)}
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
-                    DURATION
+                  <span className="text-[10px] uppercase tracking-wider text-[#231C1E]/60 font-semibold block">
+                    SESSION DURATION
                   </span>
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[#302821] dark:text-[#F5F1E8] flex items-center gap-1.5 justify-end mt-1">
-                    <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
-                    <span>{service.durationMinutes} MIN</span>
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[#231C1E] flex items-center gap-1.5 justify-end mt-1">
+                    <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
+                    <span>⏱ {service.durationMinutes} MIN</span>
                   </div>
                 </div>
               </div>
 
               {/* Assigned Specialists */}
               <div className="space-y-3">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70 block font-semibold">
-                  RESIDENT MASTER PRACTITIONERS
+                <span className="text-xs uppercase tracking-wider text-[#231C1E]/70 block font-semibold">
+                  RESIDENT SPECIALISTS
                 </span>
                 <div className="space-y-2">
                   {(service.specialists || ["Elena Vance (Master Colorist)", "Chloe Moreau"]).map((spec, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between p-3 border border-[#302821]/15 bg-[#F5F1E8] dark:bg-[#151916] text-xs"
+                      className="flex items-center justify-between p-3 rounded-xl border border-[#3B1F2B]/10 bg-[#FAF7F2] text-xs"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 bg-[#26372D] text-[#F5F1E8] font-serif font-bold text-xs flex items-center justify-center">
+                        <div className="w-7 h-7 rounded-full bg-[#3B1F2B] text-[#FAF7F2] font-serif font-bold text-xs flex items-center justify-center">
                           {spec[0]}
                         </div>
-                        <span className="font-medium text-[#302821] dark:text-[#F5F1E8]">{spec}</span>
+                        <span className="font-medium text-[#231C1E]">{spec}</span>
                       </div>
-                      <span className="text-[10px] uppercase tracking-wider text-[#B8755B]">Master</span>
+                      <span className="text-[11px] font-semibold text-[#C5A880]">Specialist</span>
                     </div>
                   ))}
                 </div>
@@ -274,28 +279,31 @@ export default function ServiceDetailsPage() {
               {/* Action Button */}
               <div className="space-y-3 pt-2">
                 <Button
-                  variant="default"
                   size="lg"
                   onClick={() => setIsModalOpen(true)}
-                  className="w-full h-12 rounded-none text-xs uppercase tracking-[0.2em] bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+                  className="w-full h-12 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] shadow-md"
                 >
-                  <Calendar className="w-3.5 h-3.5 mr-2" />
-                  <span>RESERVE TREATMENT</span>
+                  <Calendar className="w-4 h-4 mr-2 text-[#C5A880]" />
+                  <span>Book Appointment Now</span>
                 </Button>
-                <p className="text-[10px] text-center text-[#302821]/60 dark:text-[#EAE3D6]/60 uppercase tracking-wider">
-                  Unhurried chair reservation · Complimentary cancellation up to 24 hours prior.
+                <p className="text-[11px] text-center text-[#231C1E]/60">
+                  Instant confirmation · Complimentary cancellation up to 24 hours prior.
                 </p>
               </div>
 
               {/* Guarantees */}
-              <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 space-y-2 text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70">
+              <div className="pt-4 border-t border-[#3B1F2B]/10 space-y-2.5 text-xs text-[#231C1E]/75">
                 <div className="flex items-center gap-2.5">
-                  <ShieldCheck className="w-4 h-4 text-[#26372D] dark:text-[#A4AA91] shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>Single-guest dedicated chair duration</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Check className="w-4 h-4 text-[#26372D] dark:text-[#A4AA91] shrink-0" />
-                  <span>100% Certified organic &amp; cruelty-free formulations</span>
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>100% Certified organic &amp; cruelty-free formulas</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#C5A880] shrink-0" />
+                  <span>450 Madison Avenue, New York, NY</span>
                 </div>
               </div>
             </div>

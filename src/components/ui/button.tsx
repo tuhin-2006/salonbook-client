@@ -4,36 +4,34 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-xs uppercase tracking-[0.18em] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40",
+  "inline-flex items-center justify-center whitespace-nowrap text-xs font-semibold tracking-wide transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40 rounded-xl",
   {
     variants: {
       variant: {
         default:
-          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E] active:bg-[#1f2d24]",
+          "bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035] active:scale-[0.99] shadow-sm",
         destructive:
-          "bg-[#8c2e2e] text-[#F5F1E8] hover:bg-[#732424]",
+          "bg-[#8c2e2e] text-white hover:bg-[#732424]",
         outline:
-          "border border-[#302821]/30 bg-transparent text-[#26372D] hover:bg-[#26372D] hover:text-[#F5F1E8]",
+          "border border-[#3B1F2B]/30 bg-transparent text-[#3B1F2B] hover:bg-[#3B1F2B] hover:text-[#FAF7F2]",
         secondary:
-          "bg-[#EAE3D6] text-[#26372D] hover:bg-[#ded5c5]",
+          "bg-[#F5EFEB] text-[#3B1F2B] hover:bg-[#ECE3DA] border border-[#E8E2D8]",
         ghost:
-          "text-[#26372D] hover:bg-[#EAE3D6]/60",
+          "text-[#3B1F2B] hover:bg-[#F5EFEB]",
         link:
-          "text-[#26372D] underline underline-offset-8 hover:text-[#B8755B] tracking-wider normal-case font-normal",
+          "text-[#3B1F2B] underline underline-offset-8 hover:text-[#C5A880]",
+        gold:
+          "bg-[#C5A880] text-[#231C1E] hover:bg-[#b8996f] shadow-sm font-bold",
         terracotta:
-          "bg-[#B8755B] text-[#F5F1E8] hover:bg-[#a3644d]",
-        olive:
-          "bg-[#343D2E] text-[#F5F1E8] hover:bg-[#26372D]",
-        luxury:
-          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]",
+          "bg-[#B8755B] text-white hover:bg-[#a6634b]",
         gradient:
-          "bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]",
+          "bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035]",
       },
       size: {
         default: "h-11 px-6 py-2.5",
         sm: "h-9 px-4 text-[11px]",
-        lg: "h-12 px-8 text-xs font-semibold tracking-[0.2em]",
-        icon: "h-10 w-10",
+        lg: "h-12 px-7 text-xs font-bold",
+        icon: "h-10 w-10 p-0",
       },
     },
     defaultVariants: {

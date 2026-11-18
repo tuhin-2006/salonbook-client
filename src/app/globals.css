@@ -4,67 +4,71 @@
 
 @layer base {
   :root {
-    /* Luxury Editorial Atelier — Solid Warm Ivory & Forest Green */
-    --background: 40 33% 94%; /* #F5F1E8 Warm Ivory */
-    --foreground: 142 19% 18%; /* #26372D Forest Green */
+    /* SalonBook Palette (Assignment 9 Category 002 Spec) */
+    /* Warm cream / beige background: #FAF7F2 */
+    --background: 38 43% 97%;
+    /* Deep charcoal text: #231C1E */
+    --foreground: 343 11% 13%;
 
-    --card: 40 28% 97%; /* #FAF8F5 */
-    --card-foreground: 142 19% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 343 11% 13%;
 
-    --popover: 40 33% 94%;
-    --popover-foreground: 142 19% 18%;
+    --popover: 38 43% 97%;
+    --popover-foreground: 343 11% 13%;
 
-    --primary: 142 19% 18%; /* #26372D Deep Forest */
-    --primary-foreground: 40 33% 94%; /* #F5F1E8 Ivory */
+    /* Deep wine / burgundy: #3B1F2B */
+    --primary: 332 31% 18%;
+    --primary-foreground: 38 43% 97%;
 
-    --secondary: 38 25% 88%; /* #EAE3D6 Soft Parchment */
-    --secondary-foreground: 142 19% 18%;
+    /* Soft parchment: #F5EFEB */
+    --secondary: 36 28% 94%;
+    --secondary-foreground: 332 31% 18%;
 
-    --muted: 38 20% 86%;
-    --muted-foreground: 85 13% 40%; /* #5F6656 */
+    --muted: 36 20% 90%;
+    --muted-foreground: 343 8% 46%;
 
-    --accent: 17 38% 54%; /* #B8755B Terracotta */
-    --accent-foreground: 40 33% 94%;
+    /* Subtle olive gold / soft terracotta: #C5A880 */
+    --accent: 35 38% 64%;
+    --accent-foreground: 343 11% 13%;
 
-    --destructive: 0 65% 45%;
+    --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 27 18% 75%; /* subtle espresso-tinted hairline border */
-    --input: 27 18% 75%;
-    --ring: 142 19% 18%;
+    --border: 36 20% 88%; /* #E8E2D8 */
+    --input: 36 20% 88%;
+    --ring: 332 31% 18%;
 
-    --radius: 0.125rem; /* Architectural sharp edges */
+    --radius: 1rem;
   }
 
   .dark {
-    /* Evening Atelier — Deep Espresso & Warm Parchment */
-    --background: 27 18% 12%; /* #1C1713 Deep Espresso Noir */
-    --foreground: 40 33% 94%; /* #F5F1E8 Warm Ivory */
+    --background: 343 18% 10%; /* #1E1619 Deep Burgundy Black */
+    --foreground: 38 43% 97%;
 
-    --card: 27 16% 16%;
-    --card-foreground: 40 33% 94%;
+    --card: 343 16% 14%;
+    --card-foreground: 38 43% 97%;
 
-    --popover: 27 16% 16%;
-    --popover-foreground: 40 33% 94%;
+    --popover: 343 16% 14%;
+    --popover-foreground: 38 43% 97%;
 
-    --primary: 40 33% 94%;
-    --primary-foreground: 27 18% 12%;
+    --primary: 38 43% 97%;
+    --primary-foreground: 332 31% 18%;
 
-    --secondary: 27 14% 20%;
-    --secondary-foreground: 40 33% 94%;
+    --secondary: 343 14% 18%;
+    --secondary-foreground: 38 43% 97%;
 
-    --muted: 27 14% 22%;
-    --muted-foreground: 40 15% 70%;
+    --muted: 343 12% 22%;
+    --muted-foreground: 38 15% 70%;
 
-    --accent: 17 38% 54%;
-    --accent-foreground: 40 33% 94%;
+    --accent: 35 38% 64%;
+    --accent-foreground: 38 43% 97%;
 
-    --destructive: 0 65% 45%;
+    --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 27 15% 26%;
-    --input: 27 15% 26%;
-    --ring: 40 33% 94%;
+    --border: 343 14% 22%;
+    --input: 343 14% 22%;
+    --ring: 38 43% 97%;
   }
 }
 
@@ -74,42 +78,51 @@
   }
   html {
     scroll-behavior: smooth;
-    background-color: #F5F1E8;
+    background-color: #FAF7F2;
   }
   body {
-    @apply bg-[#F5F1E8] text-[#26372D] antialiased;
+    @apply bg-[#FAF7F2] text-[#231C1E] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   ::selection {
-    background-color: #26372D;
-    color: #F5F1E8;
+    background-color: #3B1F2B;
+    color: #FAF7F2;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif), Georgia, serif;
+    font-family: var(--font-serif), "Playfair Display", Georgia, serif;
     letter-spacing: -0.015em;
   }
 }
 
-/* Custom architectural scrollbar */
+/* Custom boutique scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F5F1E8;
+  background: #FAF7F2;
 }
 ::-webkit-scrollbar-thumb {
-  background: #A4AA91;
-  border-radius: 0px;
+  background: #D9D0C3;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #343D2E;
+  background: #3B1F2B;
 }
 
-/* Editorial line rule */
-.editorial-line {
-  height: 1px;
-  background-color: rgba(48, 40, 33, 0.15);
+@layer utilities {
+  .hairline-b {
+    border-bottom: 1px solid rgba(59, 31, 43, 0.1);
+  }
+  .hairline-t {
+    border-top: 1px solid rgba(59, 31, 43, 0.1);
+  }
+  .hairline-r {
+    border-right: 1px solid rgba(59, 31, 43, 0.1);
+  }
+  .hairline-l {
+    border-left: 1px solid rgba(59, 31, 43, 0.1);
+  }
 }

@@ -12,8 +12,13 @@ import {
   Sparkles,
   MapPin,
   ShieldCheck,
+  Heart,
+  Scissors,
+  Check,
   ChevronRight,
-  ArrowUpRight,
+  ChevronDown,
+  Quote,
+  Sparkle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -22,14 +27,15 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { api } from "@/lib/api";
 import { Service, ApiResponse } from "@/types";
 
-const curatedEditorialServices: Service[] = [
+// Curated Fallback Services conforming to the specification
+const curatedServices: Service[] = [
   {
-    _id: "demo-1",
-    title: "Signature Balayage & Glossing Ritual",
+    _id: "srv-1",
+    title: "Signature Balayage & Silk Glossing",
     slug: "signature-balayage-gloss",
     category: "Hair",
     description:
-      "Hand-painted multidimensional balayage tailored to cranial bone structure, organic silk glossing infusion, and unhurried natural texture finish.",
+      "Hand-painted multidimensional balayage customized to face architecture, organic botanical glossing infusion, and unhurried styling finish.",
     price: 195,
     durationMinutes: 120,
     images: [
@@ -41,12 +47,29 @@ const curatedEditorialServices: Service[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    _id: "demo-2",
-    title: "Hydra-Botanical Cell Recovery Facial",
+    _id: "srv-2",
+    title: "Executive Straight-Razor Shave & Scalp Detox",
+    slug: "executive-shave-scalp-detox",
+    category: "Barbering",
+    description:
+      "Eucalyptus hot towel preparation, badger lathering, Japanese feather blade detailing, and botanical rosemary chilled tonic.",
+    price: 85,
+    durationMinutes: 50,
+    images: [
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85",
+    ],
+    isActive: true,
+    specialists: ["Marcus Sterling"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    _id: "srv-3",
+    title: "Hydra-Botanical Deep Recovery Facial",
     slug: "hydra-botanical-facial",
     category: "Facial & Skin",
     description:
-      "Ultrasonic micro-cleansing, wild elderberry and fruit enzyme peel, cold-pressed plant squalane infusion, and cryo-sculpting facial massage.",
+      "Ultrasonic micro-cleansing, fruit enzyme exfoliation, cold-pressed plant squalane infusion, and cryo-sculpting lifting massage.",
     price: 155,
     durationMinutes: 75,
     images: [
@@ -58,29 +81,12 @@ const curatedEditorialServices: Service[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    _id: "demo-3",
-    title: "Architectural Precision Haircut & Scalp Detox",
-    slug: "architectural-precision-haircut",
-    category: "Hair",
-    description:
-      "Detailed structural scissor-work, botanical rosemary scalp detoxification ritual, customized nourishing clay wrap, and diffuse finishing.",
-    price: 110,
-    durationMinutes: 60,
-    images: [
-      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
-    ],
-    isActive: true,
-    specialists: ["David Chen", "Chloe Moreau"],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    _id: "demo-4",
-    title: "Volcanic Basalt Stone & Cedarwood Massage",
+    _id: "srv-4",
+    title: "Warm Basalt Stone & Cedarwood Massage",
     slug: "basalt-stone-massage",
     category: "Massage",
     description:
-      "Warm basalt river stones aligned along energy meridians, cold-pressed Mediterranean cedar and lavender oils, relieving deep muscular tension.",
+      "Warm basalt river stones aligned along meridian points, Mediterranean cedarwood and lavender oils, relieving deep muscle tension.",
     price: 165,
     durationMinutes: 90,
     images: [
@@ -92,7 +98,7 @@ const curatedEditorialServices: Service[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    _id: "demo-5",
+    _id: "srv-5",
     title: "Botanical Restorative Manicure & Hand Therapy",
     slug: "botanical-restorative-manicure",
     category: "Nails",
@@ -109,68 +115,152 @@ const curatedEditorialServices: Service[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    _id: "demo-6",
-    title: "Executive Straight-Razor Shave & Cedarwood Steam",
-    slug: "executive-shave-steam",
-    category: "Barbering",
+    _id: "srv-6",
+    title: "Aromatherapy Hydro-Thermal Spa Ritual",
+    slug: "aromatherapy-spa-ritual",
+    category: "Spa & Wellness",
     description:
-      "Eucalyptus hot towel preparation, badger brush badger lathering, Japanese feather blade detailing, and botanical chilled tonic.",
-    price: 90,
-    durationMinutes: 50,
+      "Full body mineral exfoliation followed by lavender and eucalyptus steam hydrotherapy, herbal scalp oil wrap, and peaceful resting tea.",
+    price: 150,
+    durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Marcus Sterling"],
+    specialists: ["Chloe Moreau", "Liam Thorne"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
 ];
 
-const editorialCategories = [
-  { name: "All", label: "Complete Carte", count: "30+ Formulations" },
-  { name: "Hair", label: "Hair Architecture & Color", count: "12 Rituals" },
-  { name: "Facial & Skin", label: "Botanical Skin Therapy", count: "8 Rituals" },
-  { name: "Massage", label: "Deep Tissue & Stone", count: "5 Rituals" },
-  { name: "Nails", label: "Hand & Cuticle Care", count: "6 Rituals" },
-  { name: "Barbering", label: "Master Barbering", count: "4 Rituals" },
-];
-
-const masterArtisans = [
+// The 8 Canonical Category Cards as explicitly instructed in the A9 Specification
+const canonicalCategories = [
   {
-    name: "Elena Vance",
-    role: "Master Colorist & Editorial Director",
-    credentials: "Trained in Paris & Florence · 14 Years Experience",
-    specialty: "Lived-in multidimensional balayage & color correction",
-    portrait: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=800&q=80",
+    name: "Hair",
+    tagline: "Precision cuts, colour and gloss treatments.",
+    image:
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+    count: "12 Treatments",
   },
   {
-    name: "Chloe Moreau",
-    role: "Architectural Cut Specialist",
-    credentials: "Vidal Sassoon London Fellow",
-    specialty: "Dry cutting, ergonomic silhouettes & natural curl tailoring",
-    portrait: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
+    name: "Nails",
+    tagline: "Considered manicures and pedicures.",
+    image:
+      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
+    count: "6 Treatments",
+  },
+  {
+    name: "Facial & Skin",
+    tagline: "Glow-giving facials and skin rituals.",
+    image:
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=80",
+    count: "8 Treatments",
+  },
+  {
+    name: "Massage",
+    tagline: "Restorative bodywork, tailored to you.",
+    image:
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
+    count: "7 Treatments",
+  },
+  {
+    name: "Makeup",
+    tagline: "Soft glam and occasion-ready artistry.",
+    image:
+      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+    count: "5 Treatments",
+  },
+  {
+    name: "Barbering",
+    tagline: "Classic cuts, fades and beard care.",
+    image:
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+    count: "9 Treatments",
+  },
+  {
+    name: "Spa & Wellness",
+    tagline: "Slow-down rituals for body and mind.",
+    image:
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+    count: "6 Treatments",
+  },
+  {
+    name: "Waxing",
+    tagline: "Gentle, meticulous hair removal.",
+    image:
+      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=800&q=80",
+    count: "4 Treatments",
+  },
+];
+
+// Resident Artists / Specialists
+const residentBarbers = [
+  {
+    name: "Marcus Sterling",
+    role: "Master Barber & Lead Groomer",
+    experience: "14 Years in Soho & London",
+    specialty: "Traditional straight-razor hot towel shaves & precision fades",
+    image:
+      "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Elena Vance",
+    role: "Master Colorist & Stylist",
+    experience: "Trained in Paris & Florence",
+    specialty: "Lived-in multidimensional balayage & organic glossing",
+    image:
+      "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=800&q=80",
   },
   {
     name: "Sofia Rossi",
-    role: "Botanical Aesthetician",
-    credentials: "Certified Swiss Dermo-Cosmetics Practitioner",
-    specialty: "Cold cryo-therapy, lymphatic drainage & barrier restoration",
-    portrait: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
+    role: "Licensed Dermal Esthetician",
+    experience: "Certified Swiss Dermo-Practitioner",
+    specialty: "Lymphatic drainage, ultrasound peel & barrier restoration",
+    image:
+      "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
   },
   {
     name: "Liam Thorne",
     role: "Senior Neuromuscular Therapist",
-    credentials: "BSc Holistic Therapies · Stockholm Institute",
-    specialty: "Warm basalt stone myofascial release & cranial tension relief",
-    portrait: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
+    experience: "Stockholm Holistic Institute",
+    specialty: "Basalt heated stone therapy & deep postural tension release",
+    image:
+      "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
+// Client Testimonials
+const clientTestimonials = [
+  {
+    quote:
+      "Marcus gave me the sharpest cut and cleanest shave I've had in New York. The atmosphere is warm, calm, and zero rush. SalonBook is a breath of fresh air.",
+    author: "Julian Reynolds",
+    service: "Executive Straight-Razor Shave",
+    rating: 5,
+    location: "Tribeca, NYC",
+  },
+  {
+    quote:
+      "Elena understands colour like a true painter. The balayage grew out seamlessly over 4 months with zero brassiness. The booking system was instant and effortless.",
+    author: "Camille Laurent",
+    service: "Signature Balayage & Gloss",
+    rating: 5,
+    location: "Upper East Side, NYC",
+  },
+  {
+    quote:
+      "The basalt stone massage melted away months of corporate desk stiffness. Spotlessly clean, peaceful treatment rooms, and completely transparent pricing.",
+    author: "David Vance",
+    service: "Basalt Stone & Cedarwood Massage",
+    rating: 5,
+    location: "Midtown Manhattan",
   },
 ];
 
 export default function HomePage() {
   const router = useRouter();
-  const [services, setServices] = useState<Service[]>(curatedEditorialServices);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [services, setServices] = useState<Service[]>(curatedServices);
+  const [activeTab, setActiveTab] = useState<string>("All");
   const [bookingService, setBookingService] = useState<Service | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -184,7 +274,7 @@ export default function HomePage() {
           setServices(res.data.data.services);
         }
       } catch (err) {
-        console.warn("Using curated editorial services fallback:", err);
+        console.warn("Using curated services fallback:", err);
       }
     };
     fetchServices();
@@ -196,117 +286,174 @@ export default function HomePage() {
   };
 
   const filteredServices =
-    selectedCategory === "All"
-      ? services
-      : services.filter((s) => s.category === selectedCategory);
+    activeTab === "All"
+      ? services.slice(0, 6)
+      : services.filter((s) => s.category.toLowerCase() === activeTab.toLowerCase());
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8] selection:bg-[#B8755B] selection:text-white">
+    <div className="flex flex-col min-h-screen bg-[#FAF7F2] text-[#231C1E]">
       {/* 
         =======================================================================
-        1. HERO SECTION: LUXURY EDITORIAL ATELIER
-        Text-First Composition — No split screen, no purple gradients, no floating pills
+        1. HERO SECTION (Exactly per Specification):
+        - Status pill: 🟢 Open today until 8:00 PM | 📍 Madison Avenue, NYC
+        - Headline: "Grooming, done properly." (Serif font)
+        - Subtitle: "A neighbourhood barbershop for hair, skin, nails and spa rituals..."
+        - CTA Buttons: Explore services → & Create an account (outline with calendar icon)
+        - Social proof: 4.9/5 rating, 8k+ Appointments, 12 Salon barbers
+        - Hero Visual: Modern salon interior with overlaid mobile preview card
         =======================================================================
       */}
-      <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Top Editorial Metadata Line */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15 text-[10px] uppercase tracking-[0.28em] text-[#302821]/70 dark:text-[#EAE3D6]/70">
-            <span>VOL. IX — PRIVATE APPOINTMENT CARTE</span>
-            <span>MADISON AVENUE · NEW YORK</span>
-            <span>AUTUMN / WINTER APPOINTMENTS</span>
-          </div>
-
-          {/* Central Editorial Display Headline */}
-          <div className="pt-12 sm:pt-16 pb-10 text-center max-w-4xl mx-auto space-y-6">
-            <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.3em] text-[#B8755B]">
-              HAUTE BEAUTÉ &amp; SLOW RESTORATION
-            </span>
-
-            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#302821] dark:text-[#F5F1E8]">
-              The Architecture of Hair, Botanicals &amp; Quiet Care.
-            </h1>
-
-            <p className="text-base sm:text-lg text-[#302821]/80 dark:text-[#EAE3D6]/80 font-normal leading-relaxed max-w-2xl mx-auto">
-              We reject the hurried, clinical salon. SalonBook is a private European atelier
-              where precision scissor craft meets organic botanical formulations in an unhurried, daylight space.
-            </p>
-
-            {/* Solid Minimalist CTAs — Pure Atelier */}
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/services">
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E] rounded-none border border-[#26372D]"
-                >
-                  <span>EXPLORE THE CARTE</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-2" />
-                </Button>
-              </Link>
-              <Link href="/experience">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium text-[#26372D] dark:text-[#F5F1E8] border-[#302821]/30 dark:border-[#EAE3D6]/30 hover:bg-[#EAE3D6]/50 rounded-none"
-                >
-                  THE ATELIER PHILOSOPHY
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* 
-            Asymmetrical Magazine Triptych Composition BELOW the Headline
-            100% Verified HTTP 200 URLs with Editorial Captions
-          */}
-          <div className="pt-10 grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
-            {/* Left: Precision Cut Portrait (4 cols) */}
-            <div className="md:col-span-4 flex flex-col space-y-2">
-              <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6] border border-[#302821]/15">
-                <SafeImage
-                  src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85"
-                  alt="Precision styling in action"
-                  className="w-full h-full object-cover grayscale-[15%] hover:scale-105 transition-transform duration-700"
-                />
+      <section className="relative pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#3B1F2B]/10 overflow-hidden bg-gradient-to-b from-[#FAF7F2] via-[#FAF7F2] to-[#F5EFEB]/50">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Typography & CTAs */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Status Pill */}
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FFFFFF] border border-[#3B1F2B]/15 shadow-sm">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-semibold text-[#231C1E] tracking-tight">
+                  Open today until 8:00 PM
+                </span>
+                <span className="text-[#3B1F2B]/30">•</span>
+                <span className="text-xs text-[#231C1E]/75 flex items-center gap-1 font-medium">
+                  <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
+                  Madison Avenue, NYC
+                </span>
               </div>
-              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-[#302821]/70 dark:text-[#EAE3D6]/70 pt-1">
-                <span>Fig. 01 — Scissor Architecture</span>
-                <span>Elena Vance</span>
-              </div>
-            </div>
 
-            {/* Middle: Architectural Studio Interior (5 cols) */}
-            <div className="md:col-span-5 flex flex-col space-y-2">
-              <div className="relative aspect-[4/3] md:h-full overflow-hidden bg-[#EAE3D6] border border-[#302821]/15">
-                <SafeImage
-                  src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=85"
-                  alt="Daylight European Atelier Interior"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute bottom-0 inset-x-0 p-4 bg-[#26372D]/90 text-[#F5F1E8] backdrop-blur-sm border-t border-[#F5F1E8]/20 flex items-center justify-between">
-                  <span className="font-serif text-sm tracking-wide">The Madison Avenue Sanctuary</span>
-                  <span className="text-[10px] uppercase tracking-widest text-[#A4AA91]">Acoustic Calm</span>
+              {/* Serif Headline */}
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#231C1E] leading-[1.12]">
+                Grooming, done properly.
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-[#231C1E]/80 leading-relaxed font-normal max-w-xl">
+                A neighbourhood barbershop for hair, skin, nails and spa rituals.
+                Browse our menu, request a time that suits you, and let our barbers take care of the rest.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                <Link href="/services">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] font-semibold text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
+                  >
+                    <span>Explore services</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+
+                <Link href="/sign-up">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-[#3B1F2B]/25 text-[#231C1E] bg-[#FFFFFF]/70 hover:bg-[#FFFFFF] font-semibold text-sm transition-all flex items-center justify-center gap-2"
+                  >
+                    <Calendar className="w-4 h-4 text-[#C5A880]" />
+                    <span>Create an account</span>
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Social Proof / Stats Bar */}
+              <div className="pt-6 border-t border-[#3B1F2B]/10 grid grid-cols-3 gap-4 max-w-lg">
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-serif text-2xl font-bold text-[#231C1E]">4.9/5</span>
+                    <div className="flex text-amber-500">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                    Client rating
+                  </p>
+                </div>
+
+                <div>
+                  <span className="font-serif text-2xl font-bold text-[#231C1E] block">
+                    8k+
+                  </span>
+                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                    Appointments
+                  </p>
+                </div>
+
+                <div>
+                  <span className="font-serif text-2xl font-bold text-[#231C1E] block">
+                    12
+                  </span>
+                  <p className="text-xs text-[#231C1E]/70 font-medium mt-0.5">
+                    Salon barbers
+                  </p>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-[#302821]/70 dark:text-[#EAE3D6]/70 pt-1">
-                <span>Fig. 02 — Private Atelier Suite</span>
-                <span>Floor IV</span>
-              </div>
             </div>
 
-            {/* Right: Botanical Amber Apothecary (3 cols) */}
-            <div className="md:col-span-3 flex flex-col space-y-2">
-              <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6] border border-[#302821]/15">
+            {/* Right Column: Hero Visual with Overlaid Mobile Preview Card */}
+            <div className="lg:col-span-5 relative">
+              {/* Outer decorative card frame */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FFFFFF] bg-[#EAE3D6] aspect-[4/5] sm:aspect-[5/6] lg:aspect-[4/5]">
                 <SafeImage
-                  src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1200&q=85"
-                  alt="Botanical Amber Glass Formulations"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=85"
+                  alt="Modern boutique barbershop and salon interior"
+                  className="w-full h-full object-cover scale-[1.02] hover:scale-105 transition-transform duration-700"
                 />
-              </div>
-              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-[#302821]/70 dark:text-[#EAE3D6]/70 pt-1">
-                <span>Fig. 03 — Cold-Pressed Oils</span>
-                <span>Pure Plant Actives</span>
+
+                {/* Subtle warm gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#231C1E]/70 via-transparent to-transparent pointer-events-none" />
+
+                {/* Overlaid Badge Top Right */}
+                <div className="absolute top-4 right-4 bg-[#FFFFFF]/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#FAF7F2] text-[11px] font-semibold text-[#231C1E] shadow-sm flex items-center gap-1.5">
+                  <Scissors className="w-3.5 h-3.5 text-[#3B1F2B]" />
+                  <span>Est. 2018 · NYC</span>
+                </div>
+
+                {/* Overlaid Mobile Preview Card showing "NEXT OPENING: Today · 2:30 PM" */}
+                <div className="absolute bottom-5 left-5 right-5 bg-[#FFFFFF]/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#FAF7F2] shadow-xl text-[#231C1E] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+                        NEXT OPENING: Today · 2:30 PM
+                      </span>
+                    </div>
+                    <span className="text-xs font-semibold text-[#C5A880] bg-[#C5A880]/15 px-2 py-0.5 rounded-md">
+                      Chair 02
+                    </span>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h4 className="font-serif text-base font-bold text-[#231C1E]">
+                        Classic Cut &amp; Straight-Razor Detailing
+                      </h4>
+                      <p className="text-xs text-[#231C1E]/70">
+                        Marcus Sterling · 45 mins
+                      </p>
+                    </div>
+                    <span className="font-serif text-base font-bold text-[#3B1F2B]">
+                      $65
+                    </span>
+                  </div>
+
+                  <div className="pt-1 flex items-center justify-between gap-3 border-t border-[#231C1E]/10">
+                    <div className="flex items-center gap-1.5 text-xs text-[#231C1E]/80">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Instant confirmation</span>
+                    </div>
+                    <Link href="/services">
+                      <span className="text-xs font-semibold text-[#3B1F2B] hover:text-[#4A2035] flex items-center gap-1">
+                        Reserve Slot <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -315,47 +462,58 @@ export default function HomePage() {
 
       {/* 
         =======================================================================
-        2. BRAND MANIFESTO & PHILOSOPHY
-        Editorial pull-quote layout with Roman numerals
+        2. TRUST INDICATORS BAR (Exactly per Specification)
+        - 🛡️ Secure booking: Your details stay private
+        - ⏱️ Thoughtful timing: Real openings, no guesswork
+        - 🤍 Personal care: One artist, all your attention
         =======================================================================
       */}
-      <section className="py-20 sm:py-28 bg-[#EAE3D6] dark:bg-[#1a201c] border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="text-center space-y-8">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#B8755B] font-bold">
-              ATELIER MANIFESTO
-            </span>
-            <blockquote className="font-serif text-2xl sm:text-3xl lg:text-4xl leading-snug font-normal text-[#302821] dark:text-[#F5F1E8] max-w-3xl mx-auto">
-              &ldquo;We treat hair, scalp, and skin as living architecture. Our appointments are strictly unhurried, one guest at a time, dedicated to biological integrity and artistic precision.&rdquo;
-            </blockquote>
-            <p className="text-xs uppercase tracking-[0.25em] text-[#302821]/60 dark:text-[#EAE3D6]/60">
-              — SALONBOOK CODE OF CRAFT · RULE 01
-            </p>
-          </div>
-
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-[#302821]/15 dark:border-[#EAE3D6]/15">
-            <div className="space-y-3">
-              <span className="font-serif text-2xl text-[#26372D] dark:text-[#A4AA91]">I.</span>
-              <h3 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">Cranial Architecture</h3>
-              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-                Haircuts sculpted dry according to head shape, bone angles, and natural fall. Hair that looks exquisite not only leaving the salon, but 8 weeks later.
-              </p>
+      <section className="bg-[#FFFFFF] border-b border-[#3B1F2B]/10 py-7">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {/* Indicator 1 */}
+            <div className="flex items-center gap-3.5 px-3 py-2">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
+                <ShieldCheck className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                  Secure booking
+                </h4>
+                <p className="text-xs text-[#231C1E]/70 font-normal">
+                  Your details stay private
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <span className="font-serif text-2xl text-[#26372D] dark:text-[#A4AA91]">II.</span>
-              <h3 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">Clean Biological Actives</h3>
-              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-                Zero ammonia, synthetic sulfates, or petrochemical parabens. Formulations imported from micro-laboratories in Grasse and Bologna.
-              </p>
+            {/* Indicator 2 */}
+            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
+                <Clock className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                  Thoughtful timing
+                </h4>
+                <p className="text-xs text-[#231C1E]/70 font-normal">
+                  Real openings, no guesswork
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <span className="font-serif text-2xl text-[#26372D] dark:text-[#A4AA91]">III.</span>
-              <h3 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">Single-Seat Concierge</h3>
-              <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-                No overlapping clients. Your master practitioner is exclusively dedicated to your chair for the entire duration of your reservation.
-              </p>
+            {/* Indicator 3 */}
+            <div className="flex items-center gap-3.5 px-3 py-2 border-t md:border-t-0 md:border-l border-[#3B1F2B]/10">
+              <div className="w-11 h-11 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center shrink-0 text-[#3B1F2B] shadow-sm">
+                <Heart className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#231C1E] tracking-tight">
+                  Personal care
+                </h4>
+                <p className="text-xs text-[#231C1E]/70 font-normal">
+                  One artist, all your attention
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -363,367 +521,503 @@ export default function HomePage() {
 
       {/* 
         =======================================================================
-        3. HAUTE CARTE (SIGNATURE TREATMENTS)
-        Numbered editorial index with solid reserve buttons
+        3. CATEGORY GRID ("Find Your Ritual — A category for every kind of pause")
+        8 Interactive Category Cards:
+        1. Hair: Precision cuts, colour and gloss treatments.
+        2. Nails: Considered manicures and pedicures.
+        3. Facial & Skin: Glow-giving facials and skin rituals.
+        4. Massage: Restorative bodywork, tailored to you.
+        5. Makeup: Soft glam and occasion-ready artistry.
+        6. Barbering: Classic cuts, fades and beard care.
+        7. Spa & Wellness: Slow-down rituals for body and mind.
+        8. Waxing: Gentle, meticulous hair removal.
         =======================================================================
       */}
-      <section className="py-20 sm:py-28 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between pb-10 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15 gap-6">
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-                LA CARTE DES SOINS
+              <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+                EXPLORE BY CATEGORY
               </span>
-              <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-                Signature Treatments &amp; Rituals
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+                Find Your Ritual
               </h2>
+              <p className="text-sm text-[#231C1E]/75 max-w-lg">
+                A category for every kind of pause. Select a ritual below to explore treatments, transparent durations, and pricing.
+              </p>
             </div>
+
             <Link href="/services">
               <Button
                 variant="outline"
-                className="rounded-none text-xs tracking-[0.2em] uppercase border-[#302821]/30"
+                size="sm"
+                className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FFFFFF] text-xs font-semibold"
               >
-                <span>VIEW COMPLETE CARTE</span>
-                <ArrowRight className="w-3.5 h-3.5 ml-2" />
+                <span>View all treatments</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </Link>
           </div>
 
-          {/* Category Filter Tabs */}
-          <div className="py-6 flex items-center gap-3 overflow-x-auto scrollbar-none border-b border-[#302821]/10 dark:border-[#EAE3D6]/10">
-            {editorialCategories.map((cat) => {
-              const isSelected = selectedCategory === cat.name;
-              return (
-                <button
-                  key={cat.name}
-                  onClick={() => setSelectedCategory(cat.name)}
-                  className={`px-4 py-2 text-xs uppercase tracking-[0.18em] transition-all whitespace-nowrap rounded-none border ${
-                    isSelected
-                      ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                      : "bg-transparent text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/20 hover:text-[#302821]"
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Treatment Cards Grid: Editorial Proportions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-10">
-            {filteredServices.slice(0, 6).map((service, idx) => (
-              <div
-                key={service._id}
-                className="group flex flex-col justify-between bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 hover:border-[#26372D] transition-colors"
+          {/* 8 Category Cards Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {canonicalCategories.map((cat) => (
+              <Link
+                key={cat.name}
+                href={`/services?category=${encodeURIComponent(cat.name)}`}
+                className="group relative rounded-2xl overflow-hidden bg-[#FFFFFF] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
               >
-                <div>
-                  {/* Photo Frame */}
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#EAE3D6] border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-                    <SafeImage
-                      src={
-                        service.images?.[0] ||
-                        "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85"
-                      }
-                      alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute top-3 left-3 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
-                      {service.category}
-                    </div>
+                {/* Visual Image */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#EAE3D6]">
+                  <SafeImage
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#231C1E]/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  
+                  {/* Category Pill Tag */}
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 text-[#231C1E] backdrop-blur-md shadow-sm">
+                    {cat.name}
+                  </span>
+
+                  {/* Count indicator */}
+                  <span className="absolute bottom-3 right-3 text-[10px] font-medium text-[#FAF7F2] bg-[#231C1E]/60 px-2 py-0.5 rounded-md backdrop-blur-sm">
+                    {cat.count}
+                  </span>
+                </div>
+
+                {/* Card Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors flex items-center justify-between">
+                      <span>{cat.name}</span>
+                      <ArrowRight className="w-4 h-4 text-[#C5A880] opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                    </h3>
+                    <p className="text-xs text-[#231C1E]/70 leading-relaxed mt-1">
+                      {cat.tagline}
+                    </p>
                   </div>
 
-                  {/* Body Content */}
-                  <div className="p-6 space-y-3">
-                    <div className="flex items-center justify-between text-[11px] text-[#302821]/70 dark:text-[#EAE3D6]/70 uppercase tracking-wider">
-                      <span className="font-serif text-sm font-semibold text-[#B8755B]">
-                        NO. 0{idx + 1}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
-                        {service.durationMinutes} MINUTES
-                      </span>
+                  <div className="pt-2 border-t border-[#3B1F2B]/10 flex items-center justify-between text-xs font-semibold text-[#3B1F2B]">
+                    <span>Browse Rituals</span>
+                    <span className="text-[11px] text-[#C5A880]">Book →</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 
+        =======================================================================
+        4. FEATURED SIGNATURE TREATMENTS (Popular Menu with 1-Click Booking)
+        =======================================================================
+      */}
+      <section className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#3B1F2B]/10">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+            <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+              MOST REQUESTED RITUALS
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+              Featured Salon Menu
+            </h2>
+            <p className="text-sm text-[#231C1E]/75 leading-relaxed">
+              Every appointment includes an unhurried consultation, cruelty-free botanical formulas, and private dedicated chair time.
+            </p>
+
+            {/* Filter Tabs */}
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-2">
+              {["All", "Hair", "Barbering", "Facial & Skin", "Massage", "Spa & Wellness"].map(
+                (tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                      activeTab === tab
+                        ? "bg-[#3B1F2B] text-[#FAF7F2] shadow-sm"
+                        : "bg-[#FAF7F2] text-[#231C1E]/75 hover:bg-[#F5EFEB] hover:text-[#231C1E]"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Treatments Cards Grid (3 Columns) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredServices.map((service) => (
+              <div
+                key={service._id}
+                className="group rounded-2xl bg-[#FAF7F2] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col"
+              >
+                {/* Image Container with Category Badge */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6]">
+                  <SafeImage
+                    src={
+                      service.images && service.images[0]
+                        ? service.images[0]
+                        : "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80"
+                    }
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {/* Category Pill Overlay */}
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/90 backdrop-blur-md text-[#231C1E] shadow-sm">
+                    {service.category}
+                  </span>
+
+                  {/* Price Tag Overlay */}
+                  <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] text-[#FAF7F2] shadow-sm">
+                    {formatCurrency(service.price)}
+                  </span>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-xs text-[#231C1E]/70 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
+                      <span>⏱ {service.durationMinutes} min</span>
+                      <span className="text-[#3B1F2B]/30">•</span>
+                      <span className="text-emerald-700 font-medium">At the salon</span>
                     </div>
 
-                    <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8] group-hover:text-[#26372D] transition-colors">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors leading-snug">
                       {service.title}
                     </h3>
 
-                    <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed line-clamp-2">
+                    <p className="text-xs text-[#231C1E]/75 line-clamp-2 leading-relaxed">
                       {service.description}
                     </p>
                   </div>
-                </div>
 
-                {/* Card Action Bar */}
-                <div className="p-6 pt-0 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 mt-2 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
-                      TREATMENT FEE
-                    </span>
-                    <span className="font-serif text-lg font-medium text-[#26372D] dark:text-[#F5F1E8]">
-                      {formatCurrency(service.price)}
-                    </span>
-                  </div>
+                  {/* Specialists & Actions */}
+                  <div className="pt-3 border-t border-[#3B1F2B]/10 space-y-3">
+                    {service.specialists && service.specialists.length > 0 && (
+                      <p className="text-[11px] text-[#231C1E]/70 font-medium">
+                        By {service.specialists.join(", ")}
+                      </p>
+                    )}
 
-                  <div className="flex items-center gap-2">
-                    <Link href={`/services/${service._id}`}>
+                    <div className="flex items-center gap-2">
                       <Button
-                        variant="ghost"
-                        size="sm"
-                        className="rounded-none text-[11px] tracking-[0.15em] uppercase hover:bg-transparent hover:underline"
+                        onClick={() => handleBookNow(service)}
+                        className="flex-1 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] text-xs font-semibold py-2.5 shadow-sm"
                       >
-                        DOSSIER
+                        Book Now
                       </Button>
-                    </Link>
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleBookNow(service)}
-                      className="rounded-none text-[11px] tracking-[0.15em] uppercase px-4 py-2 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
-                    >
-                      RESERVE
-                    </Button>
+                      <Link href={`/services/${service._id}`}>
+                        <Button
+                          variant="outline"
+                          className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FFFFFF] text-xs font-medium py-2.5 px-3"
+                        >
+                          Details ↗
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* 
-        =======================================================================
-        4. THE RESIDENT MASTER ARTISANS
-        Editorial portrait showcase with credentials
-        =======================================================================
-      */}
-      <section className="py-20 sm:py-28 bg-[#EAE3D6] dark:bg-[#1a201c] border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="max-w-2xl space-y-3 mb-14">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-              MAÎTRES DE L&apos;ATELIER
-            </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-              The Resident Artisans
-            </h2>
-            <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-              Every appointment is conducted by our resident masters. No apprentices, no divided attention.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {masterArtisans.map((artisan) => (
-              <div
-                key={artisan.name}
-                className="bg-[#F5F1E8] dark:bg-[#151916] border border-[#302821]/15 dark:border-[#EAE3D6]/15 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6]">
-                    <SafeImage
-                      src={artisan.portrait}
-                      alt={artisan.name}
-                      className="w-full h-full object-cover grayscale-[20%]"
-                    />
-                  </div>
-                  <div className="p-5 space-y-2">
-                    <span className="text-[9px] uppercase tracking-[0.25em] text-[#B8755B] block">
-                      {artisan.credentials}
-                    </span>
-                    <h3 className="font-serif text-lg text-[#302821] dark:text-[#F5F1E8]">
-                      {artisan.name}
-                    </h3>
-                    <p className="text-[11px] font-medium text-[#26372D] dark:text-[#A4AA91]">
-                      {artisan.role}
-                    </p>
-                    <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 leading-relaxed pt-1">
-                      {artisan.specialty}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-5 pt-0">
-                  <Link href="/services">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full rounded-none text-[10px] tracking-[0.18em] uppercase border-[#302821]/20 hover:bg-[#26372D] hover:text-[#F5F1E8]"
-                    >
-                      REQUEST WITH {artisan.name.split(" ")[0].toUpperCase()}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 
-        =======================================================================
-        5. THE SANCTUARY: ARCHITECTURAL SPACE
-        Photos of the salon interior with quiet acoustic design
-        =======================================================================
-      */}
-      <section className="py-20 sm:py-28 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-5 space-y-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-                THE SPACE
-              </span>
-              <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#302821] dark:text-[#F5F1E8] leading-tight">
-                Designed for Acoustic Serenity &amp; Natural Light.
-              </h2>
-              <p className="text-xs sm:text-sm text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed">
-                Step off Madison Avenue and into quiet restraint. Our private 4th-floor atelier was sculpted with lime-wash plaster, natural white oak, acoustic linen baffles, and private washrooms to shield you from city clamor.
-              </p>
-              <div className="space-y-3 pt-2 text-xs text-[#302821]/80 dark:text-[#EAE3D6]/80">
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-[#26372D]" />
-                  <span>Private single-chair styling chambers with daylight windows</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-[#26372D]" />
-                  <span>Complimentary organic tisanes &amp; cold-pressed botanical tonics</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-[#26372D]" />
-                  <span>Hospital-grade HEPA filtration and silent acoustic atmosphere</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="relative aspect-[4/5] bg-[#EAE3D6] border border-[#302821]/15">
-                  <SafeImage
-                    src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=800&q=80"
-                    alt="Atelier interior styling suite"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-[#302821]/60 dark:text-[#EAE3D6]/60">
-                  Salon Suite 4A — Natural Morning Light
-                </p>
-              </div>
-
-              <div className="space-y-4 pt-8">
-                <div className="relative aspect-[4/5] bg-[#EAE3D6] border border-[#302821]/15">
-                  <SafeImage
-                    src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80"
-                    alt="Hydrotherapy and wash sanctuary"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.16em] text-[#302821]/60 dark:text-[#EAE3D6]/60">
-                  The Hydrotherapy &amp; Wash Sanctuary
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 
-        =======================================================================
-        6. CLIENT STORIES & EDITORIAL CITATIONS
-        Magazine pull-quote format with verified clients
-        =======================================================================
-      */}
-      <section className="py-20 sm:py-28 bg-[#EAE3D6] dark:bg-[#1a201c] border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
-          <div className="text-center space-y-3 mb-16">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-              GUEST CITATIONS
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-              Words from Discerning Patrons
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-[#F5F1E8] dark:bg-[#151916] p-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 space-y-4 flex flex-col justify-between">
-              <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-relaxed">
-                &ldquo;The balayage by Elena is unmatched anywhere in Manhattan. Subtle, multidimensional, and my hair feels significantly healthier than before.&rdquo;
-              </p>
-              <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70">
-                <p className="font-bold text-[#26372D] dark:text-[#F5F1E8]">Clara Vandermeer</p>
-                <p>Architectural Designer · New York</p>
-              </div>
-            </div>
-
-            <div className="bg-[#F5F1E8] dark:bg-[#151916] p-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 space-y-4 flex flex-col justify-between">
-              <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-relaxed">
-                &ldquo;A completely different experience from traditional salons. No blaring music, no rushing between clients. Chloe gave me the finest haircut of my life.&rdquo;
-              </p>
-              <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70">
-                <p className="font-bold text-[#26372D] dark:text-[#F5F1E8]">Julian Mercer</p>
-                <p>Managing Director · Milan</p>
-              </div>
-            </div>
-
-            <div className="bg-[#F5F1E8] dark:bg-[#151916] p-8 border border-[#302821]/15 dark:border-[#EAE3D6]/15 space-y-4 flex flex-col justify-between">
-              <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-relaxed">
-                &ldquo;The botanical facial ritual cleared my persistent redness in one visit. You can immediately sense the biological quality of the plant formulas.&rdquo;
-              </p>
-              <div className="pt-4 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 dark:text-[#EAE3D6]/70">
-                <p className="font-bold text-[#26372D] dark:text-[#F5F1E8]">Genevieve H.</p>
-                <p>Editor · Paris</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 
-        =======================================================================
-        7. CONCIERGE CALL TO ACTION BANNER
-        Solid Forest Green #26372D block — Quiet, refined, non-SaaS
-        =======================================================================
-      */}
-      <section className="py-20 sm:py-28 bg-[#26372D] text-[#F5F1E8]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl space-y-8">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#A4AA91] font-semibold">
-            PRIVATE CONSULTATIONS
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl font-normal text-[#F5F1E8] leading-tight">
-            Reserve Your Unhurried Atelier Experience.
-          </h2>
-          <p className="text-xs sm:text-sm text-[#EAE3D6]/75 leading-relaxed max-w-xl mx-auto">
-            Appointments are reserved strictly in advance to preserve single-guest privacy. Select your desired ritual and our concierge will confirm your chair immediately.
-          </p>
-
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* View Complete Menu Link */}
+          <div className="mt-12 text-center">
             <Link href="/services">
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full sm:w-auto px-8 py-4 bg-[#B8755B] text-[#F5F1E8] hover:bg-[#a0624a] rounded-none text-xs uppercase tracking-[0.2em] font-medium"
-              >
-                <span>RESERVE AN APPOINTMENT</span>
-                <ArrowRight className="w-3.5 h-3.5 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/experience">
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto px-8 py-4 border-[#F5F1E8]/30 text-[#F5F1E8] hover:bg-[#F5F1E8]/10 rounded-none text-xs uppercase tracking-[0.2em] font-medium"
+                className="rounded-xl border-[#3B1F2B]/25 text-[#231C1E] hover:bg-[#FAF7F2] font-semibold text-xs uppercase tracking-wider px-8"
               >
-                EXPLORE THE SANCTUARY
+                <span>View Complete Service Menu (30+ Offerings)</span>
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Interactive Booking Modal */}
+      {/* 
+        =======================================================================
+        5. WHY SALONBOOK / THE BOUTIQUE STANDARDS (BENTO GRID)
+        =======================================================================
+      */}
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3 mb-14">
+            <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+              THE SALONBOOK DIFFERENCE
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+              Why Clients Choose Our Chairs
+            </h2>
+            <p className="text-sm text-[#231C1E]/75 leading-relaxed">
+              We reimagined modern salon booking from the ground up: zero overlapping chairs, true appointment punctuality, and certified master artists.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Bento 1: Zero double-booking */}
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
+                <Clock className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+                Zero Double-Booking
+              </h3>
+              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+                When you reserve a slot, that time belongs strictly to you. No rushed turnarounds, no waiting in line, and no overlapping clients.
+              </p>
+            </div>
+
+            {/* Bento 2: Hand-selected specialists */}
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
+                <Scissors className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+                12 Master Artisans
+              </h3>
+              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+                Each barber, colorist, and esthetician brings extensive international training, Vidal Sassoon fellowships, and dedicated craft mastery.
+              </p>
+            </div>
+
+            {/* Bento 3: Clean & non-toxic formulas */}
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
+                <Sparkles className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+                Clean Botanical Care
+              </h3>
+              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+                Cruelty-free, paraben-free European scalp washes, cold-pressed plant squalane, and organic gloss infusions safe for all skin types.
+              </p>
+            </div>
+
+            {/* Bento 4: Stripe transparent payments */}
+            <div className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#3B1F2B]/15 flex items-center justify-center text-[#3B1F2B]">
+                <ShieldCheck className="w-5 h-5 text-[#3B1F2B]" />
+              </div>
+              <h3 className="font-serif text-base font-bold text-[#231C1E]">
+                Transparent Checkout
+              </h3>
+              <p className="text-xs text-[#231C1E]/75 leading-relaxed">
+                Book without upfront lock-in; confirm your reservation first, then complete payment securely via Stripe with automated invoices.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 
+        =======================================================================
+        6. RESIDENT ARTISTS / SPECIALISTS
+        =======================================================================
+      */}
+      <section className="py-16 sm:py-24 bg-[#FFFFFF] border-b border-[#3B1F2B]/10">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div className="space-y-2">
+              <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+                THE TEAM
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+                Resident Barbers &amp; Specialists
+              </h2>
+              <p className="text-sm text-[#231C1E]/75 max-w-lg">
+                Meet the licensed artisans who bring years of precision cutting, custom hair coloring, and clinical skincare mastery to Madison Avenue.
+              </p>
+            </div>
+
+            <Link href="/experience">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2] text-xs font-semibold"
+              >
+                <span>Read artist biographies</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {residentBarbers.map((barber) => (
+              <div
+                key={barber.name}
+                className="rounded-2xl bg-[#FAF7F2] border border-[#3B1F2B]/10 overflow-hidden shadow-sm hover:shadow-md transition-all group"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#EAE3D6]">
+                  <SafeImage
+                    src={barber.image}
+                    alt={barber.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#231C1E]/70 via-transparent to-transparent opacity-70" />
+                  <div className="absolute bottom-3 left-3 right-3 text-[#FAF7F2]">
+                    <span className="text-[10px] uppercase tracking-wider text-[#C5A880] font-semibold block">
+                      {barber.experience}
+                    </span>
+                    <h3 className="font-serif text-base font-bold">
+                      {barber.name}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-2">
+                  <p className="text-xs font-semibold text-[#3B1F2B]">
+                    {barber.role}
+                  </p>
+                  <p className="text-xs text-[#231C1E]/70 leading-relaxed">
+                    {barber.specialty}
+                  </p>
+                  <div className="pt-2">
+                    <Link
+                      href="/services"
+                      className="text-xs font-semibold text-[#3B1F2B] hover:text-[#4A2035] flex items-center gap-1"
+                    >
+                      <span>Book with {barber.name.split(" ")[0]}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 
+        =======================================================================
+        7. CLIENT STORIES & TESTIMONIALS
+        =======================================================================
+      */}
+      <section className="py-16 sm:py-24 bg-[#FAF7F2] border-b border-[#3B1F2B]/10">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-xl mx-auto space-y-2 mb-12">
+            <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880] block">
+              PATRON REVIEWS
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-[#231C1E]">
+              What Our Clients Say
+            </h2>
+            <div className="flex items-center justify-center gap-1 text-amber-500 pt-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-current" />
+              ))}
+              <span className="text-xs font-bold text-[#231C1E] ml-2">
+                4.9 / 5 from over 8,000 appointments
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {clientTestimonials.map((review, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 shadow-sm flex flex-col justify-between space-y-4"
+              >
+                <div className="space-y-3">
+                  <div className="flex text-amber-500">
+                    {[...Array(review.rating)].map((_, idx) => (
+                      <Star key={idx} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#231C1E]/80 leading-relaxed italic">
+                    &ldquo;{review.quote}&rdquo;
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-[#3B1F2B]/10 flex items-center justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold text-[#231C1E]">
+                      {review.author}
+                    </h4>
+                    <p className="text-[11px] text-[#231C1E]/60">
+                      {review.location}
+                    </p>
+                  </div>
+                  <span className="text-[11px] font-semibold text-[#3B1F2B] bg-[#FAF7F2] px-2.5 py-1 rounded-full border border-[#3B1F2B]/10">
+                    {review.service}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 
+        =======================================================================
+        8. CALL TO ACTION BANNER (DEEP WINE PALETTE)
+        =======================================================================
+      */}
+      <section className="py-16 sm:py-20 bg-[#3B1F2B] text-[#FAF7F2] relative overflow-hidden">
+        {/* Subtle decorative circles */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#4A2035] opacity-50 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#2D1621] opacity-50 blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
+          <span className="inline-block px-3.5 py-1 rounded-full text-xs uppercase font-semibold tracking-widest bg-[#FAF7F2]/10 text-[#C5A880] border border-[#FAF7F2]/20">
+            APPOINTMENTS NOW OPEN
+          </span>
+
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#FAF7F2] leading-tight">
+            Ready for your next ritual?
+          </h2>
+
+          <p className="text-sm sm:text-base text-[#FAF7F2]/80 max-w-xl mx-auto leading-relaxed">
+            Reserve your chair online in under two minutes with no upfront fees.
+            Select your preferred specialist and experience grooming done properly.
+          </p>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/services">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#231C1E] font-bold text-sm shadow-lg transition-all"
+              >
+                <span>Browse All Services</span>
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+
+            <Link href="/sign-up">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-[#FAF7F2]/30 text-[#FAF7F2] hover:bg-[#FAF7F2]/10 font-semibold text-sm transition-all"
+              >
+                <Calendar className="w-4 h-4 mr-2 text-[#C5A880]" />
+                <span>Create an Account</span>
+              </Button>
+            </Link>
+          </div>
+
+          <p className="text-[11px] text-[#FAF7F2]/60 pt-2">
+            Demo Accounts: admin@salonbook.com (Admin) · customer@salonbook.com (Customer) · Password: Password123!
+          </p>
+        </div>
+      </section>
+
+      {/* Booking Modal */}
       {bookingService && (
         <BookingModal
           service={bookingService}
           isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false);
+            setBookingService(null);
+          }}
         />
       )}
     </div>

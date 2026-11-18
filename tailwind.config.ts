@@ -24,7 +24,7 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        serif: ["var(--font-serif)", "Cormorant Garamond", "Playfair Display", "Georgia", "serif"],
+        serif: ["var(--font-serif)", "Playfair Display", "Cormorant Garamond", "Georgia", "serif"],
         sans: ["var(--font-sans)", "Inter", "-apple-system", "sans-serif"],
       },
       colors: {
@@ -61,23 +61,34 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Solid Atelier Luxury Color Palette (NO GRADIENTS)
-        atelier: {
-          ivory: "#F5F1E8",
-          parchment: "#EAE3D6",
-          olive: "#343D2E",
-          forest: "#26372D",
-          sage: "#A4AA91",
-          espresso: "#302821",
+        // SalonBook Palette tokens (Assignment 9 Category 002 Spec)
+        salon: {
+          cream: "#FAF7F2",
+          parchment: "#F5EFEB",
+          wine: "#3B1F2B",
+          plum: "#4A2035",
+          charcoal: "#231C1E",
+          gold: "#C5A880",
           terracotta: "#B8755B",
+          olive: "#5C6650",
+          sand: "#EFE8DC",
         },
       },
       borderRadius: {
         none: "0",
-        sm: "2px",
-        DEFAULT: "4px",
-        md: "6px",
-        lg: "8px",
+        sm: "4px",
+        DEFAULT: "8px",
+        md: "12px",
+        lg: "16px",
+        xl: "20px",
+        "2xl": "24px",
+        "3xl": "32px",
+        full: "9999px",
+      },
+      boxShadow: {
+        subtle: "0 2px 10px rgba(59, 31, 43, 0.04)",
+        card: "0 8px 30px rgba(59, 31, 43, 0.06)",
+        hover: "0 14px 40px rgba(59, 31, 43, 0.10)",
       },
     },
   },

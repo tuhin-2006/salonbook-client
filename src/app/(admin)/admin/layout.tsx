@@ -15,6 +15,8 @@ import {
   LogOut,
   ChevronRight,
   ExternalLink,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -42,10 +44,10 @@ export default function AdminDashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-[50vh] space-y-4 bg-[#F5F1E8] dark:bg-[#151916]">
-        <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin" />
-        <p className="text-xs uppercase tracking-[0.25em] text-[#302821]/70">
-          Loading Atelier Direction...
+      <div className="container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-[50vh] space-y-4 bg-[#FAF7F2]">
+        <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin rounded-full" />
+        <p className="text-xs uppercase tracking-[0.25em] text-[#231C1E]/70 font-semibold">
+          Loading Admin Suite...
         </p>
       </div>
     );
@@ -63,31 +65,31 @@ export default function AdminDashboardLayout({
       exact: true,
     },
     {
-      label: "CARTE & SERVICES",
+      label: "SERVICES & MENU",
       href: "/admin/services",
       icon: Scissors,
       exact: false,
     },
     {
-      label: "RESERVATIONS DIARY",
+      label: "APPOINTMENTS",
       href: "/admin/appointments",
       icon: Calendar,
       exact: false,
     },
     {
-      label: "PATRON REGISTRY",
+      label: "CLIENT DIRECTORY",
       href: "/admin/customers",
       icon: Users,
       exact: false,
     },
     {
-      label: "STRIPE LEDGER",
+      label: "TRANSACTIONS",
       href: "/admin/transactions",
       icon: CreditCard,
       exact: false,
     },
     {
-      label: "ATELIER SETTINGS",
+      label: "ADMIN PROFILE",
       href: "/admin/profile",
       icon: User,
       exact: false,
@@ -95,18 +97,23 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8] flex flex-col lg:flex-row">
-      {/* Desktop Architectural Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/60 dark:bg-[#1a201c] p-6 justify-between shrink-0">
-        <div className="space-y-8">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#231C1E] flex flex-col lg:flex-row">
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 border-r border-[#3B1F2B]/10 bg-[#FFFFFF] p-6 justify-between shrink-0 shadow-sm">
+        <div className="space-y-7">
           {/* Logo */}
-          <Link href="/admin" className="flex flex-col">
-            <span className="font-serif text-2xl font-normal tracking-[0.22em] text-[#26372D] dark:text-[#F5F1E8]">
-              SALONBOOK
-            </span>
-            <span className="text-[9px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold -mt-0.5">
-              Direction &amp; Governance
-            </span>
+          <Link href="/admin" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#3B1F2B] text-[#FAF7F2] flex items-center justify-center shadow-sm">
+              <Scissors className="w-4 h-4 text-[#C5A880]" />
+            </div>
+            <div>
+              <span className="font-serif text-xl font-bold tracking-tight text-[#231C1E] block leading-none">
+                SalonBook
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-[#C5A880] font-semibold">
+                Admin Management
+              </span>
+            </div>
           </Link>
 
           {/* Navigation Items */}
@@ -121,17 +128,17 @@ export default function AdminDashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center justify-between px-3.5 py-2.5 text-[11px] uppercase tracking-[0.16em] transition-all rounded-none border ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 text-xs uppercase tracking-wider rounded-xl transition-all ${
                     isActive
-                      ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D] font-medium"
-                      : "text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/15 hover:text-[#302821] hover:bg-[#EAE3D6]/50"
+                      ? "bg-[#3B1F2B] text-[#FAF7F2] font-semibold shadow-sm"
+                      : "text-[#231C1E]/75 hover:bg-[#FAF7F2] hover:text-[#231C1E]"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon className="w-3.5 h-3.5" />
+                    <Icon className="w-4 h-4" />
                     <span>{item.label}</span>
                   </div>
-                  {isActive && <ChevronRight className="w-3 h-3 text-[#B8755B]" />}
+                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#C5A880]" />}
                 </Link>
               );
             })}
@@ -139,17 +146,17 @@ export default function AdminDashboardLayout({
         </div>
 
         {/* User Card & Logout */}
-        <div className="pt-6 border-t border-[#302821]/15 space-y-4">
+        <div className="pt-6 border-t border-[#3B1F2B]/10 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#26372D] text-[#F5F1E8] font-serif font-bold text-xs flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-[#3B1F2B] text-[#FAF7F2] font-serif font-bold text-xs flex items-center justify-center shadow-sm">
               {getInitials(user?.name || "Admin")}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-semibold text-[#302821] dark:text-[#F5F1E8] truncate">
+              <span className="text-xs font-bold text-[#231C1E] truncate">
                 {user?.name}
               </span>
-              <span className="text-[10px] text-[#302821]/60 dark:text-[#EAE3D6]/60 truncate">
-                Executive Director
+              <span className="text-[10px] text-[#231C1E]/60 truncate">
+                Salon Administrator
               </span>
             </div>
           </div>
@@ -159,36 +166,41 @@ export default function AdminDashboardLayout({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full text-[10px] uppercase tracking-wider rounded-none h-8 border-[#302821]/20 gap-1"
+                className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-[#3B1F2B]/20 gap-1 hover:bg-[#FAF7F2]"
               >
-                <ExternalLink className="w-3 h-3" /> ATELIER
+                <ExternalLink className="w-3 h-3" /> Live Site
               </Button>
             </Link>
             <Button
               variant="outline"
               size="sm"
               onClick={logout}
-              className="w-full text-[10px] uppercase tracking-wider rounded-none h-8 border-red-300 text-red-700 hover:bg-red-50 gap-1"
+              className="w-full text-[10px] font-semibold uppercase tracking-wider rounded-xl h-8 border-red-300 text-red-700 hover:bg-red-50 gap-1"
             >
-              <LogOut className="w-3 h-3" /> EXIT
+              <LogOut className="w-3 h-3" /> Sign Out
             </Button>
           </div>
         </div>
       </aside>
 
       {/* Mobile Top Header */}
-      <div className="lg:hidden bg-[#EAE3D6] border-b border-[#302821]/15 p-4 flex items-center justify-between">
-        <div className="flex flex-col">
-          <span className="font-serif text-lg font-normal tracking-[0.2em] text-[#26372D]">
-            SALONBOOK
-          </span>
-          <span className="text-[8px] uppercase tracking-[0.25em] text-[#B8755B]">
-            Direction
-          </span>
+      <div className="lg:hidden bg-[#FFFFFF] border-b border-[#3B1F2B]/10 p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-[#3B1F2B] text-[#FAF7F2] flex items-center justify-center">
+            <Scissors className="w-3.5 h-3.5 text-[#C5A880]" />
+          </div>
+          <div>
+            <span className="font-serif text-base font-bold text-[#231C1E]">
+              SalonBook
+            </span>
+            <span className="text-[9px] uppercase tracking-wider text-[#C5A880] font-semibold block -mt-1">
+              Admin Suite
+            </span>
+          </div>
         </div>
         <button
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-          className="p-2 border border-[#302821]/20 text-[#302821]"
+          className="p-2 rounded-lg border border-[#3B1F2B]/15 text-[#231C1E]"
         >
           {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
@@ -196,7 +208,7 @@ export default function AdminDashboardLayout({
 
       {/* Mobile Sidebar Drawer */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden bg-[#EAE3D6] border-b border-[#302821]/15 p-4 space-y-2">
+        <div className="lg:hidden bg-[#FFFFFF] border-b border-[#3B1F2B]/10 p-4 space-y-2">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -208,10 +220,10 @@ export default function AdminDashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileSidebarOpen(false)}
-                className={`flex items-center gap-2.5 px-3 py-2 text-xs uppercase tracking-wider rounded-none ${
+                className={`flex items-center gap-2.5 px-3 py-2 text-xs uppercase tracking-wider rounded-xl ${
                   isActive
-                    ? "bg-[#26372D] text-[#F5F1E8]"
-                    : "text-[#302821]/70"
+                    ? "bg-[#3B1F2B] text-[#FAF7F2] font-semibold"
+                    : "text-[#231C1E]/75"
                 }`}
               >
                 <Icon className="w-4 h-4" />

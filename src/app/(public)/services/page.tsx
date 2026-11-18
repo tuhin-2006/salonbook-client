@@ -12,6 +12,10 @@ import {
   List,
   ArrowRight,
   SlidersHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,24 +32,24 @@ const fallbackServices: Service[] = [
     slug: "signature-balayage-silk-glaze",
     category: "Hair",
     description:
-      "Hand-painted custom French balayage tailored to your cranial bone structure, finished with a luminous silk shine glaze and luxury botanical blowout.",
+      "Hand-painted custom French balayage tailored to cranial bone structure, finished with a luminous silk shine glaze and luxury blowout.",
     price: 195,
     durationMinutes: 120,
     images: [
       "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
+    specialists: ["Elena Vance", "Chloe Moreau"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "s2",
-    title: "Precision Cut & Silk Blowout",
-    slug: "precision-cut-silk-blowout",
+    title: "Precision Haircut & Scalp Detox",
+    slug: "precision-haircut-scalp-detox",
     category: "Hair",
     description:
-      "Geometric precision cutting tailored to hair density and natural fall, rosemary scalp detox massage, customized deep conditioning masque, and natural diffuse finish.",
+      "Geometric precision cutting tailored to hair density and natural fall, rosemary scalp detox massage, customized masque, and natural diffuse finish.",
     price: 110,
     durationMinutes: 60,
     images: [
@@ -58,18 +62,18 @@ const fallbackServices: Service[] = [
   },
   {
     _id: "s3",
-    title: "Caviar & 24K Gold Youth Radiance Facial",
+    title: "Caviar & Gold Youth Radiance Facial",
     slug: "caviar-gold-youth-radiance-facial",
     category: "Facial & Skin",
     description:
-      "An opulent anti-aging journey featuring wild French caviar extract, 24K colloidal gold infusion, micro-current lifting, and cryo oxygen therapy.",
+      "Opulent anti-aging journey featuring wild French caviar extract, 24K colloidal gold infusion, micro-current lifting, and cryo oxygen therapy.",
     price: 220,
     durationMinutes: 90,
     images: [
       "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Sofia Rossi (Aesthetician)"],
+    specialists: ["Sofia Rossi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -79,26 +83,26 @@ const fallbackServices: Service[] = [
     slug: "hydra-botanical-deep-cleanse-extraction",
     category: "Facial & Skin",
     description:
-      "Vortex-fusion medical grade hydration, sonic extractions, clarifying botanical peel, and antioxidant LED light therapy to unveil glass-like luminosity.",
+      "Vortex-fusion medical grade hydration, sonic extractions, clarifying botanical peel, and antioxidant LED light therapy.",
     price: 145,
     durationMinutes: 60,
     images: [
       "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Sarah Jenkins"],
+    specialists: ["Sofia Rossi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "s5",
-    title: "Russian Gel Manicure & Botanical Spa",
-    slug: "russian-gel-manicure-botanical-spa",
+    title: "Restorative Gel Manicure & Hand Therapy",
+    slug: "restorative-gel-manicure",
     category: "Nails",
     description:
-      "Flawless dry e-file cuticle work, structural apex gel reinforcement, nourishing organic rose petal soak, and organic argan oil arm massage.",
+      "Dry e-file diamond cuticle therapy, natural builder strengthening treatment, warm jojoba compress, and clean nontoxic lacquer.",
     price: 85,
-    durationMinutes: 75,
+    durationMinutes: 60,
     images: [
       "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85",
     ],
@@ -109,45 +113,45 @@ const fallbackServices: Service[] = [
   },
   {
     _id: "s6",
-    title: "Deep Tissue Volcanic Basalt Stone Massage",
-    slug: "deep-tissue-volcanic-stone-massage",
+    title: "Volcanic Basalt Stone & Cedarwood Massage",
+    slug: "volcanic-stone-massage",
     category: "Massage",
     description:
-      "Heated basalt stones infused with organic lavender and frankincense essential oils to melt away chronic muscular tension and restore nervous equilibrium.",
+      "Heated basalt river stones aligned along meridian points, Mediterranean cedar and lavender oils, releasing deep postural tension.",
     price: 165,
     durationMinutes: 90,
     images: [
       "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Liam Thorne (RMT)"],
+    specialists: ["Liam Thorne"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "s7",
-    title: "Royal Bridal Couture Glamour Package",
-    slug: "royal-bridal-couture-glamour-package",
-    category: "Makeup",
+    title: "Deep Neuromuscular Myofascial Therapy",
+    slug: "deep-neuromuscular-myofascial-therapy",
+    category: "Massage",
     description:
-      "The definitive bridal transformation featuring high-definition airbrush makeup, couture hair updo, veil positioning, and luxury lash application.",
-    price: 320,
-    durationMinutes: 150,
+      "Targeted trigger-point therapy and slow myofascial release designed to alleviate chronic neck, shoulder, and spinal stiffness.",
+    price: 140,
+    durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Victoria Sterling (Bridal Director)"],
+    specialists: ["Liam Thorne"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
   {
     _id: "s8",
-    title: "Executive Beard Sculpt & Hot Towel Shave",
-    slug: "executive-beard-sculpt-hot-towel-shave",
+    title: "Executive Straight-Razor Shave & Steam",
+    slug: "executive-straight-razor-shave-steam",
     category: "Barbering",
     description:
-      "Traditional straight razor precision line work, eucalyptus steam towels, sandalwood pre-shave oil massage, and organic cold-pressed beard conditioning balm.",
+      "Eucalyptus hot towel preparation, badger lathering, Japanese feather blade detailing, and chilled botanical rosemary tonic.",
     price: 75,
     durationMinutes: 45,
     images: [
@@ -160,18 +164,18 @@ const fallbackServices: Service[] = [
   },
   {
     _id: "s9",
-    title: "Aromatherapy Thermal Spa & Hydro-Detox",
-    slug: "aromatherapy-thermal-spa-hydro-detox",
+    title: "Aromatherapy Spa Ritual & Hydro-Thermal Soak",
+    slug: "aromatherapy-spa-ritual",
     category: "Spa & Wellness",
     description:
-      "A complete hydro-detox experience featuring steam inhalation, mineral-rich thermal salt soak, lymphatic dry brushing, and restorative herbal tea ceremony.",
+      "Complete hydro-detox experience featuring steam hydrotherapy, mineral-rich thermal salt soak, lymphatic dry brushing, and restorative herbal tea.",
     price: 150,
     durationMinutes: 90,
     images: [
-      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Camilla Dubois"],
+    specialists: ["Chloe Moreau", "Liam Thorne"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -185,26 +189,28 @@ const fallbackServices: Service[] = [
     price: 110,
     durationMinutes: 60,
     images: [
-      "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=85",
     ],
     isActive: true,
-    specialists: ["Chloe Moreau"],
+    specialists: ["Sofia Rossi"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
 ];
 
-const categories = [
-  "All",
+const categoriesList = [
+  "All categories",
   "Hair",
-  "Facial & Skin",
-  "Massage",
-  "Nails",
   "Barbering",
   "Spa & Wellness",
+  "Massage",
+  "Nails",
+  "Facial & Skin",
   "Makeup",
   "Waxing",
 ];
+
+const ITEMS_PER_PAGE = 9;
 
 function ServicesContent() {
   const searchParams = useSearchParams();
@@ -212,18 +218,22 @@ function ServicesContent() {
 
   const [services, setServices] = useState<Service[]>(fallbackServices);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(
-    initialCategoryParam || "All"
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    initialCategoryParam || "All categories"
   );
-  const [sortPrice, setSortPrice] = useState<"none" | "asc" | "desc">("none");
-  const [priceTier, setPriceTier] = useState<"all" | "under100" | "100to200" | "over200">("all");
-  const [viewMode, setViewMode] = useState<"grid" | "menu">("grid");
+  const [sortOption, setSortOption] = useState<string>("newest");
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (initialCategoryParam) {
-      setSelectedCategory(initialCategoryParam);
+      // Normalize match
+      const matched = categoriesList.find(
+        (c) => c.toLowerCase() === initialCategoryParam.toLowerCase()
+      );
+      if (matched) setSelectedCategory(matched);
+      else setSelectedCategory(initialCategoryParam);
     }
   }, [initialCategoryParam]);
 
@@ -231,7 +241,7 @@ function ServicesContent() {
     const fetchServices = async () => {
       try {
         const res = await api.get<ApiResponse<{ services: Service[] }>>(
-          "/services?limit=40&isActive=true"
+          "/services?limit=50&isActive=true"
         );
         if (res.data.success && res.data.data.services.length > 0) {
           setServices(res.data.data.services);
@@ -250,16 +260,19 @@ function ServicesContent() {
 
   const handleResetFilters = () => {
     setSearch("");
-    setSelectedCategory("All");
-    setSortPrice("none");
-    setPriceTier("all");
+    setSelectedCategory("All categories");
+    setSortOption("newest");
+    setCurrentPage(1);
   };
 
+  // Filtered & sorted array
   const filteredServices = useMemo(() => {
     return services
       .filter((service) => {
         const matchesCategory =
-          selectedCategory === "All" || service.category === selectedCategory;
+          selectedCategory === "All categories" ||
+          service.category.toLowerCase() === selectedCategory.toLowerCase();
+
         const matchesSearch =
           service.title.toLowerCase().includes(search.toLowerCase()) ||
           service.description.toLowerCase().includes(search.toLowerCase()) ||
@@ -267,160 +280,123 @@ function ServicesContent() {
             s.toLowerCase().includes(search.toLowerCase())
           );
 
-        let matchesPriceTier = true;
-        if (priceTier === "under100") matchesPriceTier = service.price < 100;
-        else if (priceTier === "100to200")
-          matchesPriceTier = service.price >= 100 && service.price <= 200;
-        else if (priceTier === "over200") matchesPriceTier = service.price > 200;
-
-        return matchesCategory && matchesSearch && matchesPriceTier;
+        return matchesCategory && matchesSearch;
       })
       .sort((a, b) => {
-        if (sortPrice === "asc") return a.price - b.price;
-        if (sortPrice === "desc") return b.price - a.price;
-        return 0;
+        if (sortOption === "price-asc") return a.price - b.price;
+        if (sortOption === "price-desc") return b.price - a.price;
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       });
-  }, [services, selectedCategory, search, priceTier, sortPrice]);
+  }, [services, selectedCategory, search, sortOption]);
+
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedCategory, sortOption]);
+
+  // Pagination calculation
+  const totalItems = filteredServices.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const paginatedServices = filteredServices.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen py-12 sm:py-20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]">
+    <div className="min-h-screen py-10 sm:py-16 bg-[#FAF7F2] text-[#231C1E]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-        {/* Top Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
+        {/* 
+          =======================================================================
+          1. HEADER (Exactly per Specification)
+          - "Find your next ritual" + Total count badge ("10 services available")
+          =======================================================================
+        */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 pb-6 border-b border-[#3B1F2B]/10">
           <div className="space-y-2">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold">
-              LA CARTE GÉNÉRALE DES SOINS
-            </span>
-            <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-              Curated Treatments &amp; Rituals
+            <div className="flex items-center gap-3">
+              <span className="text-xs uppercase font-bold tracking-[0.2em] text-[#C5A880]">
+                MENU &amp; RESERVATIONS
+              </span>
+              <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-[#3B1F2B] text-[#FAF7F2]">
+                {totalItems} services available
+              </span>
+            </div>
+            <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-[#231C1E]">
+              Find your next ritual
             </h1>
-            <p className="text-xs sm:text-sm text-[#302821]/75 dark:text-[#EAE3D6]/75 max-w-xl leading-relaxed">
-              Formulated with wild botanical extracts, cold-pressed seed oils, and cranial scissor architecture. Select your treatment to review the clinical dossier and reserve your chair.
+            <p className="text-sm text-[#231C1E]/75 max-w-xl leading-relaxed">
+              Explore our curated menu of precision haircuts, clean botanical skincare, restorative massages, and traditional straight-razor barbering.
             </p>
           </div>
 
-          {/* View Mode Toggle: Grid vs Classic Carte */}
-          <div className="flex items-center gap-1 border border-[#302821]/20 dark:border-[#EAE3D6]/20 bg-[#EAE3D6]/50 dark:bg-[#1a201c] p-1 self-start md:self-end">
-            <button
-              type="button"
-              onClick={() => setViewMode("grid")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] font-medium transition-all ${
-                viewMode === "grid"
-                  ? "bg-[#26372D] text-[#F5F1E8]"
-                  : "text-[#302821]/70 dark:text-[#EAE3D6]/70 hover:text-[#302821]"
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>GALLERY</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("menu")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] font-medium transition-all ${
-                viewMode === "menu"
-                  ? "bg-[#26372D] text-[#F5F1E8]"
-                  : "text-[#302821]/70 dark:text-[#EAE3D6]/70 hover:text-[#302821]"
-              }`}
-            >
-              <List className="w-3.5 h-3.5" />
-              <span>CARTE</span>
-            </button>
+          <div className="flex items-center gap-2 text-xs font-medium text-[#231C1E]/70 bg-[#FFFFFF] px-3.5 py-2 rounded-xl border border-[#3B1F2B]/10 shadow-sm self-start md:self-end">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>Instant Slot Locking · Zero Double-Booking</span>
           </div>
         </div>
 
-        {/* Filter and Search Bar: Architectural Surface */}
-        <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-6 mb-10 space-y-5">
+        {/* 
+          =======================================================================
+          2. INTERACTIVE CONTROLS BAR (Search, Category Dropdown, Sort Dropdown)
+          =======================================================================
+        */}
+        <div className="bg-[#FFFFFF] border border-[#3B1F2B]/10 rounded-2xl p-5 mb-8 shadow-sm space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            {/* Search Input */}
-            <div className="md:col-span-8 relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#302821]/50 dark:text-[#EAE3D6]/50" />
+            {/* 1. Search Input */}
+            <div className="md:col-span-6 relative">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#231C1E]/50" />
               <Input
-                placeholder="Search treatments by title, botanical ingredient, or master stylist..."
+                placeholder="Search services by name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 h-11 bg-[#F5F1E8] dark:bg-[#151916] rounded-none border-[#302821]/20 dark:border-[#EAE3D6]/20 text-xs text-[#302821] dark:text-[#F5F1E8] placeholder:text-[#302821]/50 focus-visible:ring-1 focus-visible:ring-[#26372D]"
+                className="pl-10 h-11 bg-[#FAF7F2] rounded-xl border-[#3B1F2B]/15 text-xs text-[#231C1E] placeholder:text-[#231C1E]/50 focus-visible:ring-1 focus-visible:ring-[#3B1F2B]"
               />
             </div>
 
-            {/* Price Sort */}
-            <div className="md:col-span-4 flex items-center gap-2">
-              <ArrowUpDown className="w-4 h-4 text-[#302821]/60 shrink-0" />
+            {/* 2. Category Dropdown */}
+            <div className="md:col-span-3">
               <select
-                value={sortPrice}
-                onChange={(e) => setSortPrice(e.target.value as "none" | "asc" | "desc")}
-                className="w-full h-11 rounded-none border border-[#302821]/20 dark:border-[#EAE3D6]/20 bg-[#F5F1E8] dark:bg-[#151916] px-3 text-xs uppercase tracking-wider text-[#302821] dark:text-[#F5F1E8] focus:outline-none"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 bg-[#FAF7F2] px-3 text-xs font-medium text-[#231C1E] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B]"
               >
-                <option value="none">SORT: ATELIER ORDER</option>
-                <option value="asc">PRICE: LOWEST FIRST</option>
-                <option value="desc">PRICE: HIGHEST FIRST</option>
+                {categoriesList.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* 3. Sort Dropdown */}
+            <div className="md:col-span-3 flex items-center gap-2">
+              <ArrowUpDown className="w-4 h-4 text-[#231C1E]/60 shrink-0" />
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="w-full h-11 rounded-xl border border-[#3B1F2B]/15 bg-[#FAF7F2] px-3 text-xs font-medium text-[#231C1E] focus:outline-none focus:ring-1 focus:ring-[#3B1F2B]"
+              >
+                <option value="newest">Newest first</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
               </select>
             </div>
           </div>
 
-          {/* Price Tier Filters */}
-          <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/60 dark:text-[#EAE3D6]/60 mr-2">
-              PRICE TIER:
-            </span>
-            <button
-              type="button"
-              onClick={() => setPriceTier("all")}
-              className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-all rounded-none border ${
-                priceTier === "all"
-                  ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                  : "bg-transparent text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/20"
-              }`}
-            >
-              ALL TIERS
-            </button>
-            <button
-              type="button"
-              onClick={() => setPriceTier("under100")}
-              className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-all rounded-none border ${
-                priceTier === "under100"
-                  ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                  : "bg-transparent text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/20"
-              }`}
-            >
-              UNDER $100
-            </button>
-            <button
-              type="button"
-              onClick={() => setPriceTier("100to200")}
-              className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-all rounded-none border ${
-                priceTier === "100to200"
-                  ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                  : "bg-transparent text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/20"
-              }`}
-            >
-              $100 — $200
-            </button>
-            <button
-              type="button"
-              onClick={() => setPriceTier("over200")}
-              className={`px-3 py-1 text-[11px] uppercase tracking-wider transition-all rounded-none border ${
-                priceTier === "over200"
-                  ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                  : "bg-transparent text-[#302821]/70 dark:text-[#EAE3D6]/70 border-transparent hover:border-[#302821]/20"
-              }`}
-            >
-              $200+
-            </button>
-          </div>
-
-          {/* Category Chips */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none border-t border-[#302821]/10 dark:border-[#EAE3D6]/10">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91] shrink-0 mr-1" />
-            {categories.map((cat) => {
+          {/* Category Quick Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-[#3B1F2B]/10 scrollbar-none">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#3B1F2B] shrink-0 mr-1" />
+            {categoriesList.map((cat) => {
               const isSelected = selectedCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] whitespace-nowrap transition-all rounded-none border ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                     isSelected
-                      ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                      : "bg-[#F5F1E8] dark:bg-[#151916] text-[#302821]/70 dark:text-[#EAE3D6]/70 border-[#302821]/15 hover:border-[#302821]/40"
+                      ? "bg-[#3B1F2B] text-[#FAF7F2] shadow-sm"
+                      : "bg-[#FAF7F2] text-[#231C1E]/75 hover:bg-[#F5EFEB] hover:text-[#231C1E]"
                   }`}
                 >
                   {cat}
@@ -430,200 +406,191 @@ function ServicesContent() {
           </div>
         </div>
 
-        {/* Results Counter & Reset */}
-        <div className="flex items-center justify-between mb-8 text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 uppercase tracking-wider">
+        {/* Counter & Active Filter Badge */}
+        <div className="flex items-center justify-between mb-6 text-xs text-[#231C1E]/70">
           <p>
-            INDEXING <span className="font-semibold text-[#26372D] dark:text-[#F5F1E8]">{filteredServices.length}</span> TREATMENTS
+            Showing <span className="font-semibold text-[#231C1E]">{startIndex + 1}</span>–
+            <span className="font-semibold text-[#231C1E]">{endIndex}</span> of{" "}
+            <span className="font-semibold text-[#231C1E]">{totalItems}</span> rituals
           </p>
-          {(search || selectedCategory !== "All" || sortPrice !== "none" || priceTier !== "all") && (
+          {(search || selectedCategory !== "All categories" || sortOption !== "newest") && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleResetFilters}
-              className="gap-1 text-[11px] uppercase tracking-wider text-[#B8755B] hover:bg-transparent hover:underline h-7 px-2"
+              className="gap-1 text-xs text-[#B8755B] hover:bg-transparent hover:underline h-7 px-2 font-medium"
             >
-              <FilterX className="w-3.5 h-3.5" /> RESET FILTERS
+              <FilterX className="w-3.5 h-3.5" /> Reset all filters
             </Button>
           )}
         </div>
 
-        {/* Service Cards Render */}
-        {filteredServices.length === 0 ? (
-          <div className="text-center py-20 border border-dashed border-[#302821]/20 bg-[#EAE3D6]/30 p-8 space-y-4 max-w-md mx-auto">
-            <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">No Treatments Found</h3>
-            <p className="text-[#302821]/70 dark:text-[#EAE3D6]/70 text-xs leading-relaxed">
-              We could not find any treatment matching your criteria. Reset filters to review the full atelier carte.
+        {/* 
+          =======================================================================
+          3. SERVICE CARDS (Grid 3 Columns per Specification)
+          - Service image with category pill badge overlay (e.g. SPA & WELLNESS)
+          - Service Name + Price (e.g., Aromatherapy Spa Ritual — $150.00)
+          - Short summary description
+          - Duration indicator with clock icon (⏱ 90 min)
+          - Bottom row: At the salon tag (left) + View details ↗ (right) + Book Now
+          =======================================================================
+        */}
+        {paginatedServices.length === 0 ? (
+          <div className="text-center py-20 bg-[#FFFFFF] rounded-2xl border border-dashed border-[#3B1F2B]/20 p-8 space-y-4 max-w-md mx-auto">
+            <h3 className="font-serif text-xl font-bold text-[#231C1E]">No Rituals Found</h3>
+            <p className="text-[#231C1E]/70 text-xs leading-relaxed">
+              We couldn&apos;t find any treatment matching your filter criteria. Try searching with different keywords or reset filters.
             </p>
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetFilters}
-              className="rounded-none text-xs uppercase tracking-wider border-[#302821]/30"
+              className="rounded-xl text-xs font-semibold border-[#3B1F2B]/30"
             >
-              Clear Filters
+              Reset Filters
             </Button>
           </div>
-        ) : viewMode === "grid" ? (
-          /* Gallery Grid View */
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredServices.map((service, idx) => (
+            {paginatedServices.map((service) => (
               <div
                 key={service._id}
-                className="group flex flex-col justify-between bg-[#EAE3D6]/40 dark:bg-[#1a201c] border border-[#302821]/15 dark:border-[#EAE3D6]/15 hover:border-[#26372D] transition-colors"
+                className="group rounded-2xl bg-[#FFFFFF] border border-[#3B1F2B]/10 hover:border-[#3B1F2B]/30 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
-                  {/* Photo Frame */}
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#EAE3D6] border-b border-[#302821]/15 dark:border-[#EAE3D6]/15">
+                  {/* Service Image with Category Pill Badge Overlay */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE3D6]">
                     <SafeImage
                       src={
-                        service.images[0] ||
-                        "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85"
+                        service.images && service.images[0]
+                          ? service.images[0]
+                          : "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85"
                       }
                       alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 bg-[#F5F1E8]/90 dark:bg-[#26372D]/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-[#302821] dark:text-[#F5F1E8] border border-[#302821]/20">
+
+                    {/* Category Pill Badge Overlay */}
+                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FFFFFF]/95 backdrop-blur-md text-[#231C1E] shadow-sm">
                       {service.category}
-                    </div>
+                    </span>
+
+                    {/* Price Overlay */}
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] text-[#FAF7F2] shadow-sm">
+                      {formatCurrency(service.price)}
+                    </span>
                   </div>
 
                   {/* Body Content */}
                   <div className="p-6 space-y-3">
-                    <div className="flex items-center justify-between text-[11px] text-[#302821]/70 dark:text-[#EAE3D6]/70 uppercase tracking-wider">
-                      <span className="font-serif text-sm font-semibold text-[#B8755B]">
-                        NO. 0{idx + 1}
+                    <div className="flex items-center justify-between text-xs text-[#231C1E]/70 font-medium">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
+                        ⏱ {service.durationMinutes} min
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-[#26372D] dark:text-[#A4AA91]" />
-                        {service.durationMinutes} MIN
+                      <span className="text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                        At the salon
                       </span>
                     </div>
 
-                    <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8] group-hover:text-[#26372D] transition-colors">
+                    <h3 className="font-serif text-lg font-bold text-[#231C1E] group-hover:text-[#3B1F2B] transition-colors leading-snug">
                       {service.title}
                     </h3>
 
-                    <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed line-clamp-2">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card Action Bar */}
-                <div className="p-6 pt-0 border-t border-[#302821]/10 dark:border-[#EAE3D6]/10 mt-3 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-wider text-[#302821]/60 dark:text-[#EAE3D6]/60 block">
-                      TREATMENT FEE
-                    </span>
-                    <span className="font-serif text-lg font-medium text-[#26372D] dark:text-[#F5F1E8]">
-                      {formatCurrency(service.price)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Link href={`/services/${service._id}`}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="rounded-none text-[11px] tracking-[0.15em] uppercase hover:bg-transparent hover:underline"
-                      >
-                        DOSSIER
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleOpenBooking(service)}
-                      className="rounded-none text-[11px] tracking-[0.15em] uppercase px-4 py-2 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
-                    >
-                      RESERVE
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          /* Classic Editorial Carte (List View) */
-          <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] divide-y divide-[#302821]/10 dark:divide-[#EAE3D6]/10">
-            {filteredServices.map((service, idx) => (
-              <div
-                key={service._id}
-                className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-[#EAE3D6]/70 transition-colors"
-              >
-                <div className="flex items-start gap-5 flex-1">
-                  <div className="relative w-24 h-24 overflow-hidden shrink-0 hidden sm:block border border-[#302821]/15">
-                    <SafeImage
-                      src={
-                        service.images[0] ||
-                        "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85"
-                      }
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-3">
-                      <span className="font-serif text-sm font-semibold text-[#B8755B]">
-                        0{idx + 1}
-                      </span>
-                      <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-                        {service.title}
-                      </h3>
-                      <span className="text-[10px] uppercase tracking-wider text-[#A4AA91] border border-[#A4AA91]/40 px-2 py-0.5">
-                        {service.category}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-[#302821]/75 dark:text-[#EAE3D6]/75 leading-relaxed line-clamp-2 max-w-2xl">
+                    <p className="text-xs text-[#231C1E]/75 leading-relaxed line-clamp-2">
                       {service.description}
                     </p>
 
-                    <div className="flex items-center gap-4 text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60 uppercase tracking-wider pt-1">
-                      <span>DURATION: {service.durationMinutes} MIN</span>
-                      <span>•</span>
-                      <span>SPECIALIST: {service.specialists?.[0] || "RESIDENT MASTER"}</span>
-                    </div>
+                    {service.specialists && service.specialists.length > 0 && (
+                      <p className="text-[11px] text-[#231C1E]/60 pt-1">
+                        Specialists: {service.specialists.join(", ")}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between md:justify-end gap-6 shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-[#302821]/10">
-                  <div className="text-right">
-                    <span className="text-[10px] uppercase tracking-wider text-[#302821]/60 block">
-                      FEE
-                    </span>
-                    <span className="font-serif text-xl font-medium text-[#26372D] dark:text-[#F5F1E8]">
-                      {formatCurrency(service.price)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Link href={`/services/${service._id}`}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="rounded-none text-[11px] tracking-[0.15em] uppercase hover:underline"
-                      >
-                        DOSSIER
-                      </Button>
-                    </Link>
+                {/* Bottom Row: Details ↗ & Book Now Button */}
+                <div className="p-6 pt-0 border-t border-[#3B1F2B]/10 mt-2 flex items-center justify-between gap-3">
+                  <Link href={`/services/${service._id}`} className="flex-1">
                     <Button
-                      variant="default"
+                      variant="outline"
                       size="sm"
-                      onClick={() => handleOpenBooking(service)}
-                      className="rounded-none text-[11px] tracking-[0.15em] uppercase px-4 py-2 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+                      className="w-full rounded-xl border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2] text-xs font-medium"
                     >
-                      RESERVE
+                      View details ↗
                     </Button>
-                  </div>
+                  </Link>
+
+                  <Button
+                    size="sm"
+                    onClick={() => handleOpenBooking(service)}
+                    className="flex-1 rounded-xl bg-[#3B1F2B] hover:bg-[#4A2035] text-[#FAF7F2] text-xs font-semibold shadow-sm"
+                  >
+                    Book Now
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+        {/* 
+          =======================================================================
+          4. PAGINATION (Clean numbered pagination < 1 2 > with count text)
+          =======================================================================
+        */}
+        {totalPages > 1 && (
+          <div className="mt-12 pt-6 border-t border-[#3B1F2B]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-[#231C1E]/70 font-medium">
+              Showing {startIndex + 1}–{endIndex} of {totalItems}
+            </p>
+
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 disabled:opacity-40"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </Button>
+
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                const isActive = pageNum === currentPage;
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={isActive ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-9 h-9 p-0 rounded-xl text-xs font-semibold ${
+                      isActive
+                        ? "bg-[#3B1F2B] text-[#FAF7F2] hover:bg-[#4A2035]"
+                        : "border-[#3B1F2B]/20 text-[#231C1E] hover:bg-[#FAF7F2]"
+                    }`}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="w-9 h-9 p-0 rounded-xl border-[#3B1F2B]/20 disabled:opacity-40"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* Booking Modal */}
       {selectedService && (
         <BookingModal
           service={selectedService}
@@ -640,9 +607,9 @@ export default function ServicesPage() {
     <Suspense
       fallback={
         <div className="py-24 text-center">
-          <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin mx-auto" />
-          <p className="text-xs text-[#302821]/70 mt-3 uppercase tracking-wider">
-            Loading Atelier Carte...
+          <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin mx-auto rounded-full" />
+          <p className="text-xs text-[#231C1E]/70 mt-3 uppercase tracking-wider font-semibold">
+            Loading Services...
           </p>
         </div>
       }
