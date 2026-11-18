@@ -8,6 +8,11 @@ import {
   ShieldCheck,
   UserCheck,
   UserX,
+  Mail,
+  Calendar,
+  Sparkles,
+  RefreshCw,
+  Phone,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { User, ApiResponse } from "@/types";
@@ -19,12 +24,14 @@ import { toast } from "sonner";
 export default function AdminCustomersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     try {
-      setLoading(true);
+      setRefreshing(true);
       const res = await api.get<ApiResponse<User[]>>("/admin/users");
       if (res.data.success) {
         setUsers(res.data.data);
@@ -33,6 +40,7 @@ export default function AdminCustomersPage() {
       toast.error((err as Error).message || "Failed to load patrons registry");
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -76,169 +84,233 @@ export default function AdminCustomersPage() {
     return users.filter((u) => {
       const nameMatch = u.name?.toLowerCase().includes(search.toLowerCase());
       const emailMatch = u.email?.toLowerCase().includes(search.toLowerCase());
-      return !search || nameMatch || emailMatch;
+      const matchesSearch = !search || nameMatch || emailMatch;
+
+      const matchesRole =
+        roleFilter === "all" ? true : u.role === roleFilter;
+
+      return matchesSearch && matchesRole;
     });
-  }, [users, search]);
+  }, [users, search, roleFilter]);
 
   return (
     <div className="space-y-8">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
-        <div className="space-y-1">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-            PATRON DIRECTORY
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-            Client Patrons &amp; Members
-          </h2>
-          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-xl leading-relaxed">
-            Monitor registered atelier patrons, oversee account roles, and manage booking privileges.
+      {/* 1. Header Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 border-b border-border/80">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-bold">
+              Directory &amp; Governance
+            </span>
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Patron &amp; Client Registry
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-xl leading-relaxed">
+            Oversee registered atelier clientele, monitor membership tiers, and govern appointment booking permissions.
           </p>
         </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={fetchUsers}
+          disabled={refreshing}
+          className="rounded-xl text-xs font-semibold gap-2 border-border hover:bg-muted self-start sm:self-auto"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-accent" : ""}`} />
+          <span>Refresh Patrons</span>
+        </Button>
       </div>
 
-      {/* Search Input */}
-      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-4 max-w-md">
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
-          <Input
-            placeholder="Search by patron name or email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-10 text-xs rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]"
-          />
+      {/* 2. Search & Role Filter Bar */}
+      <div className="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card space-y-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search patron by full name or email address..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 h-10 text-xs rounded-xl border-border bg-background text-foreground"
+            />
+          </div>
+
+          {/* Role Filter */}
+          <div className="flex items-center gap-3">
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="h-10 px-3 rounded-xl border border-border bg-background text-foreground text-xs font-medium focus:ring-1 focus:ring-accent outline-none"
+            >
+              <option value="all">All Roles ({users.length})</option>
+              <option value="customer">Clients / Patrons</option>
+              <option value="admin">Administrators</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Users Table */}
-      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-6">
+      {/* 3. Luxury Customers Table */}
+      <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-sm">
         {loading ? (
-          <div className="py-20 text-center space-y-3">
-            <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin mx-auto" />
-            <p className="text-xs uppercase tracking-wider text-[#302821]/60">
+          <div className="py-24 text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
               Loading Patron Registry...
             </p>
           </div>
         ) : filteredUsers.length === 0 ? (
-          <div className="py-16 text-center space-y-3 max-w-sm mx-auto">
-            <div className="w-12 h-12 border border-[#302821]/20 bg-[#EAE3D6] mx-auto flex items-center justify-center font-bold text-[#26372D]">
-              <Users className="w-5 h-5" />
+          <div className="py-20 text-center space-y-3 max-w-sm mx-auto p-4">
+            <div className="w-12 h-12 rounded-2xl bg-muted/60 flex items-center justify-center mx-auto text-muted-foreground">
+              <Users className="w-6 h-6 text-accent" />
             </div>
-            <h4 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-              No Patrons Located
-            </h4>
-            <p className="text-xs text-[#302821]/70 leading-relaxed">
-              No registered patrons match your search query.
+            <h3 className="font-serif text-xl font-bold text-foreground">
+              No Patrons Indexed
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              No registered user profiles matched your current query criteria.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-[#302821]/15 text-[#302821]/60 font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="pb-3 pr-4">Patron Name</th>
-                  <th className="pb-3 px-4">Role</th>
-                  <th className="pb-3 px-4">Contact Phone</th>
-                  <th className="pb-3 px-4">Joined Date</th>
-                  <th className="pb-3 px-4">Standing</th>
-                  <th className="pb-3 pl-4 text-right">Access Governance</th>
+                <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="py-4 px-6">Patron Profile</th>
+                  <th className="py-4 px-4">Contact</th>
+                  <th className="py-4 px-4">Role</th>
+                  <th className="py-4 px-4">Registered</th>
+                  <th className="py-4 px-4">Status</th>
+                  <th className="py-4 px-6 text-right">Privilege Governance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#302821]/10">
-                {filteredUsers.map((u) => {
-                  const userId = u.id || u._id || "";
-                  const isBlocked = u.isBlocked;
-                  const isUserAdmin = u.role === "admin";
+              <tbody className="divide-y divide-border/60">
+                {filteredUsers.map((client) => {
+                  const clientId = client.id || client._id || "";
+                  const isProcessing = actionLoadingId === clientId;
 
                   return (
-                    <tr key={userId} className="hover:bg-[#EAE3D6]/60 transition-colors">
-                      <td className="py-4 pr-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-none bg-[#26372D] text-[#F5F1E8] font-serif font-bold text-xs flex items-center justify-center shrink-0">
-                            {getInitials(u.name || "Guest")}
+                    <tr
+                      key={clientId}
+                      className="hover:bg-muted/40 transition-colors group"
+                    >
+                      {/* Patron Profile */}
+                      <td className="py-4 px-6">
+                        <div className="flex items-center gap-3.5">
+                          <div className="w-10 h-10 rounded-full bg-accent/20 text-accent font-serif font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
+                            {client.image ? (
+                              <img
+                                src={client.image}
+                                alt={client.name || "Patron"}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              getInitials(client.name || "Client")
+                            )}
                           </div>
                           <div>
-                            <p className="font-medium text-[#302821] dark:text-[#F5F1E8] text-xs leading-tight">
-                              {u.name}
-                            </p>
-                            <p className="text-[10px] text-[#302821]/60 dark:text-[#EAE3D6]/60">
-                              {u.email}
-                            </p>
+                            <span className="font-serif text-sm font-bold text-foreground block">
+                              {client.name || "Unnamed Patron"}
+                            </span>
+                            <span className="text-[11px] text-muted-foreground block">
+                              ID: {clientId.slice(-8)}
+                            </span>
                           </div>
                         </div>
                       </td>
 
+                      {/* Contact */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5 text-foreground">
+                            <Mail className="w-3.5 h-3.5 text-accent" />
+                            <span>{client.email}</span>
+                          </div>
+                          {client.phone && (
+                            <div className="flex items-center gap-1.5 text-muted-foreground text-[11px]">
+                              <Phone className="w-3 h-3" />
+                              <span>{client.phone}</span>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Role */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <span
-                          className={`text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 border ${
-                            isUserAdmin
-                              ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                              : "bg-[#EAE3D6] text-[#302821] border-[#302821]/20"
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                            client.role === "admin"
+                              ? "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
+                              : "bg-muted text-muted-foreground border-border"
                           }`}
                         >
-                          {u.role || "Patron"}
+                          {client.role === "admin" ? "Administrator" : "Patron Client"}
                         </span>
                       </td>
 
-                      <td className="py-4 px-4 whitespace-nowrap text-[#302821]/70">
-                        {u.phone || "—"}
+                      {/* Registered Date */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="text-muted-foreground">
+                          {client.createdAt ? formatDate(client.createdAt) : "Member"}
+                        </span>
                       </td>
 
-                      <td className="py-4 px-4 whitespace-nowrap text-[#302821]/70">
-                        {formatDate(u.createdAt)}
-                      </td>
-
+                      {/* Status */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold border ${
-                            isBlocked
-                              ? "bg-red-500/10 text-red-700 border-red-500/30"
-                              : "bg-emerald-600/10 text-emerald-800 dark:text-emerald-400 border-emerald-600/30"
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                            client.isBlocked
+                              ? "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
                           }`}
                         >
-                          {isBlocked ? (
+                          {client.isBlocked ? (
                             <>
-                              <ShieldAlert className="w-3 h-3 text-red-700" />
-                              <span>SUSPENDED</span>
+                              <ShieldAlert className="w-3 h-3" />
+                              <span>Suspended</span>
                             </>
                           ) : (
                             <>
-                              <ShieldCheck className="w-3 h-3 text-emerald-700" />
-                              <span>IN GOOD STANDING</span>
+                              <ShieldCheck className="w-3 h-3" />
+                              <span>Active</span>
                             </>
                           )}
                         </span>
                       </td>
 
-                      <td className="py-4 pl-4 text-right whitespace-nowrap">
-                        {isUserAdmin ? (
-                          <span className="text-[10px] uppercase tracking-wider text-[#302821]/40 italic">
-                            Protected Executive
-                          </span>
-                        ) : (
+                      {/* Privilege Action */}
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        {client.role !== "admin" ? (
                           <Button
-                            variant="outline"
                             size="sm"
-                            className={`h-8 text-[10px] uppercase tracking-wider rounded-none px-3 ${
-                              isBlocked
-                                ? "border-emerald-600/40 text-emerald-800 hover:bg-emerald-50"
-                                : "border-red-300 text-red-700 hover:bg-red-50"
+                            variant="outline"
+                            disabled={isProcessing}
+                            onClick={() => handleToggleBlock(client)}
+                            className={`rounded-xl text-[11px] font-semibold tracking-wider h-8 gap-1.5 ${
+                              client.isBlocked
+                                ? "border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
+                                : "border-rose-500/30 text-rose-600 hover:bg-rose-500/10"
                             }`}
-                            onClick={() => handleToggleBlock(u)}
-                            disabled={actionLoadingId === userId}
                           >
-                            {isBlocked ? (
+                            {client.isBlocked ? (
                               <>
-                                <UserCheck className="w-3 h-3 mr-1" />
-                                <span>REINSTATE PRIVILEGES</span>
+                                <UserCheck className="w-3.5 h-3.5" />
+                                <span>Reinstate</span>
                               </>
                             ) : (
                               <>
-                                <UserX className="w-3 h-3 mr-1" />
-                                <span>SUSPEND ACCESS</span>
+                                <UserX className="w-3.5 h-3.5" />
+                                <span>Suspend</span>
                               </>
                             )}
                           </Button>
+                        ) : (
+                          <span className="text-[10px] text-muted-foreground italic px-2">
+                            Protected Role
+                          </span>
                         )}
                       </td>
                     </tr>

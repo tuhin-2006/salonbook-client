@@ -11,6 +11,11 @@ import {
   DollarSign,
   TrendingUp,
   ArrowUpRight,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  RefreshCw,
+  Plus,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types";
@@ -40,27 +45,36 @@ interface AnalyticsData {
   monthlyRevenue: Array<{ month: string; revenue: number; bookings: number }>;
 }
 
-const PIE_COLORS = ["#26372D", "#B8755B", "#343D2E", "#A4AA91", "#302821", "#7E856E"];
+const LUXURY_PALETTE = [
+  "#C6A875", // Champagne Gold
+  "#4A2035", // Deep Plum
+  "#82977C", // Sage Green
+  "#B8756D", // Terracotta
+  "#70695F", // Warm Taupe
+  "#3B1F2B", // Burgundy Noir
+];
 
 export default function AdminOverviewPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchAnalytics = async () => {
+    try {
+      setRefreshing(true);
+      const res = await api.get<ApiResponse<AnalyticsData>>("/admin/analytics");
+      if (res.data.success) {
+        setData(res.data.data);
+      }
+    } catch (err) {
+      console.warn("Failed to fetch analytics:", err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        setLoading(true);
-        const res = await api.get<ApiResponse<AnalyticsData>>("/admin/analytics");
-        if (res.data.success) {
-          setData(res.data.data);
-        }
-      } catch (err) {
-        console.warn("Failed to fetch analytics:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAnalytics();
   }, []);
 
@@ -68,98 +82,140 @@ export default function AdminOverviewPage() {
     data?.statusCounts.find((s) => s._id === "pending")?.count || 0;
   const confirmedCount =
     data?.statusCounts.find((s) => s._id === "confirmed")?.count || 0;
+  const cancelledCount =
+    data?.statusCounts.find((s) => s._id === "cancelled")?.count || 0;
 
   const statCards = [
     {
-      label: "REGISTERED PATRONS",
+      label: "Registered Patrons",
+      subtext: "Verified Atelier Clients",
       value: data?.summary.totalUsers || 0,
       icon: Users,
       href: "/admin/customers",
+      badge: "Accounts",
+      badgeClass: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
     },
     {
-      label: "ACTIVE CARTE OFFERINGS",
+      label: "Active Carte Offerings",
+      subtext: "Live Service Catalog",
       value: data?.summary.totalServices || 0,
       icon: Scissors,
       href: "/admin/services",
+      badge: "Formulations",
+      badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
     },
     {
-      label: "TOTAL CHAIR BOOKINGS",
+      label: "Total Chair Bookings",
+      subtext: "All Lifetime Reservations",
       value: data?.summary.totalAppointments || 0,
       icon: Calendar,
       href: "/admin/appointments",
+      badge: "Diary",
+      badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
     },
     {
-      label: "PENDING CONSULTATIONS",
+      label: "Pending Consultations",
+      subtext: "Awaiting Confirmation",
       value: pendingCount,
       icon: Clock,
       href: "/admin/appointments?status=pending",
+      badge: "Action Req.",
+      badgeClass: "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20",
     },
     {
-      label: "CONFIRMED SESSIONS",
+      label: "Confirmed Sessions",
+      subtext: "Ready for Checkout",
       value: confirmedCount,
       icon: CheckCircle2,
       href: "/admin/appointments?status=confirmed",
+      badge: "Confirmed",
+      badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     },
     {
-      label: "STRIPE GROSS REVENUE",
+      label: "Stripe Gross Revenue",
+      subtext: "Verified Webhook Settlement",
       value: formatCurrency(data?.summary.totalRevenue || 0),
       icon: DollarSign,
       href: "/admin/transactions",
+      badge: "Settled",
+      badgeClass: "bg-accent/10 text-accent border-accent/30",
     },
   ];
 
   return (
     <div className="space-y-10">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
-        <div className="space-y-1">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-            ATELIER TELEMETRY
-          </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
+      {/* 1. Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border/80">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-bold">
+              Operations &amp; Telemetry
+            </span>
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
             Direction &amp; Operations Suite
           </h1>
-          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-xl leading-relaxed">
-            Real-time governance across treatment carte offerings, reservation diary approvals, and verified Stripe financial settlements.
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            Real-time atelier operations, chair reservation management, service carte administration, and verified Stripe financial settlements.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchAnalytics}
+            disabled={refreshing}
+            className="rounded-xl text-xs font-semibold tracking-wider gap-2 border-border hover:bg-muted"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-accent" : ""}`} />
+            <span>Refresh</span>
+          </Button>
+
           <Link href="/admin/services">
             <Button
-              variant="default"
               size="sm"
-              className="rounded-none text-xs uppercase tracking-wider px-5 py-2.5 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+              className="rounded-xl text-xs font-semibold tracking-wider gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
             >
-              <Scissors className="w-3.5 h-3.5 mr-2" />
-              <span>MANAGE CARTE</span>
+              <Plus className="w-3.5 h-3.5 text-accent" />
+              <span>Add New Service</span>
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* 6 Key Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 2. 6 KPI Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            <Link key={i} href={card.href}>
-              <div className="p-6 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] hover:border-[#26372D] transition-colors group flex flex-col justify-between min-h-[140px]">
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#302821]/60 dark:text-[#EAE3D6]/60">
-                    {card.label}
-                  </span>
-                  <div className="w-8 h-8 bg-[#26372D] text-[#F5F1E8] flex items-center justify-center">
-                    <Icon className="w-4 h-4" />
+            <Link key={i} href={card.href} className="group">
+              <div className="p-6 rounded-2xl border border-border/80 bg-card hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300 flex flex-col justify-between min-h-[160px]">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <span className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                      {card.label}
+                    </span>
+                    <p className="text-[11px] text-muted-foreground/70">
+                      {card.subtext}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 rounded-xl bg-muted/60 text-foreground flex items-center justify-center shrink-0 group-hover:bg-accent group-hover:text-accent-foreground transition-colors duration-300 shadow-sm">
+                    <Icon className="w-5 h-5" />
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-baseline justify-between">
-                  <h3 className="font-serif text-3xl text-[#26372D] dark:text-[#F5F1E8]">
-                    {loading ? "..." : card.value}
+                <div className="mt-4 pt-3 border-t border-border/40 flex items-baseline justify-between">
+                  <h3 className="font-serif text-3xl font-bold text-foreground tracking-tight">
+                    {loading ? (
+                      <span className="inline-block w-16 h-8 bg-muted animate-pulse rounded-md" />
+                    ) : (
+                      card.value
+                    )}
                   </h3>
-                  <span className="text-[10px] uppercase tracking-wider text-[#302821]/60 group-hover:text-[#26372D] flex items-center gap-0.5">
-                    DETAILS <ArrowUpRight className="w-3 h-3" />
+                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${card.badgeClass}`}>
+                    {card.badge}
                   </span>
                 </div>
               </div>
@@ -168,90 +224,100 @@ export default function AdminOverviewPage() {
         })}
       </div>
 
-      {/* Analytics Charts Row */}
+      {/* 3. Analytics Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Revenue Trend Area Chart */}
-        <div className="lg:col-span-2 border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#302821]/10 pb-4">
-            <div>
-              <span className="text-[9px] uppercase tracking-[0.2em] text-[#B8755B] font-semibold block">
-                MONTHLY REVENUE
-              </span>
-              <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-                Stripe Settlement Trajectory
+        <div className="lg:col-span-2 rounded-2xl border border-border/80 bg-card p-6 sm:p-7 space-y-6 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold">
+                  Revenue Telemetry
+                </span>
+              </div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+                Stripe Monthly Settlements
               </h3>
             </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] uppercase tracking-wider bg-[#26372D] text-[#F5F1E8]">
-              <TrendingUp className="w-3 h-3" />
-              <span>Verified Webhook</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/60 bg-muted/40 text-[11px] text-muted-foreground self-start sm:self-auto font-medium">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Webhook Verified Ledger</span>
             </div>
           </div>
 
-          <div className="h-64 w-full pt-4">
+          <div className="h-72 w-full pt-2">
             {loading ? (
-              <div className="h-full flex items-center justify-center text-xs text-[#302821]/60">
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                <div className="w-6 h-6 border-2 border-accent border-t-transparent animate-spin rounded-full mr-2" />
                 Loading revenue telemetry...
               </div>
             ) : data?.monthlyRevenue && data.monthlyRevenue.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data.monthlyRevenue}>
+                  <defs>
+                    <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#C6A875" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#C6A875" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
                   <XAxis
                     dataKey="month"
-                    stroke="#7E856E"
-                    fontSize={10}
+                    stroke="currentColor"
+                    className="text-[11px] text-muted-foreground"
                     tickLine={false}
-                    axisLine={false}
+                    axisLine={{ stroke: "rgba(128,128,128,0.2)" }}
                   />
                   <YAxis
-                    stroke="#7E856E"
-                    fontSize={10}
+                    stroke="currentColor"
+                    className="text-[11px] text-muted-foreground"
                     tickLine={false}
-                    axisLine={false}
+                    axisLine={{ stroke: "rgba(128,128,128,0.2)" }}
                     tickFormatter={(val) => `$${val}`}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#F5F1E8",
-                      borderRadius: "0px",
-                      border: "1px solid #302821",
-                      fontSize: "11px",
-                      color: "#302821",
-                      textTransform: "uppercase",
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "12px",
+                      fontSize: "12px",
+                      color: "hsl(var(--foreground))",
+                      boxShadow: "0 10px 25px -5px rgba(0,0,0,0.2)",
                     }}
-                    formatter={(val: unknown) => [formatCurrency(Number(val)), "Revenue"]}
+                    formatter={(val: unknown) => [formatCurrency(Number(val)), "Settled Revenue"]}
                   />
                   <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#26372D"
-                    strokeWidth={2}
-                    fill="#343D2E"
-                    fillOpacity={0.2}
+                    stroke="#C6A875"
+                    strokeWidth={2.5}
+                    fill="url(#revenueGradient)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-[#302821]/60">
-                No revenue records recorded in this billing cycle.
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-2 text-muted-foreground p-6">
+                <ShieldCheck className="w-8 h-8 text-muted-foreground/40" />
+                <p className="text-xs">No settlements recorded in current billing period.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Category Distribution Pie Chart */}
-        <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 space-y-4 flex flex-col justify-between">
-          <div className="border-b border-[#302821]/10 pb-4">
-            <span className="text-[9px] uppercase tracking-[0.2em] text-[#B8755B] font-semibold block">
-              CARTE DISTRIBUTION
+        {/* Category Distribution Donut Chart */}
+        <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm">
+          <div className="border-b border-border/60 pb-5 space-y-1">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold block">
+              Carte Portfolio
             </span>
-            <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-              Formulations by Specialty
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+              Formulation Distribution
             </h3>
           </div>
 
-          <div className="h-56 w-full flex items-center justify-center">
+          <div className="h-60 w-full flex items-center justify-center">
             {loading ? (
-              <span className="text-xs text-[#302821]/60">Analyzing offerings...</span>
+              <span className="text-xs text-muted-foreground">Analyzing offerings...</span>
             ) : data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -261,43 +327,127 @@ export default function AdminOverviewPage() {
                     nameKey="_id"
                     cx="50%"
                     cy="50%"
-                    innerRadius={45}
-                    outerRadius={75}
-                    paddingAngle={2}
+                    innerRadius={55}
+                    outerRadius={85}
+                    paddingAngle={3}
                   >
                     {data.categoryDistribution.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={PIE_COLORS[index % PIE_COLORS.length]}
+                        fill={LUXURY_PALETTE[index % LUXURY_PALETTE.length]}
                       />
                     ))}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#F5F1E8",
-                      borderRadius: "0px",
-                      border: "1px solid #302821",
-                      fontSize: "11px",
-                      color: "#302821",
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "12px",
+                      fontSize: "12px",
+                      color: "hsl(var(--foreground))",
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <span className="text-xs text-[#302821]/60">No categories indexed</span>
+              <span className="text-xs text-muted-foreground">No categories indexed.</span>
             )}
           </div>
 
-          <div className="pt-2 border-t border-[#302821]/10 flex flex-wrap items-center justify-center gap-3 text-[10px] uppercase tracking-wider text-[#302821]/70">
-            {data?.categoryDistribution.slice(0, 4).map((cat, i) => (
-              <div key={i} className="flex items-center gap-1.5">
+          <div className="pt-4 border-t border-border/60 flex flex-wrap items-center justify-center gap-3 text-[11px] text-muted-foreground">
+            {data?.categoryDistribution.slice(0, 5).map((cat, i) => (
+              <div key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/40 border border-border/40">
                 <span
-                  className="w-2 h-2"
-                  style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: LUXURY_PALETTE[i % LUXURY_PALETTE.length] }}
                 />
-                <span>{cat._id} ({cat.count})</span>
+                <span className="font-medium text-foreground">{cat._id}</span>
+                <span className="text-muted-foreground/80">({cat.count})</span>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Quick Governance & Operations Shortcuts */}
+      <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 space-y-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
+          <div className="space-y-1">
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+              Reservation Diary Health
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Direct pipeline to manage upcoming guest requests and confirm chair openings.
+            </p>
+          </div>
+          <Link href="/admin/appointments">
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-muted"
+            >
+              <span>View All Appointments</span>
+              <ArrowRight className="w-3.5 h-3.5 text-accent" />
+            </Button>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-semibold text-foreground block">
+                  Pending Review
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Awaiting confirmation
+                </span>
+              </div>
+            </div>
+            <span className="font-serif text-2xl font-bold text-amber-600 dark:text-amber-400">
+              {pendingCount}
+            </span>
+          </div>
+
+          <div className="p-4 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-semibold text-foreground block">
+                  Confirmed &amp; Ready
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Patron checkout eligible
+                </span>
+              </div>
+            </div>
+            <span className="font-serif text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              {confirmedCount}
+            </span>
+          </div>
+
+          <div className="p-4 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <Clock className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-xs font-semibold text-foreground block">
+                  Cancelled / Released
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Slot freed for booking
+                </span>
+              </div>
+            </div>
+            <span className="font-serif text-2xl font-bold text-rose-600 dark:text-rose-400">
+              {cancelledCount}
+            </span>
           </div>
         </div>
       </div>

@@ -11,9 +11,37 @@ import {
   ShieldAlert,
   ArrowRight,
   Sparkles,
+  Scissors,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+
+const CUSTOMER_TABS = [
+  {
+    label: "Overview",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    exact: true,
+  },
+  {
+    label: "My Appointments",
+    href: "/dashboard/appointments",
+    icon: Calendar,
+    exact: false,
+  },
+  {
+    label: "Invoices & Receipts",
+    href: "/dashboard/transactions",
+    icon: CreditCard,
+    exact: false,
+  },
+  {
+    label: "Profile Settings",
+    href: "/dashboard/profile",
+    icon: User,
+    exact: false,
+  },
+];
 
 export default function CustomerDashboardLayout({
   children,
@@ -32,10 +60,10 @@ export default function CustomerDashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-24 flex flex-col items-center justify-center min-h-[50vh] space-y-4 bg-[#FAF7F2]">
-        <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin rounded-full" />
-        <p className="text-xs uppercase tracking-[0.2em] text-[#231C1E]/70 font-semibold">
-          Loading Patron Lounge...
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center space-y-4">
+        <div className="w-10 h-10 border-2 border-primary border-t-transparent animate-spin rounded-full" />
+        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+          Entering Patron Lounge...
         </p>
       </div>
     );
@@ -43,106 +71,84 @@ export default function CustomerDashboardLayout({
 
   if (user?.isBlocked) {
     return (
-      <div className="container mx-auto px-4 py-24 max-w-md text-center space-y-6 bg-[#FAF7F2]">
-        <div className="w-14 h-14 mx-auto rounded-2xl border border-red-300 bg-red-50 text-red-700 flex items-center justify-center">
-          <ShieldAlert className="w-6 h-6" />
+      <div className="min-h-[70vh] flex items-center justify-center p-4">
+        <div className="max-w-md w-full rounded-2xl border border-destructive/30 bg-card p-8 text-center space-y-5 shadow-lg">
+          <div className="w-14 h-14 mx-auto rounded-2xl border border-destructive/30 bg-destructive/10 text-destructive flex items-center justify-center">
+            <ShieldAlert className="w-7 h-7" />
+          </div>
+          <h2 className="font-serif text-2xl font-bold text-foreground">
+            Account Privileges Paused
+          </h2>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Your chair booking privileges have been temporarily paused by atelier management. For assistance and reinstatement, please contact our concierge desk.
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => router.push("/")}
+            className="rounded-xl text-xs uppercase tracking-wider border-border"
+          >
+            Return to Atelier Home
+          </Button>
         </div>
-        <h2 className="font-serif text-2xl font-bold text-[#231C1E]">
-          Account Restricted
-        </h2>
-        <p className="text-xs text-[#231C1E]/70 leading-relaxed">
-          Your reservation privileges have been temporarily paused by salon management. Please contact concierge for assistance.
-        </p>
-        <Button
-          variant="outline"
-          onClick={() => router.push("/")}
-          className="rounded-xl text-xs uppercase tracking-wider border-[#3B1F2B]/20"
-        >
-          Return to Home
-        </Button>
       </div>
     );
   }
 
-  const tabs = [
-    {
-      label: "OVERVIEW",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-      exact: true,
-    },
-    {
-      label: "MY APPOINTMENTS",
-      href: "/dashboard/appointments",
-      icon: Calendar,
-      exact: false,
-    },
-    {
-      label: "INVOICES & RECEIPTS",
-      href: "/dashboard/transactions",
-      icon: CreditCard,
-      exact: false,
-    },
-    {
-      label: "PROFILE SETTINGS",
-      href: "/dashboard/profile",
-      icon: User,
-      exact: false,
-    },
-  ];
-
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-[#FAF7F2] dark:bg-[#170F13] text-[#231C1E] dark:text-[#FAF7F2] transition-colors duration-200">
-      {/* Top Banner */}
-      <div className="border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 bg-[#FFFFFF] dark:bg-[#22161B]">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div className="space-y-1.5">
+    <div className="min-h-[calc(100vh-80px)] bg-background text-foreground transition-colors duration-200">
+      {/* 1. Top Customer Executive Banner */}
+      <div className="border-b border-border/70 bg-card/70 backdrop-blur-md">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl space-y-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-                <span className="text-xs uppercase tracking-[0.2em] text-[#C5A880] font-bold">
-                  CUSTOMER LOUNGE
+                <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-bold">
+                  Patron Lounge &amp; Concierge
                 </span>
               </div>
-              <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#231C1E] dark:text-[#FAF7F2]">
+              <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
                 Welcome, {user?.name || "Valued Patron"}
               </h1>
-              <p className="text-xs sm:text-sm text-[#231C1E]/75 dark:text-[#FAF7F2]/75 leading-relaxed">
-                Manage upcoming chair bookings, review treatment regimens, and access verified Stripe receipts.
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-xl leading-relaxed">
+                Review your upcoming chair reservations, explore personalized treatment formulations, and access verified Stripe receipts.
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 self-start md:self-auto">
               <Link href="/services">
                 <Button
                   size="sm"
-                  className="rounded-xl text-xs font-bold uppercase tracking-wider px-5 py-2.5 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] shadow-sm"
+                  className="rounded-xl text-xs font-semibold tracking-wider px-5 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm gap-2"
                 >
+                  <Scissors className="w-3.5 h-3.5 text-accent" />
                   <span>Book New Appointment</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-2" />
+                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
                 </Button>
               </Link>
             </div>
           </div>
 
-          {/* Navigation Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-6 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 mt-6 scrollbar-none">
-            {tabs.map((tab) => {
+          {/* 2. Horizontal Navigation Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pt-4 border-t border-border/50 scrollbar-none">
+            {CUSTOMER_TABS.map((tab) => {
               const isActive = tab.exact
                 ? pathname === tab.href
                 : pathname.startsWith(tab.href);
+              const Icon = tab.icon;
 
               return (
                 <Link
                   key={tab.href}
                   href={tab.href}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all ${
+                  className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-200 flex items-center gap-2 ${
                     isActive
-                      ? "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm"
-                      : "bg-transparent text-[#231C1E]/75 dark:text-[#FAF7F2]/75 hover:bg-[#FAF7F2] dark:hover:bg-[#2D1D24] hover:text-[#231C1E] dark:hover:text-[#FAF7F2]"
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/10 font-bold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                   }`}
                 >
-                  {tab.label}
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-accent" : "text-muted-foreground"}`} />
+                  <span>{tab.label}</span>
                 </Link>
               );
             })}
@@ -150,8 +156,8 @@ export default function CustomerDashboardLayout({
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 max-w-6xl">
+      {/* 3. Main Customer Content Area */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 max-w-6xl">
         {children}
       </div>
     </div>

@@ -10,6 +10,13 @@ import {
   CheckCircle,
   XCircle,
   Upload,
+  Clock,
+  DollarSign,
+  Filter,
+  Sparkles,
+  ExternalLink,
+  Layers,
+  Image as ImageIcon,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Service, ApiResponse } from "@/types";
@@ -111,20 +118,12 @@ export default function AdminServicesPage() {
     setModalOpen(true);
   };
 
-  // Image Upload via ImgBB
-  const handleImageFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Please upload a valid image file (PNG, JPG, WEBP).");
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("Image file size cannot exceed 10 MB.");
+      toast.error("Please upload an image file (PNG, JPG, WEBP).");
       return;
     }
 
@@ -133,7 +132,7 @@ export default function AdminServicesPage() {
 
     try {
       setUploadingImage(true);
-      toast.info("Uploading formulation image to ImgBB cloud...");
+      toast.info("Uploading formulation photograph to ImgBB cloud...");
 
       const res = await api.post<ApiResponse<{ url: string }>>(
         "/services/upload-image",
@@ -147,115 +146,101 @@ export default function AdminServicesPage() {
 
       if (res.data.success && res.data.data.url) {
         setImageUrl(res.data.data.url);
-        toast.success("Image successfully hosted on ImgBB.");
+        toast.success("Image uploaded successfully.");
       }
     } catch (err: unknown) {
-      toast.error((err as Error).message || "Image upload failed.");
+      toast.error((err as Error).message || "Image upload failed");
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // Save (Create or Update)
-  const handleSaveService = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!title.trim() || !description.trim()) {
-      toast.error("Please enter treatment title and description.");
+    if (!title.trim() || !price || !durationMinutes || !description.trim()) {
+      toast.error("Please fill in all required fields.");
       return;
     }
 
-    const numericPrice = Number(price);
-    const numericDuration = Number(durationMinutes);
-
-    if (isNaN(numericPrice) || numericPrice <= 0) {
-      toast.error("Price must be a positive number.");
-      return;
-    }
-
-    if (isNaN(numericDuration) || numericDuration <= 0) {
-      toast.error("Duration must be a positive number.");
-      return;
-    }
-
-    if (!imageUrl) {
-      toast.error("Please upload a formulation image file via ImgBB.");
-      return;
-    }
+    const payload = {
+      title: title.trim(),
+      category,
+      price: Number(price),
+      durationMinutes: Number(durationMinutes),
+      description: description.trim(),
+      isActive,
+      images: imageUrl.trim()
+        ? [imageUrl.trim()]
+        : [
+            "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+          ],
+    };
 
     try {
       setSubmitting(true);
-      const payload = {
-        title,
-        category,
-        description,
-        price: numericPrice,
-        durationMinutes: numericDuration,
-        isActive,
-        images: [imageUrl],
-      };
-
       if (editingService) {
         const res = await api.patch<ApiResponse<Service>>(
           `/services/${editingService._id}`,
           payload
         );
         if (res.data.success) {
-          toast.success("Treatment dossier updated.");
+          toast.success("Treatment carte offering updated.");
           setServices((prev) =>
             prev.map((s) => (s._id === editingService._id ? res.data.data : s))
           );
+          setModalOpen(false);
         }
       } else {
         const res = await api.post<ApiResponse<Service>>("/services", payload);
         if (res.data.success) {
-          toast.success("New formulation added to atelier carte.");
+          toast.success("New treatment added to carte.");
           setServices((prev) => [res.data.data, ...prev]);
+          setModalOpen(false);
         }
       }
-
-      setModalOpen(false);
     } catch (err: unknown) {
-      toast.error((err as Error).message || "Failed to save treatment.");
+      toast.error((err as Error).message || "Operation failed.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  // Toggle active/inactive
   const handleToggleStatus = async (service: Service) => {
     try {
+      const newStatus = !service.isActive;
       const res = await api.patch<ApiResponse<Service>>(
-        `/services/${service._id}/toggle-status`
+        `/services/${service._id}`,
+        {
+          isActive: newStatus,
+        }
       );
       if (res.data.success) {
-        toast.success(res.data.message);
+        toast.success(
+          newStatus ? "Service activated in live catalog." : "Service archived."
+        );
         setServices((prev) =>
-          prev.map((s) =>
-            s._id === service._id ? { ...s, isActive: !s.isActive } : s
-          )
+          prev.map((s) => (s._id === service._id ? { ...s, isActive: newStatus } : s))
         );
       }
     } catch (err: unknown) {
-      toast.error((err as Error).message || "Toggle status failed.");
+      toast.error((err as Error).message || "Failed to update status");
     }
   };
 
-  // Delete
-  const confirmDelete = async () => {
+  const handleDelete = async () => {
     if (!serviceToDelete) return;
     try {
       setDeleting(true);
-      const res = await api.delete(`/services/${serviceToDelete._id}`);
-      if (res.status === 200) {
-        toast.success("Treatment removed from atelier carte.");
-        setServices((prev) =>
-          prev.filter((s) => s._id !== serviceToDelete._id)
-        );
+      const res = await api.delete<ApiResponse<null>>(
+        `/services/${serviceToDelete._id}`
+      );
+      if (res.data.success) {
+        toast.success("Service removed from carte.");
+        setServices((prev) => prev.filter((s) => s._id !== serviceToDelete._id));
         setDeleteModalOpen(false);
       }
     } catch (err: unknown) {
-      toast.error((err as Error).message || "Delete failed.");
+      toast.error((err as Error).message || "Failed to delete service");
     } finally {
       setDeleting(false);
       setServiceToDelete(null);
@@ -273,8 +258,11 @@ export default function AdminServicesPage() {
         categoryFilter === "all" || s.category === categoryFilter;
 
       const matchesStatus =
-        statusFilter === "all" ||
-        (statusFilter === "active" ? s.isActive : !s.isActive);
+        statusFilter === "all"
+          ? true
+          : statusFilter === "active"
+          ? s.isActive
+          : !s.isActive;
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -282,200 +270,241 @@ export default function AdminServicesPage() {
 
   return (
     <div className="space-y-8">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-[#302821]/15">
-        <div className="space-y-1">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-            CARTE MANAGEMENT
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-            Atelier Formulations &amp; Rituals
-          </h2>
-          <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 max-w-xl leading-relaxed">
-            Manage public carte offerings, update pricing and durations, toggle visibility, and host imagery via ImgBB.
+      {/* 1. Header Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 border-b border-border/80">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-bold">
+              Service Management
+            </span>
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Treatment Carte Catalog
+          </h1>
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-xl leading-relaxed">
+            Manage your bespoke styling services, pricing, treatment duration, and catalog visibility across the booking portal.
           </p>
         </div>
 
         <Button
-          variant="default"
-          size="sm"
-          className="rounded-none text-xs uppercase tracking-wider px-5 py-2.5 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
           onClick={openCreateModal}
+          className="rounded-xl text-xs font-semibold tracking-wider gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4 mr-1.5" />
-          <span>ADD NEW FORMULATION</span>
+          <Plus className="w-4 h-4 text-accent" />
+          <span>Add New Treatment</span>
         </Button>
       </div>
 
-      {/* Filter and Search Bar: Architectural Surface */}
-      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/40 dark:bg-[#1a201c] p-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
-          <Input
-            placeholder="Search treatments by title or ingredients..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-10 text-xs rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-[#302821] dark:text-[#F5F1E8]"
-          />
+      {/* 2. Filters & Search Control Bar */}
+      <div className="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card space-y-4 shadow-sm">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search treatments by title or keywords..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 h-10 text-xs rounded-xl border-border bg-background text-foreground"
+            />
+          </div>
+
+          {/* Quick Filters */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Category Dropdown */}
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              aria-label="Filter services by category"
+              className="h-10 px-3 rounded-xl border border-border bg-background text-foreground text-xs font-medium focus:ring-1 focus:ring-accent outline-none"
+            >
+              <option value="all">All Specialties ({services.length})</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+
+            {/* Status Dropdown */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Filter services by status"
+              className="h-10 px-3 rounded-xl border border-border bg-background text-foreground text-xs font-medium focus:ring-1 focus:ring-accent outline-none"
+            >
+              <option value="all">All Statuses</option>
+              <option value="active">Active Only</option>
+              <option value="inactive">Archived Only</option>
+            </select>
+
+            {(search || categoryFilter !== "all" || statusFilter !== "all") && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setSearch("");
+                  setCategoryFilter("all");
+                  setStatusFilter("all");
+                }}
+                className="text-xs text-muted-foreground hover:text-foreground h-10 px-3"
+              >
+                Clear Filters
+              </Button>
+            )}
+          </div>
         </div>
 
-        {/* Category Filter */}
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="h-10 px-3 text-xs uppercase tracking-wider rounded-none bg-[#F5F1E8] dark:bg-[#151916] border border-[#302821]/20 text-[#302821] dark:text-[#F5F1E8] focus:outline-none"
-        >
-          <option value="all">ALL SPECIALTIES</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat.toUpperCase()}
-            </option>
-          ))}
-        </select>
-
-        {/* Status Filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 px-3 text-xs uppercase tracking-wider rounded-none bg-[#F5F1E8] dark:bg-[#151916] border border-[#302821]/20 text-[#302821] dark:text-[#F5F1E8] focus:outline-none"
-        >
-          <option value="all">ALL VISIBILITY STATUSES</option>
-          <option value="active">ACTIVE ONLY</option>
-          <option value="inactive">INACTIVE (ARCHIVED)</option>
-        </select>
+        {/* Counter */}
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-3 border-t border-border/50">
+          <span>
+            Displaying <strong className="text-foreground">{filteredServices.length}</strong> of {services.length} treatments
+          </span>
+          <span className="hidden sm:inline-block">Live synchronous updates enabled</span>
+        </div>
       </div>
 
-      {/* Services Table */}
-      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-6">
+      {/* 3. Luxury Structured Carte Table */}
+      <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-sm">
         {loading ? (
-          <div className="py-20 text-center space-y-3">
-            <div className="w-8 h-8 border-2 border-[#26372D] border-t-transparent animate-spin mx-auto" />
-            <p className="text-xs uppercase tracking-wider text-[#302821]/60">
-              Loading Atelier Carte...
+          <div className="py-24 text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+              Loading Treatment Carte...
             </p>
           </div>
         ) : filteredServices.length === 0 ? (
-          <div className="py-16 text-center space-y-3 max-w-sm mx-auto">
-            <div className="w-12 h-12 border border-[#302821]/20 bg-[#EAE3D6] mx-auto flex items-center justify-center font-bold text-[#26372D]">
-              <Scissors className="w-5 h-5" />
+          <div className="py-20 text-center space-y-3 max-w-sm mx-auto p-4">
+            <div className="w-12 h-12 rounded-2xl bg-muted/60 flex items-center justify-center mx-auto text-muted-foreground">
+              <Scissors className="w-6 h-6 text-accent" />
             </div>
-            <h4 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-              No Formulations Found
-            </h4>
-            <p className="text-xs text-[#302821]/70 leading-relaxed">
-              No treatments match your active filter parameters.
+            <h3 className="font-serif text-xl font-bold text-foreground">
+              No Treatments Found
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              No services matched your active search or specialty filters. Try clearing filters or create a new treatment.
             </p>
             <Button
-              variant="outline"
               size="sm"
-              onClick={() => {
-                setSearch("");
-                setCategoryFilter("all");
-                setStatusFilter("all");
-              }}
-              className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
+              onClick={openCreateModal}
+              className="mt-2 rounded-xl text-xs bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              Reset Filters
+              <Plus className="w-3.5 h-3.5 mr-1 text-accent" /> Add New Treatment
             </Button>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-[#302821]/15 text-[#302821]/60 font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="pb-3 pr-4">Treatment</th>
-                  <th className="pb-3 px-4">Specialty</th>
-                  <th className="pb-3 px-4">Fee</th>
-                  <th className="pb-3 px-4">Duration</th>
-                  <th className="pb-3 px-4">Visibility</th>
-                  <th className="pb-3 pl-4 text-right">Actions</th>
+                <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
+                  <th className="py-4 px-6">Treatment</th>
+                  <th className="py-4 px-4">Specialty</th>
+                  <th className="py-4 px-4">Duration</th>
+                  <th className="py-4 px-4">Price</th>
+                  <th className="py-4 px-4">Status</th>
+                  <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#302821]/10">
+              <tbody className="divide-y divide-border/60">
                 {filteredServices.map((service) => (
-                  <tr key={service._id} className="hover:bg-[#EAE3D6]/60 transition-colors">
-                    <td className="py-4 pr-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 overflow-hidden shrink-0 border border-[#302821]/15 bg-[#EAE3D6]">
+                  <tr
+                    key={service._id}
+                    className="hover:bg-muted/40 transition-colors group"
+                  >
+                    {/* Treatment Column */}
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-muted/60 shrink-0 border border-border/70 relative">
                           <SafeImage
                             src={service.images?.[0] || ""}
                             alt={service.title}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
-                        <div>
-                          <p className="font-serif text-base text-[#302821] dark:text-[#F5F1E8] leading-tight">
+                        <div className="space-y-1 min-w-0 max-w-xs sm:max-w-md">
+                          <span className="font-serif text-sm sm:text-base font-bold text-foreground block truncate">
                             {service.title}
-                          </p>
-                          <p className="text-[11px] text-[#302821]/60 dark:text-[#EAE3D6]/60 line-clamp-1 max-w-[240px]">
+                          </span>
+                          <p className="text-[11px] text-muted-foreground line-clamp-1">
                             {service.description}
                           </p>
                         </div>
                       </div>
                     </td>
 
+                    {/* Category Column */}
                     <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="px-2 py-0.5 text-[9px] uppercase tracking-wider border border-[#302821]/20">
-                        {service.category}
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-semibold text-[11px]">
+                        <Layers className="w-3 h-3" />
+                        <span>{service.category}</span>
                       </span>
                     </td>
 
-                    <td className="py-4 px-4 font-serif text-base text-[#26372D] dark:text-[#F5F1E8] whitespace-nowrap">
-                      {formatCurrency(service.price)}
+                    {/* Duration Column */}
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Clock className="w-3.5 h-3.5 text-accent" />
+                        <span className="font-medium">{service.durationMinutes} mins</span>
+                      </div>
                     </td>
 
-                    <td className="py-4 px-4 whitespace-nowrap text-[#302821]/70">
-                      {service.durationMinutes} MIN
+                    {/* Price Column */}
+                    <td className="py-4 px-4 whitespace-nowrap">
+                      <span className="font-serif text-base font-bold text-foreground">
+                        {formatCurrency(service.price)}
+                      </span>
                     </td>
 
+                    {/* Status Column */}
                     <td className="py-4 px-4 whitespace-nowrap">
                       <button
                         onClick={() => handleToggleStatus(service)}
-                        className="cursor-pointer"
-                        title="Click to toggle status"
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase transition-colors ${
+                          service.isActive
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                            : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
+                        }`}
+                        title="Click to toggle active status"
                       >
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[9px] uppercase tracking-wider font-semibold border ${
-                            service.isActive
-                              ? "bg-[#26372D] text-[#F5F1E8] border-[#26372D]"
-                              : "bg-[#EAE3D6] text-[#302821]/60 border-[#302821]/20"
-                          }`}
-                        >
-                          {service.isActive ? (
-                            <>
-                              <CheckCircle className="w-3 h-3" /> ACTIVE
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="w-3 h-3" /> HIDDEN
-                            </>
-                          )}
-                        </span>
+                        {service.isActive ? (
+                          <>
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            <span>Active</span>
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Archived</span>
+                          </>
+                        )}
                       </button>
                     </td>
 
-                    <td className="py-4 pl-4 text-right whitespace-nowrap">
+                    {/* Action Column */}
+                    <td className="py-4 px-6 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-2">
                         <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-8 text-[10px] uppercase tracking-wider rounded-none border-[#302821]/20 hover:bg-[#26372D] hover:text-[#F5F1E8] px-3"
+                          variant="ghost"
+                          size="icon"
                           onClick={() => openEditModal(service)}
+                          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+                          title="Edit Service"
                         >
-                          <Edit className="w-3 h-3 mr-1" />
-                          <span>EDIT</span>
+                          <Edit className="w-4 h-4" />
                         </Button>
                         <Button
                           variant="ghost"
-                          size="sm"
-                          className="h-8 text-red-700 hover:bg-red-50 px-2 rounded-none"
+                          size="icon"
                           onClick={() => {
                             setServiceToDelete(service);
                             setDeleteModalOpen(true);
                           }}
+                          className="h-8 w-8 rounded-lg text-destructive/80 hover:text-destructive hover:bg-destructive/10"
+                          title="Delete Service"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </td>
@@ -487,205 +516,202 @@ export default function AdminServicesPage() {
         )}
       </div>
 
-      {/* Add / Edit Service Modal */}
+      {/* 4. Add / Edit Service Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-[#F5F1E8] border-[#302821]/20 p-8 rounded-none">
-          <DialogHeader className="space-y-1">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-              CARTE FORMULATION DOSSIER
-            </span>
-            <DialogTitle className="font-serif text-2xl text-[#302821]">
-              {editingService ? "Update Treatment Formulation" : "Add New Carte Treatment"}
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-6 sm:p-8">
+          <DialogHeader className="space-y-1 pb-4 border-b border-border">
+            <DialogTitle className="font-serif text-2xl font-bold text-foreground">
+              {editingService ? "Edit Treatment Offering" : "New Treatment Formulation"}
             </DialogTitle>
-            <DialogDescription className="text-xs text-[#302821]/70">
-              Configure formulation details, treatment investment, duration, and upload clinical imagery to ImgBB.
+            <DialogDescription className="text-xs text-muted-foreground">
+              Configure treatment pricing, duration, description, and visual representation on the SalonBook carte.
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSaveService} className="space-y-4 pt-3">
+          <form onSubmit={handleSubmit} className="space-y-5 pt-3">
+            {/* Title */}
             <div className="space-y-1.5">
-              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                Treatment Title
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                Treatment Title *
               </label>
               <Input
+                placeholder="e.g. Signature Balayage & Silk Glaze"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Signature French Balayage & Silk Glaze"
-                className="rounded-none border-[#302821]/20 bg-[#F5F1E8] text-xs text-[#302821] focus-visible:ring-1 focus-visible:ring-[#26372D]"
                 required
+                className="h-10 rounded-xl text-xs border-border bg-background"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Category, Price, Duration Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                  Specialty Category
+                <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Specialty *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full h-10 px-3 text-xs uppercase tracking-wider rounded-none bg-[#F5F1E8] border border-[#302821]/20 text-[#302821]"
+                  className="w-full h-10 px-3 rounded-xl border border-border bg-background text-foreground text-xs font-medium focus:ring-1 focus:ring-accent outline-none"
                 >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat.toUpperCase()}
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                  Treatment Fee ($ USD)
+                <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Price ($ USD) *
                 </label>
                 <Input
                   type="number"
-                  min="1"
-                  step="0.01"
+                  min="0"
+                  step="1"
+                  placeholder="185"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  placeholder="195"
-                  className="rounded-none border-[#302821]/20 bg-[#F5F1E8] text-xs text-[#302821]"
                   required
+                  className="h-10 rounded-xl text-xs border-border bg-background"
                 />
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                  Duration (Minutes)
+                <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Duration (mins) *
                 </label>
                 <Input
                   type="number"
                   min="15"
-                  step="5"
+                  step="15"
+                  placeholder="90"
                   value={durationMinutes}
                   onChange={(e) => setDurationMinutes(e.target.value)}
-                  placeholder="60"
-                  className="rounded-none border-[#302821]/20 bg-[#F5F1E8] text-xs text-[#302821]"
                   required
+                  className="h-10 rounded-xl text-xs border-border bg-background"
                 />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                  Visibility Status
-                </label>
-                <select
-                  value={isActive ? "active" : "inactive"}
-                  onChange={(e) => setIsActive(e.target.value === "active")}
-                  className="w-full h-10 px-3 text-xs uppercase tracking-wider rounded-none bg-[#F5F1E8] border border-[#302821]/20 text-[#302821]"
-                >
-                  <option value="active">Active (Visible on Carte)</option>
-                  <option value="inactive">Archived (Hidden)</option>
-                </select>
               </div>
             </div>
 
+            {/* Description */}
             <div className="space-y-1.5">
-              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                Formulation Protocol &amp; Description
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                Treatment Description *
               </label>
               <textarea
+                placeholder="Describe treatment procedures, formulation botanicals, and client results..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="w-full p-3 text-xs rounded-none bg-[#F5F1E8] border border-[#302821]/20 text-[#302821] focus:outline-none focus:ring-1 focus:ring-[#26372D]"
-                placeholder="Comprehensive clinical and botanical description of the service..."
                 required
+                className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-xs font-sans focus:ring-1 focus:ring-accent outline-none"
               />
             </div>
 
-            {/* ImgBB Image Upload */}
-            <div className="space-y-2 pt-1">
-              <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-                Formulation Imagery (Hosted on ImgBB Cloud)
+            {/* Image Upload / URL */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                Treatment Photography (ImgBB Cloud or URL)
               </label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="https://images.unsplash.com/..."
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  className="h-10 rounded-xl text-xs border-border bg-background flex-1"
+                />
+                <label className="h-10 px-4 rounded-xl border border-border bg-muted/60 hover:bg-muted text-foreground text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shrink-0">
+                  <Upload className="w-3.5 h-3.5 text-accent" />
+                  <span>{uploadingImage ? "Uploading..." : "Upload"}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                  />
+                </label>
+              </div>
 
               {imageUrl && (
-                <div className="relative aspect-[16/9] w-full border border-[#302821]/15 bg-[#EAE3D6] mb-2 overflow-hidden">
+                <div className="mt-2 w-full h-32 rounded-xl overflow-hidden border border-border relative bg-muted/40">
                   <SafeImage
                     src={imageUrl}
-                    alt="Uploaded preview"
-                    className="w-full h-full object-cover"
+                    alt="Preview"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )}
-
-              <div className="flex items-center gap-3">
-                <input
-                  type="file"
-                  id="service-image-input"
-                  accept="image/*"
-                  onChange={handleImageFileUpload}
-                  className="hidden"
-                  disabled={uploadingImage}
-                />
-                <label
-                  htmlFor="service-image-input"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-none border border-[#302821]/20 bg-[#EAE3D6] text-xs uppercase tracking-wider font-semibold cursor-pointer hover:bg-[#26372D] hover:text-[#F5F1E8] transition-all"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  <span>{uploadingImage ? "Hosting on ImgBB..." : "Upload Photo File"}</span>
-                </label>
-
-                {imageUrl && (
-                  <span className="text-[10px] uppercase tracking-wider text-emerald-700 font-semibold flex items-center gap-1">
-                    <CheckCircle className="w-3.5 h-3.5" /> Cloud Hosted
-                  </span>
-                )}
-              </div>
             </div>
 
-            <DialogFooter className="pt-6 border-t border-[#302821]/10 gap-3">
+            {/* Active Toggle */}
+            <div className="flex items-center gap-3 pt-2">
+              <input
+                type="checkbox"
+                id="isActiveService"
+                checked={isActive}
+                onChange={(e) => setIsActive(e.target.checked)}
+                className="w-4 h-4 rounded text-accent accent-accent"
+              />
+              <label
+                htmlFor="isActiveService"
+                className="text-xs font-medium text-foreground cursor-pointer"
+              >
+                Display offering as active in public reservation catalog
+              </label>
+            </div>
+
+            <DialogFooter className="pt-4 border-t border-border gap-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setModalOpen(false)}
-                className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
+                className="rounded-xl text-xs border-border"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="default"
                 disabled={submitting || uploadingImage}
-                className="rounded-none text-xs uppercase tracking-wider bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E] px-6"
+                className="rounded-xl text-xs bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                {submitting ? "Saving..." : editingService ? "Update Formulation" : "Create Formulation"}
+                {submitting ? "Saving..." : editingService ? "Update Treatment" : "Create Treatment"}
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
+      {/* 5. Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent className="sm:max-w-md bg-[#F5F1E8] border-[#302821]/20 p-6 rounded-none">
+        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
           <DialogHeader className="space-y-2">
-            <DialogTitle className="font-serif text-2xl text-[#302821]">
-              Remove Formulation from Carte?
+            <DialogTitle className="font-serif text-xl font-bold text-destructive">
+              Remove Offering from Carte
             </DialogTitle>
-            <DialogDescription className="text-xs text-[#302821]/70 leading-relaxed">
-              Are you sure you wish to delete &quot;{serviceToDelete?.title}&quot;? Patrons will no longer be able to select or reserve this service.
+            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+              Are you sure you want to delete <strong className="text-foreground">"{serviceToDelete?.title}"</strong>?
+              This action cannot be undone and will prevent future guest reservations for this offering.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="pt-4 flex gap-2">
+          <DialogFooter className="pt-4 border-t border-border gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setDeleteModalOpen(false)}
-              className="rounded-none text-xs uppercase tracking-wider border-[#302821]/20"
+              className="rounded-xl text-xs border-border"
             >
               Cancel
             </Button>
             <Button
-              variant="default"
+              variant="destructive"
               size="sm"
-              onClick={confirmDelete}
               disabled={deleting}
-              className="rounded-none text-xs uppercase tracking-wider bg-red-700 text-white hover:bg-red-800"
+              onClick={handleDelete}
+              className="rounded-xl text-xs bg-destructive text-destructive-foreground"
             >
               {deleting ? "Removing..." : "Confirm Removal"}
             </Button>

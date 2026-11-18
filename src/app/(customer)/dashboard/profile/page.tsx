@@ -1,7 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, Mail, Phone, Camera, ShieldCheck } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  Camera,
+  ShieldCheck,
+  Save,
+  Lock,
+  Upload,
+  Sparkles,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,9 +82,9 @@ export default function CustomerProfilePage() {
     try {
       setSaving(true);
       await updateProfile({
-        name,
-        phone,
-        image,
+        name: name.trim(),
+        phone: phone.trim(),
+        image: image.trim(),
       });
       toast.success("Profile information updated successfully.");
     } catch (err: unknown) {
@@ -85,122 +95,147 @@ export default function CustomerProfilePage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      <div className="space-y-1 pb-4 border-b border-[#302821]/15">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-[#B8755B] font-semibold block">
-          PATRON RECORD
-        </span>
-        <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#302821] dark:text-[#F5F1E8]">
-          Profile Dossier
-        </h2>
-        <p className="text-xs text-[#302821]/70 dark:text-[#EAE3D6]/70 leading-relaxed">
-          Manage your contact details, consultation telephone, and patron portrait.
+    <div className="max-w-3xl mx-auto space-y-8">
+      {/* 1. Header Banner */}
+      <div className="space-y-2 pb-6 border-b border-border/80">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-accent" />
+          <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-bold">
+            Patron Preferences
+          </span>
+        </div>
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          Profile Dossier &amp; Settings
+        </h1>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          Manage your personal details, contact telephone for appointment reminders, and guest portrait.
         </p>
       </div>
 
-      <div className="border border-[#302821]/15 dark:border-[#EAE3D6]/15 bg-[#EAE3D6]/30 dark:bg-[#1a201c] p-7 sm:p-8 space-y-8">
+      {/* 2. Main Profile Card */}
+      <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-8 space-y-8 shadow-sm">
         {/* Avatar Upload Section */}
-        <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#302821]/10">
+        <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-border/60">
           <div className="relative group">
-            <div className="w-20 h-20 rounded-none border border-[#302821]/20 bg-[#26372D] flex items-center justify-center text-[#F5F1E8] font-serif text-xl font-bold overflow-hidden">
+            <div className="w-24 h-24 rounded-2xl border-2 border-border/80 bg-muted/60 flex items-center justify-center text-foreground font-serif text-2xl font-bold overflow-hidden shadow-sm">
               {image ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={image}
                   alt={name || "Patron"}
                   className="w-full h-full object-cover"
                 />
               ) : (
-                getInitials(name || "Salon Guest")
+                getInitials(name || "Patron")
               )}
             </div>
 
-            <label
-              htmlFor="avatar-upload"
-              className="absolute inset-0 bg-[#302821]/70 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-            >
-              <Camera className="w-5 h-5" />
+            <label className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center cursor-pointer shadow-md transition-transform hover:scale-110">
+              <Camera className="w-4 h-4 text-accent" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                disabled={uploadingImage}
+                className="hidden"
+              />
             </label>
-            <input
-              id="avatar-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileUpload}
-              disabled={uploadingImage}
-            />
           </div>
 
           <div className="space-y-1.5 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <h3 className="font-serif text-xl text-[#302821] dark:text-[#F5F1E8]">
-                {name || "Valued Patron"}
-              </h3>
-              <span className="px-2 py-0.5 text-[9px] uppercase tracking-wider font-semibold border border-[#302821]/20 bg-[#F5F1E8]">
-                {user?.role || "patron"}
+            <h3 className="font-serif text-lg font-bold text-foreground">
+              Guest Portrait
+            </h3>
+            <p className="text-xs text-muted-foreground max-w-sm">
+              Upload your personal photo. Format must be PNG, JPG, or WEBP under 5MB.
+            </p>
+            <div className="pt-1">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
+                Verified SalonBook Patron
               </span>
             </div>
-            <p className="text-xs text-[#302821]/60">
-              Hover over portrait to upload via ImgBB cloud storage.
-            </p>
           </div>
         </div>
 
-        {/* Profile Details Form */}
-        <form onSubmit={handleSaveProfile} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-              Full Legal Name
-            </label>
-            <div className="relative">
-              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
+        {/* Form Inputs */}
+        <form onSubmit={handleSaveProfile} className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Full Name */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-accent" />
+                <span>Full Name *</span>
+              </label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
-                placeholder="Your full name"
+                placeholder="Sophia Montgomery"
                 required
+                className="h-11 rounded-xl text-xs border-border bg-background"
               />
             </div>
-          </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-              Email Address <span className="text-[#302821]/40 font-normal">(Verified &amp; Locked)</span>
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
-              <Input
-                value={user?.email || ""}
-                disabled
-                className="pl-10 h-11 rounded-none border-[#302821]/15 bg-[#EAE3D6]/50 text-xs text-[#302821]/60 cursor-not-allowed"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-[#302821]/70 font-semibold block">
-              Contact Telephone
-            </label>
-            <div className="relative">
-              <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#302821]/40" />
+            {/* Phone */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-accent" />
+                <span>Contact Telephone</span>
+              </label>
               <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="pl-10 h-11 rounded-none border-[#302821]/20 bg-[#F5F1E8] dark:bg-[#151916] text-xs text-[#302821] dark:text-[#F5F1E8] focus-visible:ring-1 focus-visible:ring-[#26372D]"
-                placeholder="+1 (212) 555-0198"
+                placeholder="+1 (212) 555-0144"
+                className="h-11 rounded-xl text-xs border-border bg-background"
               />
             </div>
           </div>
 
-          <div className="pt-2">
+          {/* Email Address (Read-Only) */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-accent" />
+              <span>Email Address (Protected Identifier)</span>
+            </label>
+            <div className="relative">
+              <Input
+                value={user?.email || ""}
+                disabled
+                className="h-11 rounded-xl text-xs border-border bg-muted/60 text-muted-foreground cursor-not-allowed pl-10"
+              />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Your registered email is tied to verified appointments and Stripe transaction receipts.
+            </p>
+          </div>
+
+          {/* Photo URL */}
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+              <Upload className="w-3.5 h-3.5 text-accent" />
+              <span>Direct Photo URL (Optional)</span>
+            </label>
+            <Input
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              placeholder="https://..."
+              className="h-11 rounded-xl text-xs border-border bg-background"
+            />
+          </div>
+
+          {/* Submit Action */}
+          <div className="pt-4 border-t border-border/60 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Single-client encrypted session</span>
+            </div>
+
             <Button
               type="submit"
-              variant="default"
-              disabled={saving}
-              className="text-xs uppercase tracking-[0.2em] rounded-none h-11 px-6 bg-[#26372D] text-[#F5F1E8] hover:bg-[#343D2E]"
+              disabled={saving || uploadingImage}
+              className="rounded-xl text-xs font-semibold tracking-wider gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-6 h-10 shadow-sm"
             >
-              {saving ? "SAVING..." : "UPDATE PATRON DOSSIER"}
+              <Save className="w-3.5 h-3.5 text-accent" />
+              <span>{saving ? "Updating..." : "Save Changes"}</span>
             </Button>
           </div>
         </form>
