@@ -12,6 +12,9 @@ import {
   TrendingUp,
   Sparkles,
   ArrowUpRight,
+  ShieldCheck,
+  CreditCard,
+  Crown,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types";
@@ -42,7 +45,7 @@ interface AnalyticsData {
   monthlyRevenue: Array<{ month: string; revenue: number; bookings: number }>;
 }
 
-const PIE_COLORS = ["#3B1F2B", "#D97706", "#059669", "#2563EB", "#9333EA", "#E11D48"];
+const PIE_COLORS = ["#be9643", "#c4755f", "#059669", "#2563EB", "#9333EA", "#D97706"];
 
 export default function AdminOverviewPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -73,7 +76,7 @@ export default function AdminOverviewPage() {
 
   const statCards = [
     {
-      label: "Registered Customers",
+      label: "Registered Patrons",
       value: data?.summary.totalUsers || 0,
       icon: Users,
       color: "text-blue-600 dark:text-blue-400",
@@ -81,7 +84,7 @@ export default function AdminOverviewPage() {
       href: "/admin/customers",
     },
     {
-      label: "Active Services",
+      label: "Curated Offerings",
       value: data?.summary.totalServices || 0,
       icon: Scissors,
       color: "text-terracotta-600 dark:text-terracotta-400",
@@ -89,7 +92,7 @@ export default function AdminOverviewPage() {
       href: "/admin/services",
     },
     {
-      label: "Total Appointment Requests",
+      label: "All Reservations",
       value: data?.summary.totalAppointments || 0,
       icon: Calendar,
       color: "text-purple-600 dark:text-purple-400",
@@ -97,7 +100,7 @@ export default function AdminOverviewPage() {
       href: "/admin/appointments",
     },
     {
-      label: "Pending Appointments",
+      label: "Pending Inquiries",
       value: pendingCount,
       icon: Clock,
       color: "text-amber-600 dark:text-amber-400",
@@ -105,7 +108,7 @@ export default function AdminOverviewPage() {
       href: "/admin/appointments?status=pending",
     },
     {
-      label: "Confirmed Appointments",
+      label: "Confirmed Visits",
       value: confirmedCount,
       icon: CheckCircle2,
       color: "text-emerald-600 dark:text-emerald-400",
@@ -113,11 +116,11 @@ export default function AdminOverviewPage() {
       href: "/admin/appointments?status=confirmed",
     },
     {
-      label: "Gross Stripe Revenue",
+      label: "Gross Stripe Volume",
       value: formatCurrency(data?.summary.totalRevenue || 0),
       icon: DollarSign,
-      color: "text-primary dark:text-gold-400",
-      bg: "bg-primary/10",
+      color: "text-gold-600 dark:text-gold-400",
+      bg: "bg-gold-500/10",
       href: "/admin/transactions",
       isMoney: true,
     },
@@ -128,41 +131,41 @@ export default function AdminOverviewPage() {
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Executive Performance Dashboard</span>
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600 dark:text-gold-400 mb-1">
+            <Crown className="w-3.5 h-3.5 text-gold-500" />
+            <span>Operational Directorate</span>
           </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Salon Operational Metrics
+            Salon Operational Telemetry
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Real-time insights across salon catalog, reservations, guest registry, and Stripe transactions.
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+            Real-time management across treatment menu, appointment requests, patron ledger, and Stripe payments.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Link href="/admin/services">
-            <Button variant="luxury" size="sm" className="gap-2">
+            <Button variant="luxury" size="sm" className="gap-2 rounded-full px-5 text-xs font-semibold shadow-md shadow-gold-500/20">
               <Scissors className="w-3.5 h-3.5" />
-              <span>Manage Services</span>
+              <span>Manage Services Menu</span>
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* 6 Key Statistics Cards as specified */}
+      {/* 6 Key Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
             <Link key={i} href={card.href}>
-              <Card className="p-6 bg-card border-border/70 hover:shadow-md hover:border-primary/40 transition-all group">
+              <Card className="p-6 bg-card border-gold-500/20 hover:border-gold-500/50 hover:shadow-xl transition-all rounded-3xl group">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     {card.label}
                   </span>
                   <div
-                    className={`w-10 h-10 rounded-xl ${card.bg} ${card.color} flex items-center justify-center group-hover:scale-105 transition-transform`}
+                    className={`w-11 h-11 rounded-2xl ${card.bg} ${card.color} flex items-center justify-center group-hover:scale-105 transition-transform border border-border/60`}
                   >
                     <Icon className="w-5 h-5" />
                   </div>
@@ -171,8 +174,8 @@ export default function AdminOverviewPage() {
                   <h3 className="font-serif text-3xl font-bold text-foreground">
                     {loading ? "..." : card.value}
                   </h3>
-                  <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5">
-                    View <ArrowUpRight className="w-3 h-3" />
+                  <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 font-semibold">
+                    Inspect <ArrowUpRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </Card>
@@ -184,19 +187,19 @@ export default function AdminOverviewPage() {
       {/* Analytics Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue Trend Area Chart */}
-        <div className="lg:col-span-2 bg-card rounded-2xl border border-border/70 p-6 space-y-4">
+        <div className="lg:col-span-2 bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-serif text-lg font-bold text-foreground">
+              <h3 className="font-serif text-xl font-bold text-foreground">
                 Revenue & Reservation Growth
               </h3>
               <p className="text-xs text-muted-foreground">
-                Monthly verified Stripe transaction volume.
+                Verified monthly Stripe payment collections.
               </p>
             </div>
-            <div className="flex items-center gap-1 text-xs text-emerald-600 font-medium">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-semibold">
               <TrendingUp className="w-3.5 h-3.5" />
-              <span>Live Ledger</span>
+              <span>Live Telemetry</span>
             </div>
           </div>
 
@@ -206,8 +209,8 @@ export default function AdminOverviewPage() {
                 <AreaChart data={data.monthlyRevenue}>
                   <defs>
                     <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3B1F2B" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#3B1F2B" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#be9643" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#be9643" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="month" stroke="#888" fontSize={11} />
@@ -216,16 +219,17 @@ export default function AdminOverviewPage() {
                     formatter={(val) => [`$${val}`, "Revenue"]}
                     contentStyle={{
                       backgroundColor: "var(--card)",
-                      borderColor: "var(--border)",
-                      borderRadius: "0.75rem",
+                      borderColor: "rgba(190, 150, 67, 0.3)",
+                      borderRadius: "1rem",
                       fontSize: "12px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
                     }}
                   />
                   <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#3B1F2B"
-                    strokeWidth={2}
+                    stroke="#be9643"
+                    strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#revenueGrad)"
                   />
@@ -241,13 +245,13 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Category Distribution Pie Chart */}
-        <div className="bg-card rounded-2xl border border-border/70 p-6 space-y-4">
+        <div className="bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 space-y-4 shadow-xl">
           <div>
-            <h3 className="font-serif text-lg font-bold text-foreground">
+            <h3 className="font-serif text-xl font-bold text-foreground">
               Catalog Category Mix
             </h3>
             <p className="text-xs text-muted-foreground">
-              Active service offerings by ritual category.
+              Service offerings distributed across disciplines.
             </p>
           </div>
 
@@ -275,8 +279,8 @@ export default function AdminOverviewPage() {
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "var(--card)",
-                      borderColor: "var(--border)",
-                      borderRadius: "0.75rem",
+                      borderColor: "rgba(190, 150, 67, 0.3)",
+                      borderRadius: "1rem",
                       fontSize: "12px",
                     }}
                   />
@@ -290,14 +294,14 @@ export default function AdminOverviewPage() {
           </div>
 
           {/* Legend */}
-          <div className="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-border">
-            {data?.categoryDistribution?.slice(0, 4).map((cat, idx) => (
+          <div className="grid grid-cols-2 gap-2 text-[11px] pt-3 border-t border-border">
+            {data?.categoryDistribution?.slice(0, 6).map((cat, idx) => (
               <div key={idx} className="flex items-center gap-2 truncate">
                 <div
                   className="w-2.5 h-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}
                 />
-                <span className="truncate text-muted-foreground">
+                <span className="truncate text-muted-foreground font-medium">
                   {cat._id} ({cat.count})
                 </span>
               </div>

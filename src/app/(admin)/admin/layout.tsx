@@ -17,6 +17,7 @@ import {
   LogOut,
   ChevronRight,
   ExternalLink,
+  Crown,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -45,9 +46,9 @@ export default function AdminDashboardLayout({
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-        <p className="text-sm font-serif text-muted-foreground animate-pulse">
-          Authenticating administrative credentials...
+        <div className="w-12 h-12 rounded-full border-4 border-gold-500 border-t-transparent animate-spin" />
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold animate-pulse">
+          Authenticating Executive Desk Credentials...
         </p>
       </div>
     );
@@ -71,25 +72,25 @@ export default function AdminDashboardLayout({
       exact: false,
     },
     {
-      label: "Appointments",
+      label: "Appointments Dispatch",
       href: "/admin/appointments",
       icon: Calendar,
       exact: false,
     },
     {
-      label: "Customers",
+      label: "Client Registry",
       href: "/admin/customers",
       icon: Users,
       exact: false,
     },
     {
-      label: "Transactions",
+      label: "Stripe Transactions",
       href: "/admin/transactions",
       icon: CreditCard,
       exact: false,
     },
     {
-      label: "Admin Profile",
+      label: "Executive Profile",
       href: "/admin/profile",
       icon: User,
       exact: false,
@@ -97,20 +98,21 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-muted/20 flex flex-col lg:flex-row">
-      {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 flex-col border-r border-border/80 bg-card p-6 space-y-8 shrink-0">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            <span>SalonBook Admin</span>
+    <div className="min-h-[calc(100vh-80px)] bg-secondary/30 dark:bg-background flex flex-col lg:flex-row">
+      {/* Desktop Executive Sidebar */}
+      <aside className="hidden lg:flex w-72 flex-col border-r border-gold-500/15 bg-card p-6 space-y-8 shrink-0 shadow-lg">
+        <div className="space-y-1 pb-4 border-b border-border/80">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600 dark:text-gold-400">
+            <Crown className="w-4 h-4 text-gold-500" />
+            <span>Executive Directorate</span>
           </div>
-          <h2 className="font-serif text-xl font-bold text-foreground">
-            Executive Desk
+          <h2 className="font-serif text-2xl font-bold text-foreground">
+            Atelier Control
           </h2>
+          <p className="text-[11px] text-muted-foreground">Madison Ave Flagship Operations</p>
         </div>
 
-        <nav className="flex-1 space-y-1">
+        <nav className="flex-1 space-y-1.5">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -121,10 +123,10 @@ export default function AdminDashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? "bg-primary text-white font-semibold shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    ? "bg-gradient-to-r from-gold-500 to-terracotta-500 text-white shadow-md shadow-gold-500/20 font-bold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/80"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -137,63 +139,70 @@ export default function AdminDashboardLayout({
           })}
         </nav>
 
-        {/* Quick Link to Public Store */}
-        <div className="pt-4 border-t border-border space-y-3">
-          <Link
-            href="/"
-            target="_blank"
-            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
-          >
-            <span>Preview Client Store</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+        {/* Quick Link to Public Sanctuary */}
+        <div className="pt-4 border-t border-border/80 space-y-3">
+          <Link href="/services">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full justify-between text-xs rounded-xl border-gold-500/30 hover:bg-gold-500/10 font-semibold"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-gold-500" />
+                Live Client Menu
+              </span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+            </Button>
           </Link>
 
-          {/* Admin Profile pill */}
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-muted/40 border border-border">
+          {/* User Signout */}
+          <div className="flex items-center justify-between pt-2">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs">
+              <div className="w-9 h-9 rounded-full bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-xs font-bold text-foreground">
                 {getInitials(user?.name || "Admin")}
               </div>
               <div className="flex flex-col text-left">
-                <span className="text-xs font-medium text-foreground max-w-[100px] truncate">
+                <span className="text-xs font-bold text-foreground truncate max-w-[120px]">
                   {user?.name}
                 </span>
-                <span className="text-[10px] text-primary uppercase font-semibold">
-                  Administrator
+                <span className="text-[10px] uppercase tracking-wider text-gold-600 dark:text-gold-400 font-semibold">
+                  Managing Director
                 </span>
               </div>
             </div>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={logout}
-              className="text-muted-foreground hover:text-destructive p-1 rounded transition-colors"
-              title="Sign out"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-full"
+              title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       </aside>
 
-      {/* Mobile Header Bar */}
-      <div className="lg:hidden bg-card border-b border-border p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-primary" />
-          <span className="font-serif font-bold text-foreground">
-            SalonBook Admin
-          </span>
+      {/* Mobile Top Navbar for Admin */}
+      <div className="lg:hidden bg-card border-b border-gold-500/15 p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+          <ShieldCheck className="w-4 h-4 text-gold-500" />
+          <span>Executive Desk</span>
         </div>
         <Button
-          variant="ghost"
-          size="icon"
+          variant="outline"
+          size="sm"
+          className="rounded-full border-border/80"
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
         >
-          {mobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          <span className="ml-2 text-xs font-semibold">Menu</span>
         </Button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Navigation Drawer */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden bg-card border-b border-border p-4 space-y-2">
+        <div className="lg:hidden bg-card border-b border-border p-4 space-y-2 animate-in slide-in-from-top-2">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -205,10 +214,10 @@ export default function AdminDashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold ${
                   isActive
-                    ? "bg-primary text-white font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-gold-500 text-white font-bold"
+                    : "text-foreground hover:bg-muted"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -219,7 +228,7 @@ export default function AdminDashboardLayout({
         </div>
       )}
 
-      {/* Main Content Pane */}
+      {/* Main Administrative Viewport */}
       <main className="flex-1 p-6 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
         {children}
       </main>
