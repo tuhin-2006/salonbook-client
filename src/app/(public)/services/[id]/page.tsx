@@ -11,6 +11,11 @@ import {
   CheckCircle2,
   Calendar,
   Share2,
+  Heart,
+  Droplets,
+  Award,
+  Leaf,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,9 +47,9 @@ export default function ServiceDetailsPage() {
         // Fallback service
         setService({
           _id: serviceId,
-          title: "Signature Balayage & Silk Glaze",
+          title: "Signature French Balayage & Silk Glaze",
           slug: "signature-balayage-silk-glaze",
-          category: "Hair Styling & Cut",
+          category: "Hair",
           description:
             "A hand-painted custom French balayage tailored to your unique complexion and bone structure. Finished with a luminous silk shine glaze and luxury botanical blowout that preserves hair integrity while imparting sublime dimension.",
           price: 185,
@@ -52,6 +57,7 @@ export default function ServiceDetailsPage() {
           images: [
             "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85",
             "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85",
+            "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
           ],
           isActive: true,
           specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
@@ -77,8 +83,10 @@ export default function ServiceDetailsPage() {
     return (
       <div className="min-h-screen py-24 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Sparkles className="w-8 h-8 text-primary animate-spin" />
-          <p className="text-sm text-muted-foreground">Loading bespoke ritual details...</p>
+          <Sparkles className="w-8 h-8 text-gold-500 animate-spin" />
+          <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">
+            Loading Bespoke Ritual Dossier...
+          </p>
         </div>
       </div>
     );
@@ -86,13 +94,13 @@ export default function ServiceDetailsPage() {
 
   if (!service) {
     return (
-      <div className="min-h-screen py-24 text-center container mx-auto px-4">
-        <h2 className="text-2xl font-serif">Service Not Found</h2>
-        <p className="text-muted-foreground mt-2 mb-6">
-          The requested service could not be located in our atelier catalog.
+      <div className="min-h-screen py-24 text-center container mx-auto px-4 max-w-md">
+        <h2 className="text-2xl font-serif font-bold">Ritual Not Located</h2>
+        <p className="text-muted-foreground text-sm mt-2 mb-6">
+          The requested service could not be located in our active atelier catalog.
         </p>
         <Link href="/services">
-          <Button variant="luxury">Return to Catalog</Button>
+          <Button variant="luxury" className="rounded-full">Return to Menu</Button>
         </Link>
       </div>
     );
@@ -101,103 +109,185 @@ export default function ServiceDetailsPage() {
   return (
     <div className="min-h-screen py-12 md:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-        {/* Navigation Back */}
+        {/* Navigation Back & Share */}
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Back to Services
+            <ArrowLeft className="w-4 h-4 text-gold-500" /> Back to Services Menu
           </button>
-          <Button variant="ghost" size="sm" onClick={handleShare} className="gap-2 text-xs">
-            <Share2 className="w-3.5 h-3.5" /> Share Ritual
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleShare}
+            className="gap-2 text-xs font-semibold rounded-full"
+          >
+            <Share2 className="w-3.5 h-3.5 text-gold-500" /> Share Dossier
           </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Column: Visual Gallery */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-border shadow-md bg-muted relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={service.images[activeImageIndex] || service.images[0]}
-                alt={service.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 left-4">
-                <Badge variant="terracotta" className="text-xs">
-                  {service.category}
-                </Badge>
+          {/* Left Column: Visual Gallery & Detailed Ritual Protocol */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4">
+              <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-gold-500/25 shadow-2xl bg-muted relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={service.images[activeImageIndex] || service.images[0]}
+                  alt={service.title}
+                  className="w-full h-full object-cover transition-all duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <Badge variant="terracotta" className="text-xs px-3 py-1 shadow-md">
+                    {service.category}
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Thumbnail Selector */}
+              {service.images.length > 1 && (
+                <div className="flex items-center gap-3">
+                  {service.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${
+                        activeImageIndex === idx
+                          ? "border-gold-500 shadow-md scale-105"
+                          : "border-transparent opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img}
+                        alt="Thumbnail"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Protocol Step-by-Step Timeline */}
+            <div className="rounded-3xl border border-border/80 bg-card p-6 sm:p-8 space-y-6">
+              <div className="space-y-1">
+                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-gold-600 dark:text-gold-400">
+                  Treatment Methodology
+                </span>
+                <h3 className="font-serif text-2xl font-bold text-foreground">
+                  The Protocol Progression
+                </h3>
+              </div>
+
+              <div className="space-y-4 divide-y divide-border/60">
+                <div className="pt-3 first:pt-0 flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                    1
+                  </span>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-foreground">
+                      Diagnostic & Botanical Formulation
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                      Detailed consultation assessing your hair or skin porosity, undertone alignment, and specific lifestyle requirements.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                    2
+                  </span>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-foreground">
+                      Sensory Cleansing & Scalp/Skin Prep
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                      Eucalyptus steam compresses, ultrasonic skin purification, or pH-balancing botanical wash with gentle acupressure.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                    3
+                  </span>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-foreground">
+                      Artisan Execution & Infusion
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                      Meticulous application by your resident specialist using imported French balayage clay, 24K colloidal gold, or surgical tools.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex items-start gap-4">
+                  <span className="w-8 h-8 rounded-full bg-gold-500/10 text-gold-600 dark:text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/20">
+                    4
+                  </span>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-foreground">
+                      Finish Styling & Post-Care Prescription
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                      Signature blowout, mirror reveal in calibrated daylight, accompanied by your personalized home maintenance formula.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Thumbnail Row */}
-            {service.images.length > 1 && (
-              <div className="flex items-center gap-3">
-                {service.images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                      activeImageIndex === idx
-                        ? "border-primary shadow-sm"
-                        : "border-transparent opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img}
-                      alt="Thumbnail"
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
+            {/* Botanical Compounds & Inclusions */}
+            <div className="rounded-3xl border border-gold-500/20 bg-secondary/30 dark:bg-card/40 p-6 sm:p-8 space-y-4">
+              <div className="flex items-center gap-2 text-gold-600 dark:text-gold-400 text-xs font-bold uppercase tracking-wider">
+                <Leaf className="w-4 h-4" /> Clean Formulation Charter
               </div>
-            )}
-
-            {/* Atelier Inclusions */}
-            <div className="rounded-2xl border border-border bg-card p-6 mt-8 space-y-4">
-              <h3 className="font-serif text-lg font-semibold">What is Included</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-muted-foreground">
+              <h3 className="font-serif text-lg font-bold text-foreground">
+                Organic & Botanical Guarantee
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>One-on-one Master Artist Consultation</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Cruelty-Free & Zero Harsh Sulfates</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Aromatherapy Hot Towel Compress</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Wild-Harvested Rosehip & Argan</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Complimentary Organic Herb Infusion</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Private Treatment Acoustic Serenity</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Personalized Post-Treatment Regimen</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Complimentary Organic Tisane Bar</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Pricing & Booking Card */}
+          {/* Right Column: Sticky Pricing & Reservation Card */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-3xl border border-border bg-card p-8 shadow-sm space-y-6">
-              <div className="space-y-2">
+            <div className="sticky top-28 rounded-3xl border border-gold-500/30 bg-card p-8 shadow-2xl space-y-6">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-primary" /> {service.durationMinutes} Minutes Duration
+                  <span className="flex items-center gap-1.5 font-semibold text-gold-600 dark:text-gold-400">
+                    <Clock className="w-4 h-4 text-primary" /> {service.durationMinutes} Minutes Session
                   </span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" /> Instant Confirmation
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                    <ShieldCheck className="w-4 h-4" /> Live Openings Today
                   </span>
                 </div>
 
-                <h1 className="text-3xl font-serif font-semibold text-foreground">
+                <h1 className="text-3xl font-serif font-bold text-foreground leading-tight">
                   {service.title}
                 </h1>
 
                 <div className="flex items-baseline gap-2 pt-2">
-                  <span className="text-3xl font-serif font-bold text-foreground">
+                  <span className="text-4xl font-serif font-bold text-foreground">
                     {formatCurrency(service.price)}
                   </span>
                   <span className="text-xs text-muted-foreground">
@@ -206,22 +296,25 @@ export default function ServiceDetailsPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-border">
-                <p className="text-muted-foreground text-sm leading-relaxed">
+              <div className="pt-4 border-t border-border/80">
+                <p className="text-muted-foreground text-xs leading-relaxed font-sans">
                   {service.description}
                 </p>
               </div>
 
-              {/* Specialists Card */}
-              <div className="rounded-xl bg-secondary/50 p-4 space-y-2 border border-border">
-                <p className="text-xs uppercase font-semibold tracking-wider text-muted-foreground">
-                  Assigned Specialists
+              {/* Specialists Assigned */}
+              <div className="rounded-2xl bg-secondary/50 p-4 space-y-2 border border-border/60">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">
+                  Resident Artisans
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {service.specialists.map((spec, i) => (
-                    <Badge key={i} variant="outline" className="bg-background">
-                      {spec}
-                    </Badge>
+                    <span
+                      key={i}
+                      className="px-3 py-1 rounded-full text-xs font-semibold bg-background border border-gold-500/30 text-foreground"
+                    >
+                      ✦ {spec}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -231,13 +324,19 @@ export default function ServiceDetailsPage() {
                 variant="luxury"
                 size="lg"
                 onClick={() => setIsModalOpen(true)}
-                className="w-full text-base gap-2 shadow-lg shadow-terracotta-600/20"
+                className="w-full text-sm font-semibold rounded-2xl h-13 gap-2 shadow-xl shadow-gold-500/20"
               >
-                <Calendar className="w-4 h-4" /> Book Appointment Now
+                <Sparkles className="w-4 h-4" /> Reserve Appointment Chair
               </Button>
 
-              <div className="text-center text-xs text-muted-foreground">
-                Free cancellation up to 24 hours prior to appointment time.
+              <div className="space-y-2 text-center text-xs text-muted-foreground">
+                <p className="flex items-center justify-center gap-1.5">
+                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                  Free cancellation on pending requests
+                </p>
+                <p className="text-[11px] text-zinc-400">
+                  Secured by Stripe Checkout · Gratuity included
+                </p>
               </div>
             </div>
           </div>
