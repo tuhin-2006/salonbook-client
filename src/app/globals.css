@@ -76,8 +76,17 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-sage-300/30 selection:text-forest-900 dark:selection:text-champagne-200;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: rgba(182, 194, 177, 0.35);
+    color: #141c18;
+  }
+  .dark ::selection {
+    background-color: rgba(111, 130, 107, 0.4);
+    color: #f7eed8;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif), Georgia, serif;
