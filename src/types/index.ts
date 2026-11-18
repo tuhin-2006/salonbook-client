@@ -30,8 +30,13 @@ export interface Appointment {
   customerId: User | string;
   serviceId: Service;
   appointmentDate: string;
+  date?: string;
   timeSlot: string;
+  servicePrice?: number;
+  price?: number;
+  paymentStatus?: "unpaid" | "paid";
   status: "pending" | "confirmed" | "cancelled" | "completed";
+  specialist?: string;
   transactionId?: Transaction | string;
   notes?: string;
   cancelledAt?: string;
@@ -56,11 +61,4 @@ export interface ApiResponse<T = unknown> {
   statusCode: number;
   message: string;
   data: T;
-}
-
-export interface PaginationMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
 }

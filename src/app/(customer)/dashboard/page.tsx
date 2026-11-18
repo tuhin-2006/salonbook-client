@@ -5,18 +5,17 @@ import Link from "next/link";
 import {
   Calendar,
   Clock,
-  CheckCircle,
+  CheckCircle2,
   AlertCircle,
   ArrowRight,
   Sparkles,
   CreditCard,
-  Crown,
-  MapPin,
+  Scissors,
+  Check,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
@@ -52,290 +51,254 @@ export default function CustomerDashboardOverview() {
 
   return (
     <div className="space-y-8">
-      {/* 1. Atelier VIP Patron Membership Card & Next Session Strip */}
+      {/* 1. Client Digital Pass & Next Upcoming Session */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* VIP Digital Membership Card */}
-        <div className="lg:col-span-5 rounded-3xl bg-gradient-to-br from-noir-900 via-noir-800 to-zinc-950 p-6 sm:p-8 text-white border border-gold-500/30 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[220px]">
-          {/* Subtle Golden Hairline Foil Ornament */}
-          <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-gold-500/15 via-transparent to-transparent rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute bottom-2 right-4 text-[90px] font-serif font-black text-white/[0.03] select-none pointer-events-none">
-            SB
-          </div>
+        {/* Digital Membership Pass */}
+        <div className="lg:col-span-5 rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 p-6 sm:p-7 text-white border border-indigo-500/30 shadow-xl relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+          <div className="absolute top-0 right-0 w-44 h-44 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gold-500 to-terracotta-500 flex items-center justify-center text-white">
-                <Crown className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                <Scissors className="w-4 h-4" />
               </div>
-              <span className="font-serif text-lg font-bold tracking-wider text-gold-300">
-                SALONBOOK
+              <span className="font-extrabold text-lg tracking-tight text-white">
+                SalonBook
               </span>
             </div>
-            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-gold-500/20 text-gold-300 border border-gold-500/40">
-              VIP Atelier Patron
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-violet-500/20 text-violet-300 border border-violet-500/40">
+              Verified Patron
             </span>
           </div>
 
-          <div className="space-y-1 relative z-10 py-6">
-            <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400">
-              Patron Identity
+          <div className="space-y-1 relative z-10 py-5">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
+              Patron Name
             </span>
-            <h3 className="font-serif text-2xl font-bold tracking-tight text-white">
+            <h3 className="text-2xl font-black tracking-tight text-white">
               {user?.name || "Valued Guest"}
             </h3>
-            <p className="text-xs text-zinc-400">{user?.email}</p>
+            <p className="text-xs text-slate-400">{user?.email}</p>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-zinc-400 border-t border-gold-500/15 pt-3 relative z-10">
-            <span>Privilege Tier: Diamond Society</span>
-            <span className="text-gold-400 font-semibold">Madison Flagship</span>
+          <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-800 pt-3 relative z-10">
+            <span>Membership: Standard</span>
+            <span className="text-indigo-300 font-bold">Madison Flagship</span>
           </div>
         </div>
 
         {/* Next Scheduled Appointment Spotlight */}
-        <div className="lg:col-span-7 rounded-3xl bg-card border border-gold-500/20 p-6 sm:p-8 shadow-xl flex flex-col justify-between">
-          <div className="space-y-2">
+        <div className="lg:col-span-7 rounded-2xl bg-card border border-border p-6 sm:p-7 shadow-sm flex flex-col justify-between">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400 flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-gold-500" /> Next Upcoming Treatment
+              <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" /> Next Scheduled Visit
               </span>
               {nextAppointment && (
-                <Badge
-                  variant={nextAppointment.status === "confirmed" ? "default" : "secondary"}
-                  className="capitalize text-[11px]"
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    nextAppointment.status === "confirmed"
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                      : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                  }`}
                 >
                   {nextAppointment.status}
-                </Badge>
+                </span>
               )}
             </div>
 
-            {nextAppointment ? (
-              <div className="space-y-3 pt-2">
-                <h3 className="font-serif text-2xl font-bold text-foreground">
-                  {nextAppointment.serviceId?.title || "Bespoke Treatment"}
+            {loading ? (
+              <div className="py-6 flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                <span className="text-xs text-muted-foreground">Checking next booking...</span>
+              </div>
+            ) : nextAppointment ? (
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-foreground">
+                  {typeof nextAppointment.serviceId === "object"
+                    ? (nextAppointment.serviceId as { title?: string }).title || "Salon Treatment"
+                    : "Salon Treatment"}
                 </h3>
                 <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5 font-medium text-foreground">
-                    <Calendar className="w-4 h-4 text-primary" />
-                    {formatDate(nextAppointment.appointmentDate)} at {nextAppointment.timeSlot}
+                  <span className="flex items-center gap-1 font-semibold text-foreground">
+                    <Calendar className="w-3.5 h-3.5 text-primary" />
+                    {formatDate(nextAppointment.appointmentDate || nextAppointment.date || "")}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-primary" />
+                    {nextAppointment.timeSlot}
                   </span>
                   <span>•</span>
-                  <span>Duration: {nextAppointment.serviceId?.durationMinutes || 60} mins</span>
-                  <span>•</span>
-                  <span>Fee: {formatCurrency(nextAppointment.serviceId?.price || 0)}</span>
+                  <span className="font-bold text-foreground">
+                    {formatCurrency(nextAppointment.price || nextAppointment.servicePrice || 0)}
+                  </span>
                 </div>
               </div>
             ) : (
-              <div className="py-6 space-y-2">
-                <h3 className="font-serif text-xl font-bold text-foreground">
-                  No Upcoming Appointments Scheduled
+              <div className="py-4 space-y-1">
+                <h3 className="text-base font-bold text-foreground">
+                  No Upcoming Appointments
                 </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Your calendar is currently clear. Reserve your next editorial hair styling, caviar facial, or body massage ritual today.
+                <p className="text-xs text-muted-foreground">
+                  You do not have any pending or confirmed bookings at the moment.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-border/80">
-            {nextAppointment ? (
-              <Link href="/dashboard/appointments" className="w-full sm:w-auto">
-                <Button variant="luxury" size="sm" className="w-full sm:w-auto rounded-full gap-2 text-xs font-semibold">
-                  <span>Manage Reservation</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+          <div className="pt-4 border-t border-border flex items-center justify-between mt-4">
+            <Link
+              href="/dashboard/appointments"
+              className="text-xs font-bold text-muted-foreground hover:text-foreground flex items-center gap-1"
+            >
+              View All Appointments <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+
+            {nextAppointment?.status === "confirmed" && nextAppointment?.paymentStatus === "unpaid" ? (
+              <Link href="/dashboard/appointments">
+                <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl gap-1.5">
+                  <CreditCard className="w-3.5 h-3.5" />
+                  Pay with Stripe
                 </Button>
               </Link>
             ) : (
-              <Link href="/services" className="w-full sm:w-auto">
-                <Button variant="luxury" size="sm" className="w-full sm:w-auto rounded-full gap-2 text-xs font-semibold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Explore Menu & Book</span>
+              <Link href="/services">
+                <Button variant="outline" size="sm" className="text-xs font-bold rounded-xl gap-1.5">
+                  <Scissors className="w-3.5 h-3.5" />
+                  Browse Menu
                 </Button>
               </Link>
             )}
-            <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-gold-500" />
-              <span>450 Madison Avenue, New York</span>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Three Metric Stat Cards */}
+      {/* 2. Key Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <Card className="p-6 bg-card border-border/80 hover:border-gold-500/40 hover:shadow-xl transition-all rounded-3xl">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Total Appointments
+        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+              Total Bookings
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-              <Calendar className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <h3 className="font-serif text-3xl font-bold text-foreground">
+            <div className="text-2xl font-black text-foreground">
               {loading ? "..." : totalAppointments}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              All bookings requested at SalonBook
-            </p>
+            </div>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+            <Calendar className="w-5 h-5" />
           </div>
         </Card>
 
-        <Card className="p-6 bg-card border-border/80 hover:border-gold-500/40 hover:shadow-xl transition-all rounded-3xl">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-gold-600 dark:text-gold-400 uppercase tracking-wider">
-              Pending Confirmation
+        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+              Pending Requests
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-gold-500/10 flex items-center justify-center text-gold-600 dark:text-gold-400">
-              <Clock className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <h3 className="font-serif text-3xl font-bold text-foreground">
+            <div className="text-2xl font-black text-foreground">
               {loading ? "..." : pendingAppointments}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              Awaiting salon specialist confirmation
-            </p>
+            </div>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
+            <Clock className="w-5 h-5" />
           </div>
         </Card>
 
-        <Card className="p-6 bg-card border-border/80 hover:border-gold-500/40 hover:shadow-xl transition-all rounded-3xl">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              Confirmed Bookings
+        <Card className="p-5 bg-card border-border shadow-sm rounded-2xl flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+              Confirmed Visits
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-              <CheckCircle className="w-5 h-5" />
+            <div className="text-2xl font-black text-foreground">
+              {loading ? "..." : confirmedAppointments}
             </div>
           </div>
-          <div className="mt-4">
-            <h3 className="font-serif text-3xl font-bold text-foreground">
-              {loading ? "..." : confirmedAppointments}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              Confirmed & ready for salon visit
-            </p>
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
+            <CheckCircle2 className="w-5 h-5" />
           </div>
         </Card>
       </div>
 
-      {/* 3. Recent Appointments Section */}
-      <div className="bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 space-y-6 shadow-xl">
+      {/* 3. Recent Bookings Table */}
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
-              Recent Salon Reservations
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Your latest booking requests and specialist appointment statuses.
+            <h3 className="text-base font-bold text-foreground">
+              Recent Activity
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Your latest salon appointments and service statuses.
             </p>
           </div>
           <Link href="/dashboard/appointments">
-            <Button variant="ghost" size="sm" className="gap-1 text-xs text-primary hover:text-primary rounded-full">
-              <span>View All</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+            <Button variant="ghost" size="sm" className="text-xs font-bold text-primary">
+              View All
             </Button>
           </Link>
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-muted-foreground text-sm space-y-3">
-            <div className="w-8 h-8 rounded-full border-2 border-gold-500 border-t-transparent animate-spin mx-auto" />
-            <p className="text-xs font-semibold text-muted-foreground">Loading recent reservations...</p>
+          <div className="py-8 text-center text-xs text-muted-foreground">
+            Loading recent visits...
           </div>
         ) : recentAppointments.length === 0 ? (
-          <div className="py-16 text-center space-y-4 max-w-sm mx-auto">
-            <div className="w-12 h-12 rounded-full bg-gold-500/10 text-gold-500 mx-auto flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
-            </div>
-            <h4 className="font-serif text-lg font-bold text-foreground">
-              No Appointments Yet
-            </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Experience the pinnacle of editorial hair design and restorative spa rituals.
+          <div className="py-10 text-center space-y-2">
+            <Scissors className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
+            <p className="text-xs text-muted-foreground">
+              No bookings yet. Ready for your first appointment?
             </p>
             <Link href="/services">
-              <Button variant="luxury" size="sm" className="mt-2 rounded-full text-xs font-semibold">
-                Discover Services Menu
+              <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl mt-2">
+                Explore Services
               </Button>
             </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
+            <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border/80 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+                <tr className="border-b border-border text-muted-foreground font-bold uppercase tracking-wider text-[10px]">
                   <th className="pb-3 pr-4">Service</th>
                   <th className="pb-3 px-4">Date & Time</th>
-                  <th className="pb-3 px-4">Session Fee</th>
-                  <th className="pb-3 px-4">Booking Status</th>
+                  <th className="pb-3 px-4">Price</th>
+                  <th className="pb-3 px-4">Status</th>
                   <th className="pb-3 pl-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60">
+              <tbody className="divide-y divide-border">
                 {recentAppointments.map((app) => {
-                  const service = app.serviceId;
+                  const serviceTitle =
+                    typeof app.serviceId === "object"
+                      ? (app.serviceId as { title?: string }).title || "Salon Service"
+                      : "Salon Service";
+
                   return (
-                    <tr key={app._id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-4 pr-4">
-                        <div className="flex items-center gap-3">
-                          {service?.images?.[0] ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={service.images[0]}
-                              alt={service.title}
-                              className="w-12 h-12 rounded-xl object-cover border border-border shrink-0"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 rounded-xl bg-gold-500/10 flex items-center justify-center text-gold-600 font-serif font-bold shrink-0">
-                              SB
-                            </div>
-                          )}
-                          <div>
-                            <p className="font-serif font-bold text-foreground text-sm leading-tight">
-                              {service?.title || "Custom Service"}
-                            </p>
-                            <span className="text-[11px] text-muted-foreground">
-                              {service?.category || "Salon"} · {service?.durationMinutes || 60} mins
-                            </span>
-                          </div>
-                        </div>
+                    <tr key={app._id} className="hover:bg-secondary/40 transition-colors">
+                      <td className="py-3.5 pr-4 font-bold text-foreground">
+                        {serviceTitle}
                       </td>
-
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="font-semibold text-foreground">
-                          {formatDate(app.appointmentDate)}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {app.timeSlot}
-                        </div>
+                      <td className="py-3.5 px-4 text-muted-foreground">
+                        {formatDate(app.appointmentDate || app.date || "")} at {app.timeSlot}
                       </td>
-
-                      <td className="py-4 px-4 font-serif font-bold text-foreground whitespace-nowrap">
-                        {formatCurrency(service?.price || 0)}
+                      <td className="py-3.5 px-4 font-semibold text-foreground">
+                        {formatCurrency(app.price || app.servicePrice || 0)}
                       </td>
-
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <Badge
-                          variant={
+                      <td className="py-3.5 px-4">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                             app.status === "confirmed"
-                              ? "default"
-                              : app.status === "cancelled"
-                              ? "destructive"
-                              : "secondary"
-                          }
-                          className="capitalize text-[11px]"
+                              ? "bg-emerald-500/10 text-emerald-600"
+                              : app.status === "pending"
+                              ? "bg-amber-500/10 text-amber-600"
+                              : "bg-slate-500/10 text-slate-600"
+                          }`}
                         >
                           {app.status}
-                        </Badge>
+                        </span>
                       </td>
-
-                      <td className="py-4 pl-4 text-right whitespace-nowrap">
+                      <td className="py-3.5 pl-4 text-right">
                         <Link href="/dashboard/appointments">
-                          <Button variant="outline" size="sm" className="h-8 text-xs rounded-full border-border/80">
-                            Manage
+                          <Button variant="ghost" size="sm" className="text-xs font-bold h-7 px-2 text-primary">
+                            Details
                           </Button>
                         </Link>
                       </td>

@@ -10,15 +10,15 @@ import {
   User,
   Phone,
   ArrowRight,
-  CheckCircle2,
   AlertCircle,
   Loader2,
   ShieldCheck,
-  Star,
+  Scissors,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { toast } from "sonner";
 
 export default function SignUpPage() {
@@ -64,7 +64,7 @@ export default function SignUpPage() {
         password,
         phone: phone || undefined,
       });
-      toast.success("Welcome to the SalonBook Sanctuary! Your membership is active.");
+      toast.success("Welcome to SalonBook! Your account is created.");
       router.push("/dashboard");
     } catch (err: unknown) {
       setFormError((err as Error).message || "Registration failed.");
@@ -77,36 +77,33 @@ export default function SignUpPage() {
     <div className="min-h-[calc(100vh-80px)] w-full flex flex-col lg:flex-row bg-background">
       {/* Left Form Container */}
       <div className="flex-1 flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-20 xl:px-24 relative overflow-hidden">
-        {/* Ambient Glow */}
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-terracotta-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
         <div className="mx-auto w-full max-w-md space-y-6">
           {/* Header */}
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-gold-500" />
-              <span>Begin Your Personal Ritual</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Free Patron Account</span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-              Create Patron Account
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+              Create Your Account
             </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Join the SalonBook Society to book luxury treatments, manage your schedule, and experience bespoke beauty rituals.
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Book hair transformations, facial therapies, and track all your appointments in real time.
             </p>
           </div>
 
           {/* Error Banner */}
           {formError && (
-            <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs sm:text-sm flex items-center gap-2">
+            <div className="p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{formError}</span>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" htmlFor="name">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="name">
                 Full Legal Name
               </label>
               <div className="relative">
@@ -114,17 +111,17 @@ export default function SignUpPage() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Sophia Montgomery"
+                  placeholder="e.g. Elena Rostova"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 h-12 rounded-xl bg-background border-input focus:border-gold-500/50 text-sm"
+                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" htmlFor="email">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="email">
                 Email Address
               </label>
               <div className="relative">
@@ -132,45 +129,45 @@ export default function SignUpPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="sophia@example.com"
+                  placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 rounded-xl bg-background border-input focus:border-gold-500/50 text-sm"
+                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" htmlFor="phone">
-                Mobile Number (Optional)
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="phone">
+                Phone Number <span className="text-muted-foreground font-normal">(Optional)</span>
               </label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+1 (555) 018-9922"
+                  placeholder="+1 (555) 000-0000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="pl-10 h-12 rounded-xl bg-background border-input focus:border-gold-500/50 text-sm"
+                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground" htmlFor="password">
-                Create Password
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground" htmlFor="password">
+                Password <span className="text-muted-foreground font-normal">(Min 6 chars)</span>
               </label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Minimum 6 characters"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-12 rounded-xl bg-background border-input focus:border-gold-500/50 text-sm"
+                  className="pl-10 h-11 rounded-xl bg-background border-input text-xs"
                   required
                 />
               </div>
@@ -178,72 +175,50 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              variant="luxury"
-              className="w-full h-12 text-xs uppercase tracking-wider font-bold rounded-xl gap-2 mt-2 shadow-lg shadow-gold-500/20"
+              variant="gradient"
+              className="w-full h-11 text-xs font-bold rounded-xl gap-2 shadow-md shadow-primary/25 mt-2"
               disabled={submitting || isLoading}
             >
               {submitting ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Registering Membership...
+                  <Loader2 className="w-4 h-4 animate-spin" /> Creating Account...
                 </>
               ) : (
                 <>
-                  Complete Registration <ArrowRight className="w-4 h-4" />
+                  Create Free Account <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </Button>
           </form>
 
           {/* Footer note */}
-          <div className="pt-6 border-t border-border/80 text-center space-y-2">
-            <p className="text-xs text-muted-foreground">
-              Already have a SalonBook account?{" "}
-              <Link href="/sign-in" className="text-primary font-bold hover:underline">
-                Sign in to Lounge
-              </Link>
-            </p>
-            <p className="text-[11px] text-zinc-400 leading-relaxed">
-              By creating an account, you agree to our Privacy Charter and Salon Etiquette Policies.
-            </p>
+          <div className="text-center text-xs text-muted-foreground">
+            Already have an account?{" "}
+            <Link href="/sign-in" className="font-bold text-primary hover:underline">
+              Sign In
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Right Side Visual & Benefits Panel */}
-      <div className="hidden lg:flex flex-1 relative bg-noir-900 items-center justify-center p-12 overflow-hidden border-l border-gold-500/20">
-        <div
-          className="absolute inset-0 opacity-35 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=80')",
-          }}
+      {/* Right Column: Hero Visual */}
+      <div className="hidden lg:block lg:flex-1 relative bg-muted overflow-hidden">
+        <SafeImage
+          src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85"
+          alt="Spa Radiance"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-noir-900 via-noir-900/60 to-transparent" />
-
-        <div className="relative z-10 max-w-lg text-white space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/20 backdrop-blur-md border border-gold-500/30 text-xs text-gold-300 font-semibold">
-            <Star className="w-3.5 h-3.5 fill-gold-400 text-gold-400" />
-            <span>Privileged Patron Privileges</span>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+        <div className="absolute bottom-12 left-12 right-12 text-white space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold">
+            <Scissors className="w-3.5 h-3.5" /> Client Privileges
           </div>
-
-          <h2 className="font-serif text-3xl sm:text-4xl font-normal leading-snug text-champagne-100">
-            Slow, considered beauty rituals designed around your cadence.
-          </h2>
-
-          <div className="space-y-4 text-xs text-zinc-300">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-4 h-4 text-gold-400 shrink-0 mt-0.5" />
-              <span>Instant slot reservations with real-time specialist schedule confirmation.</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-4 h-4 text-gold-400 shrink-0 mt-0.5" />
-              <span>Paris, London, and Tokyo trained resident artists dedicated entirely to you.</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-4 h-4 text-gold-400 shrink-0 mt-0.5" />
-              <span>Frictionless Stripe checkout upon appointment confirmation with transparent invoices.</span>
-            </div>
-          </div>
+          <h3 className="text-2xl font-black">
+            Seamless appointments, zero waiting lines.
+          </h3>
+          <p className="text-xs text-slate-300 leading-relaxed max-w-md">
+            Join thousands of satisfied patrons booking their beauty rituals effortlessly.
+          </p>
         </div>
       </div>
     </div>

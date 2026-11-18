@@ -12,7 +12,7 @@ import {
   XCircle,
   Upload,
   AlertCircle,
-  ImageIcon,
+  Sparkles,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Service, ApiResponse } from "@/types";
@@ -27,6 +27,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -265,7 +266,6 @@ export default function AdminServicesPage() {
     }
   };
 
-  // Filtered List
   const filteredServices = useMemo(() => {
     return services.filter((s) => {
       const matchesSearch =
@@ -289,35 +289,35 @@ export default function AdminServicesPage() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-foreground">
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
             Manage Salon Catalog
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Create, edit, toggle visibility, and host treatment images via ImgBB.
+            Create, edit, toggle visibility, and upload images hosted via ImgBB.
           </p>
         </div>
 
         <Button
-          variant="luxury"
+          variant="gradient"
           size="sm"
-          className="gap-2"
+          className="gap-2 rounded-xl text-xs font-bold"
           onClick={openCreateModal}
         >
           <Plus className="w-4 h-4" />
-          <span>New Service</span>
+          <span>Add New Service</span>
         </Button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-card rounded-2xl border border-border/70 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="bg-card rounded-2xl border border-border p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-3 shadow-sm">
         {/* Search Input */}
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search services by name..."
+            placeholder="Search services by title..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-10 text-xs"
+            className="pl-10 h-10 text-xs rounded-xl"
           />
         </div>
 
@@ -348,32 +348,32 @@ export default function AdminServicesPage() {
       </div>
 
       {/* Services Table */}
-      <div className="bg-card rounded-2xl border border-border/70 p-6 sm:p-8">
+      <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
         {loading ? (
           <div className="py-20 text-center text-muted-foreground text-sm space-y-3">
             <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
-            <p>Loading salon catalog...</p>
+            <p className="text-xs font-semibold">Loading salon catalog...</p>
           </div>
         ) : filteredServices.length === 0 ? (
-          <div className="py-16 text-center space-y-4 max-w-sm mx-auto">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+          <div className="py-16 text-center space-y-3 max-w-sm mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary mx-auto flex items-center justify-center font-bold">
               <Scissors className="w-6 h-6" />
             </div>
-            <h4 className="font-serif text-lg font-semibold text-foreground">
+            <h4 className="text-lg font-bold text-foreground">
               No Services Found
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed">
               No services match your active search and filter parameters.
             </p>
-            <Button variant="outline" size="sm" onClick={() => { setSearch(""); setCategoryFilter("all"); setStatusFilter("all"); }}>
+            <Button variant="outline" size="sm" onClick={() => { setSearch(""); setCategoryFilter("all"); setStatusFilter("all"); }} className="rounded-xl text-xs font-bold">
               Reset Filters
             </Button>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
+            <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-border/80 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+                <tr className="border-b border-border text-muted-foreground font-bold uppercase tracking-wider text-[10px]">
                   <th className="pb-3 pr-4">Service</th>
                   <th className="pb-3 px-4">Category</th>
                   <th className="pb-3 px-4">Price</th>
@@ -382,25 +382,20 @@ export default function AdminServicesPage() {
                   <th className="pb-3 pl-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60">
+              <tbody className="divide-y divide-border">
                 {filteredServices.map((service) => (
-                  <tr key={service._id} className="hover:bg-muted/40 transition-colors">
+                  <tr key={service._id} className="hover:bg-secondary/40 transition-colors">
                     <td className="py-4 pr-4">
                       <div className="flex items-center gap-3">
-                        {service.images?.[0] ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={service.images[0]}
+                        <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 border border-border bg-muted">
+                          <SafeImage
+                            src={service.images?.[0] || ""}
                             alt={service.title}
-                            className="w-12 h-12 rounded-lg object-cover border border-border shrink-0"
+                            className="w-full h-full object-cover"
                           />
-                        ) : (
-                          <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
-                            SB
-                          </div>
-                        )}
+                        </div>
                         <div>
-                          <p className="font-semibold text-foreground text-sm leading-tight">
+                          <p className="font-bold text-foreground text-xs leading-tight">
                             {service.title}
                           </p>
                           <p className="text-[11px] text-muted-foreground line-clamp-1 max-w-[200px]">
@@ -411,12 +406,12 @@ export default function AdminServicesPage() {
                     </td>
 
                     <td className="py-4 px-4 whitespace-nowrap">
-                      <Badge variant="outline" className="text-[11px]">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-secondary text-foreground border border-border">
                         {service.category}
-                      </Badge>
+                      </span>
                     </td>
 
-                    <td className="py-4 px-4 font-semibold text-foreground whitespace-nowrap">
+                    <td className="py-4 px-4 font-bold text-foreground whitespace-nowrap">
                       {formatCurrency(service.price)}
                     </td>
 
@@ -430,11 +425,11 @@ export default function AdminServicesPage() {
                         className="cursor-pointer"
                         title="Click to toggle status"
                       >
-                        <Badge
-                          className={`gap-1 capitalize text-[11px] ${
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                             service.isActive
-                              ? "bg-emerald-600 text-white"
-                              : "bg-muted text-muted-foreground"
+                              ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+                              : "bg-slate-500/10 text-slate-500 border border-slate-500/20"
                           }`}
                         >
                           {service.isActive ? (
@@ -446,16 +441,16 @@ export default function AdminServicesPage() {
                               <XCircle className="w-3 h-3" /> Inactive
                             </>
                           )}
-                        </Badge>
+                        </span>
                       </button>
                     </td>
 
                     <td className="py-4 pl-4 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1.5">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-8 text-xs gap-1"
+                          className="h-8 text-xs font-bold rounded-lg gap-1 px-2.5"
                           onClick={() => openEditModal(service)}
                         >
                           <Edit className="w-3 h-3" />
@@ -464,7 +459,7 @@ export default function AdminServicesPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 text-xs text-destructive hover:bg-destructive/10"
+                          className="h-8 text-xs font-bold rounded-lg text-destructive hover:bg-destructive/10 px-2"
                           onClick={() => {
                             setServiceToDelete(service);
                             setDeleteModalOpen(true);
@@ -484,10 +479,10 @@ export default function AdminServicesPage() {
 
       {/* Add / Edit Service Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="font-serif text-2xl">
-              {editingService ? "Edit Service" : "Add New Salon Ritual"}
+            <DialogTitle className="text-xl font-bold">
+              {editingService ? "Edit Service" : "Add New Salon Service"}
             </DialogTitle>
             <DialogDescription className="text-xs">
               Configure treatment details, pricing, duration, and upload high-res imagery to ImgBB.
@@ -496,21 +491,22 @@ export default function AdminServicesPage() {
 
           <form onSubmit={handleSaveService} className="space-y-4 pt-2">
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Service Title
               </label>
               <Input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. French Balayage & Glaze"
+                placeholder="e.g. Signature French Balayage"
+                className="rounded-xl text-xs"
                 required
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Ritual Category
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Category
                 </label>
                 <select
                   value={category}
@@ -526,7 +522,7 @@ export default function AdminServicesPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Price (USD)
                 </label>
                 <Input
@@ -536,6 +532,7 @@ export default function AdminServicesPage() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder="150"
+                  className="rounded-xl text-xs"
                   required
                 />
               </div>
@@ -543,7 +540,7 @@ export default function AdminServicesPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Duration (Minutes)
                 </label>
                 <Input
@@ -553,12 +550,13 @@ export default function AdminServicesPage() {
                   value={durationMinutes}
                   onChange={(e) => setDurationMinutes(e.target.value)}
                   placeholder="60"
+                  className="rounded-xl text-xs"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Visibility Status
                 </label>
                 <select
@@ -566,99 +564,83 @@ export default function AdminServicesPage() {
                   onChange={(e) => setIsActive(e.target.value === "active")}
                   className="w-full h-10 px-3 text-xs rounded-xl bg-background border border-border text-foreground"
                 >
-                  <option value="active">Active (Visible to Guests)</option>
-                  <option value="inactive">Inactive (Draft / Hidden)</option>
+                  <option value="active">Active (Visible to Clients)</option>
+                  <option value="inactive">Inactive (Hidden)</option>
                 </select>
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Description
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                placeholder="Describe treatment techniques, botanical extracts, and guest benefits..."
                 className="w-full p-3 text-xs rounded-xl bg-background border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="Comprehensive service description..."
                 required
               />
             </div>
 
-            {/* ImgBB File Upload Requirement */}
-            <div className="space-y-2 p-4 rounded-xl border border-dashed border-border bg-muted/20">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-foreground flex items-center gap-1.5">
-                  <Upload className="w-3.5 h-3.5 text-primary" />
-                  Service Image (Hosted on ImgBB)
-                </span>
-                {imageUrl && (
-                  <Badge variant="outline" className="text-[10px] text-emerald-600 border-emerald-600/30">
-                    Uploaded
-                  </Badge>
-                )}
-              </div>
+            {/* ImgBB Image Upload */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Service Image (ImgBB Hosted)
+              </label>
 
-              <div className="flex items-center gap-4">
+              {imageUrl && (
+                <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-border bg-muted mb-2">
+                  <SafeImage
+                    src={imageUrl}
+                    alt="Uploaded preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
                 <input
                   type="file"
+                  id="service-image-input"
                   accept="image/*"
-                  id="service-file-input"
-                  className="hidden"
                   onChange={handleImageFileUpload}
+                  className="hidden"
                   disabled={uploadingImage}
                 />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="text-xs gap-1.5"
-                  disabled={uploadingImage}
-                  onClick={() =>
-                    document.getElementById("service-file-input")?.click()
-                  }
+                <label
+                  htmlFor="service-image-input"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-secondary hover:bg-secondary/80 text-xs font-bold cursor-pointer transition-all"
                 >
-                  <Upload className="w-3.5 h-3.5" />
-                  {uploadingImage ? "Uploading to ImgBB..." : "Choose Image File"}
-                </Button>
+                  <Upload className="w-4 h-4 text-primary" />
+                  <span>{uploadingImage ? "Uploading to ImgBB..." : "Upload Image File"}</span>
+                </label>
 
-                {imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="w-14 h-14 rounded-lg object-cover border border-border shrink-0"
-                  />
-                ) : (
-                  <span className="text-xs text-muted-foreground">
-                    Required: File upload via ImgBB API
+                {imageUrl && (
+                  <span className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                    <CheckCircle className="w-3.5 h-3.5" /> Hosted on ImgBB
                   </span>
                 )}
               </div>
             </div>
 
-            <DialogFooter className="pt-3 gap-2">
+            <DialogFooter className="pt-4 border-t border-border gap-2">
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
                 onClick={() => setModalOpen(false)}
-                disabled={submitting}
+                className="rounded-xl text-xs font-bold"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
-                variant="luxury"
-                size="sm"
+                variant="gradient"
                 disabled={submitting || uploadingImage}
+                className="rounded-xl text-xs font-bold"
               >
-                {submitting
-                  ? "Saving..."
-                  : editingService
-                  ? "Update Service"
-                  : "Create Service"}
+                {submitting ? "Saving Service..." : editingService ? "Save Changes" : "Create Service"}
               </Button>
             </DialogFooter>
           </form>
@@ -667,23 +649,21 @@ export default function AdminServicesPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="font-serif text-xl">
-              Delete Service?
+            <DialogTitle className="text-lg font-bold">
+              Delete Service from Catalog?
             </DialogTitle>
-            <DialogDescription className="text-xs leading-relaxed pt-2">
-              Are you sure you want to permanently delete{" "}
-              <strong className="text-foreground">{serviceToDelete?.title}</strong>?
-              This will remove it from all catalog listings.
+            <DialogDescription className="text-xs text-muted-foreground">
+              Are you sure you want to remove &quot;{serviceToDelete?.title}&quot;? Clients will no longer be able to book this treatment.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="mt-4 gap-2">
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setDeleteModalOpen(false)}
-              disabled={deleting}
+              className="rounded-xl text-xs font-bold"
             >
               Cancel
             </Button>
@@ -692,8 +672,9 @@ export default function AdminServicesPage() {
               size="sm"
               onClick={confirmDelete}
               disabled={deleting}
+              className="rounded-xl text-xs font-bold"
             >
-              {deleting ? "Deleting..." : "Permanently Delete"}
+              {deleting ? "Deleting..." : "Yes, Delete Service"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -4,67 +4,67 @@
 
 @layer base {
   :root {
-    /* Editorial Botanical Luxury — Warm Ivory & Deep Forest */
-    --background: 40 28% 97%; /* #FAF7F2 Warm Ivory */
-    --foreground: 155 20% 10%; /* #141C18 Deep Forest Noir */
+    /* Modern Neo-Sleek Studio — Crisp Ice Canvas & Electric Indigo */
+    --background: 220 20% 98%; /* #F8FAFC */
+    --foreground: 222 47% 11%; /* #0F172A */
 
     --card: 0 0% 100%;
-    --card-foreground: 155 20% 10%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 155 20% 10%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 157 28% 14%; /* #1A2E26 Deep Forest Green */
-    --primary-foreground: 40 25% 97%;
+    --primary: 246 80% 60%; /* #6366F1 Electric Indigo */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 22% 93%; /* Soft Cream */
-    --secondary-foreground: 155 20% 14%;
+    --secondary: 220 14% 96%; /* #F1F5F9 */
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 40 18% 92%;
-    --muted-foreground: 155 10% 45%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 42 50% 56%; /* #C5A059 Champagne Gold */
+    --accent: 262 83% 58%; /* #8B5CF6 Vibrant Violet */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 40 16% 87%;
-    --input: 40 16% 87%;
-    --ring: 157 28% 14%;
+    --border: 220 13% 90%;
+    --input: 220 13% 90%;
+    --ring: 246 80% 60%;
 
-    --radius: 1rem;
+    --radius: 0.85rem;
   }
 
   .dark {
-    /* Haute Nocturne — Velvet Forest & Luminous Champagne */
-    --background: 156 30% 6%; /* #0B130F Velvet Obsidian */
-    --foreground: 40 25% 96%; /* #F8F5EE Warm Champagne */
+    /* Midnight Obsidian & Luminous Ultraviolet */
+    --background: 224 71% 4%; /* #070A11 */
+    --foreground: 210 40% 98%; /* #F8FAFC */
 
-    --card: 156 24% 9%; /* #111D17 Dark Forest Velvet */
-    --card-foreground: 40 25% 96%;
+    --card: 222 47% 8%; /* #0B1120 */
+    --card-foreground: 210 40% 98%;
 
-    --popover: 156 24% 9%;
-    --popover-foreground: 40 25% 96%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 42 55% 60%; /* Champagne Gold in Dark Mode */
-    --primary-foreground: 156 30% 6%;
+    --primary: 246 80% 64%; /* #6366F1 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 156 20% 13%;
-    --secondary-foreground: 40 25% 92%;
+    --secondary: 217 33% 13%; /* #151E2E */
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 156 18% 13%;
-    --muted-foreground: 100 10% 65%;
+    --muted: 217 33% 13%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 100 15% 65%; /* Muted Sage */
-    --accent-foreground: 156 30% 6%;
+    --accent: 262 83% 65%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62% 35%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 156 20% 16%;
-    --input: 156 20% 16%;
-    --ring: 42 55% 60%;
+    --border: 217 33% 15%;
+    --input: 217 33% 15%;
+    --ring: 246 80% 64%;
   }
 }
 
@@ -76,79 +76,57 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-sans;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   ::selection {
-    background-color: rgba(182, 194, 177, 0.35);
-    color: #141c18;
+    background-color: rgba(99, 102, 241, 0.25);
+    color: #4f46e5;
   }
   .dark ::selection {
-    background-color: rgba(111, 130, 107, 0.4);
-    color: #f7eed8;
+    background-color: rgba(139, 92, 246, 0.35);
+    color: #c4b5fd;
   }
+
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-serif), Georgia, serif;
-    letter-spacing: -0.02em;
+    @apply font-sans font-bold tracking-tight text-foreground;
   }
 }
 
-/* Custom Scrollbar for Editorial Sanctuary */
+/* Custom modern sleek scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(111, 130, 107, 0.3);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(197, 160, 89, 0.55);
+  background: rgba(99, 102, 241, 0.5);
 }
 
-/* Glassmorphism & Visual Polish */
-.glass-luxury {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(197, 160, 89, 0.22);
-  box-shadow: 0 10px 30px -10px rgba(26, 46, 38, 0.06);
+/* Smooth glass effect helper */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
-.dark .glass-luxury {
-  background: rgba(17, 29, 23, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(197, 160, 89, 0.2);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+.dark .glass-panel {
+  background: rgba(11, 17, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 41, 59, 0.7);
 }
 
-/* Subtle Editorial Gradients */
-.text-gradient-gold {
-  background: linear-gradient(135deg, #c5a059 0%, #e2c785 50%, #aa8036 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-forest {
-  background: linear-gradient(135deg, #1a2e26 0%, #3c6152 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.dark .text-gradient-forest {
-  background: linear-gradient(135deg, #f5f0e6 0%, #adc0ac 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Subtle botanical hairline */
-.border-botanical {
-  border-color: rgba(138, 154, 134, 0.25);
-}
-
-.border-gold-subtle {
-  border-color: rgba(197, 160, 89, 0.28);
+/* Shimmer animation */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }

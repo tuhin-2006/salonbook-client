@@ -14,7 +14,6 @@ import {
   ArrowUpRight,
   ShieldCheck,
   CreditCard,
-  Crown,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { ApiResponse } from "@/types";
@@ -45,7 +44,7 @@ interface AnalyticsData {
   monthlyRevenue: Array<{ month: string; revenue: number; bookings: number }>;
 }
 
-const PIE_COLORS = ["#be9643", "#c4755f", "#059669", "#2563EB", "#9333EA", "#D97706"];
+const PIE_COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#14b8a6", "#3b82f6", "#f59e0b"];
 
 export default function AdminOverviewPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -76,7 +75,7 @@ export default function AdminOverviewPage() {
 
   const statCards = [
     {
-      label: "Registered Patrons",
+      label: "Total Registered Patrons",
       value: data?.summary.totalUsers || 0,
       icon: Users,
       color: "text-blue-600 dark:text-blue-400",
@@ -84,19 +83,19 @@ export default function AdminOverviewPage() {
       href: "/admin/customers",
     },
     {
-      label: "Curated Offerings",
+      label: "Active Services",
       value: data?.summary.totalServices || 0,
       icon: Scissors,
-      color: "text-terracotta-600 dark:text-terracotta-400",
-      bg: "bg-terracotta-500/10",
+      color: "text-violet-600 dark:text-violet-400",
+      bg: "bg-violet-500/10",
       href: "/admin/services",
     },
     {
-      label: "All Reservations",
+      label: "Total Reservations",
       value: data?.summary.totalAppointments || 0,
       icon: Calendar,
-      color: "text-purple-600 dark:text-purple-400",
-      bg: "bg-purple-500/10",
+      color: "text-indigo-600 dark:text-indigo-400",
+      bg: "bg-indigo-500/10",
       href: "/admin/appointments",
     },
     {
@@ -116,66 +115,65 @@ export default function AdminOverviewPage() {
       href: "/admin/appointments?status=confirmed",
     },
     {
-      label: "Gross Stripe Volume",
+      label: "Stripe Revenue",
       value: formatCurrency(data?.summary.totalRevenue || 0),
       icon: DollarSign,
-      color: "text-gold-600 dark:text-gold-400",
-      bg: "bg-gold-500/10",
+      color: "text-pink-600 dark:text-pink-400",
+      bg: "bg-pink-500/10",
       href: "/admin/transactions",
-      isMoney: true,
     },
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600 dark:text-gold-400 mb-1">
-            <Crown className="w-3.5 h-3.5 text-gold-500" />
-            <span>Operational Directorate</span>
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary mb-1">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Salon Operations</span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            Salon Operational Telemetry
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+            Executive Telemetry & Metrics
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Real-time management across treatment menu, appointment requests, patron ledger, and Stripe payments.
+            Real-time management across salon catalog, client appointments, and Stripe revenue.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <Link href="/admin/services">
-            <Button variant="luxury" size="sm" className="gap-2 rounded-full px-5 text-xs font-semibold shadow-md shadow-gold-500/20">
+            <Button variant="gradient" size="sm" className="gap-2 rounded-xl text-xs font-bold">
               <Scissors className="w-3.5 h-3.5" />
-              <span>Manage Services Menu</span>
+              <span>Manage Services</span>
             </Button>
           </Link>
         </div>
       </div>
 
       {/* 6 Key Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
             <Link key={i} href={card.href}>
-              <Card className="p-6 bg-card border-gold-500/20 hover:border-gold-500/50 hover:shadow-xl transition-all rounded-3xl group">
+              <Card className="p-5 bg-card border-border hover:border-primary/50 hover:shadow-lg transition-all rounded-2xl group">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
                     {card.label}
                   </span>
                   <div
-                    className={`w-11 h-11 rounded-2xl ${card.bg} ${card.color} flex items-center justify-center group-hover:scale-105 transition-transform border border-border/60`}
+                    className={`w-10 h-10 rounded-xl ${card.bg} ${card.color} flex items-center justify-center group-hover:scale-105 transition-transform`}
                   >
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
                 <div className="mt-4 flex items-baseline justify-between">
-                  <h3 className="font-serif text-3xl font-bold text-foreground">
+                  <h3 className="text-2xl font-black text-foreground">
                     {loading ? "..." : card.value}
                   </h3>
-                  <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 font-semibold">
-                    Inspect <ArrowUpRight className="w-3.5 h-3.5" />
+                  <span className="text-xs text-muted-foreground group-hover:text-primary transition-colors flex items-center gap-0.5 font-bold">
+                    View <ArrowUpRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
               </Card>
@@ -187,48 +185,64 @@ export default function AdminOverviewPage() {
       {/* Analytics Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue Trend Area Chart */}
-        <div className="lg:col-span-2 bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 space-y-4 shadow-xl">
+        <div className="lg:col-span-2 bg-card rounded-2xl border border-border p-6 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-serif text-xl font-bold text-foreground">
-                Revenue & Reservation Growth
+              <h3 className="text-base font-bold text-foreground">
+                Revenue & Appointment Growth
               </h3>
               <p className="text-xs text-muted-foreground">
-                Verified monthly Stripe payment collections.
+                Monthly verified Stripe payment collections.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-semibold">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 font-bold">
               <TrendingUp className="w-3.5 h-3.5" />
-              <span>Live Telemetry</span>
+              <span>+18.4% MoM</span>
             </div>
           </div>
 
-          <div className="h-[280px] w-full pt-4">
-            {data?.monthlyRevenue && data.monthlyRevenue.length > 0 ? (
+          <div className="h-64 w-full pt-4">
+            {loading ? (
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                Loading revenue telemetry...
+              </div>
+            ) : data?.monthlyRevenue && data.monthlyRevenue.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data.monthlyRevenue}>
                   <defs>
                     <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#be9643" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#be9643" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="month" stroke="#888" fontSize={11} />
-                  <YAxis stroke="#888" fontSize={11} tickFormatter={(val) => `$${val}`} />
+                  <XAxis
+                    dataKey="month"
+                    stroke="#94a3b8"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#94a3b8"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(val) => `$${val}`}
+                  />
                   <Tooltip
-                    formatter={(val) => [`$${val}`, "Revenue"]}
                     contentStyle={{
-                      backgroundColor: "var(--card)",
-                      borderColor: "rgba(190, 150, 67, 0.3)",
-                      borderRadius: "1rem",
+                      backgroundColor: "rgba(15, 23, 42, 0.95)",
+                      borderRadius: "12px",
+                      border: "1px solid rgba(99, 102, 241, 0.3)",
                       fontSize: "12px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                      color: "#fff",
                     }}
+                    formatter={(val: unknown) => [formatCurrency(Number(val)), "Revenue"]}
                   />
                   <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#be9643"
+                    stroke="#6366f1"
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#revenueGrad)"
@@ -236,27 +250,28 @@ export default function AdminOverviewPage() {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-xs text-muted-foreground">
-                <Calendar className="w-8 h-8 opacity-40 mb-2" />
-                <span>Collecting monthly transaction telemetry...</span>
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                No revenue records available yet.
               </div>
             )}
           </div>
         </div>
 
         {/* Category Distribution Pie Chart */}
-        <div className="bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 space-y-4 shadow-xl">
+        <div className="bg-card rounded-2xl border border-border p-6 space-y-4 shadow-sm flex flex-col justify-between">
           <div>
-            <h3 className="font-serif text-xl font-bold text-foreground">
-              Catalog Category Mix
+            <h3 className="text-base font-bold text-foreground">
+              Services by Category
             </h3>
             <p className="text-xs text-muted-foreground">
-              Service offerings distributed across disciplines.
+              Catalog breakdown across salon specialties.
             </p>
           </div>
 
-          <div className="h-[240px] w-full flex items-center justify-center">
-            {data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
+          <div className="h-56 w-full flex items-center justify-center">
+            {loading ? (
+              <span className="text-xs text-muted-foreground">Analyzing offerings...</span>
+            ) : data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -265,11 +280,11 @@ export default function AdminOverviewPage() {
                     nameKey="_id"
                     cx="50%"
                     cy="50%"
-                    outerRadius={80}
                     innerRadius={50}
+                    outerRadius={80}
                     paddingAngle={3}
                   >
-                    {data.categoryDistribution.map((_entry, index) => (
+                    {data.categoryDistribution.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={PIE_COLORS[index % PIE_COLORS.length]}
@@ -278,32 +293,28 @@ export default function AdminOverviewPage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "var(--card)",
-                      borderColor: "rgba(190, 150, 67, 0.3)",
-                      borderRadius: "1rem",
+                      backgroundColor: "rgba(15, 23, 42, 0.95)",
+                      borderRadius: "12px",
+                      border: "1px solid rgba(99, 102, 241, 0.3)",
                       fontSize: "12px",
+                      color: "#fff",
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="text-xs text-muted-foreground">
-                No active categories found
-              </div>
+              <span className="text-xs text-muted-foreground">No categories defined yet</span>
             )}
           </div>
 
-          {/* Legend */}
-          <div className="grid grid-cols-2 gap-2 text-[11px] pt-3 border-t border-border">
-            {data?.categoryDistribution?.slice(0, 6).map((cat, idx) => (
-              <div key={idx} className="flex items-center gap-2 truncate">
-                <div
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}
+          <div className="pt-2 border-t border-border flex flex-wrap items-center justify-center gap-3 text-[11px] text-muted-foreground">
+            {data?.categoryDistribution.slice(0, 4).map((cat, i) => (
+              <div key={i} className="flex items-center gap-1.5 font-medium">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }}
                 />
-                <span className="truncate text-muted-foreground font-medium">
-                  {cat._id} ({cat.count})
-                </span>
+                <span>{cat._id} ({cat.count})</span>
               </div>
             ))}
           </div>

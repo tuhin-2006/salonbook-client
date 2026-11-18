@@ -53,7 +53,6 @@ export default function CustomerProfilePage() {
 
       if (res.data.success && res.data.data.url) {
         setImage(res.data.data.url);
-        // Persist immediately to profile
         await updateProfile({ image: res.data.data.url });
         toast.success("Profile photo updated successfully!");
       }
@@ -87,21 +86,21 @@ export default function CustomerProfilePage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
+    <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h2 className="font-serif text-2xl font-bold text-foreground">
+        <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
           Profile Settings
         </h2>
         <p className="text-xs text-muted-foreground mt-0.5">
-          Manage your personal atelier identity, contact information, and portrait photo.
+          Manage your contact details, phone number, and profile picture.
         </p>
       </div>
 
-      <div className="bg-card rounded-2xl border border-border/70 p-6 sm:p-8 space-y-8">
+      <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 space-y-6 shadow-sm">
         {/* Avatar Upload Section */}
-        <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-border/60">
+        <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-border">
           <div className="relative group">
-            <div className="w-24 h-24 rounded-full border-2 border-primary/30 bg-primary/10 flex items-center justify-center text-primary text-2xl font-serif font-bold overflow-hidden">
+            <div className="w-20 h-20 rounded-full border-2 border-primary/30 bg-primary/10 flex items-center justify-center text-primary text-xl font-bold overflow-hidden shadow-sm">
               {image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -116,9 +115,9 @@ export default function CustomerProfilePage() {
 
             <label
               htmlFor="avatar-upload"
-              className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
             >
-              <Camera className="w-6 h-6" />
+              <Camera className="w-5 h-5" />
             </label>
             <input
               id="avatar-upload"
@@ -132,118 +131,74 @@ export default function CustomerProfilePage() {
 
           <div className="space-y-1.5 text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-2">
-              <h3 className="font-semibold text-foreground text-base">
+              <h3 className="font-bold text-foreground text-base">
                 {name || "Valued Guest"}
               </h3>
-              <Badge variant="outline" className="capitalize text-[11px]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase">
                 {user?.role || "customer"}
-              </Badge>
+              </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {uploadingImage
-                ? "Uploading your new photo via ImgBB..."
-                : "Click the portrait or use the button below to upload a new avatar (Max 5MB)."}
+              Hover over the avatar to upload a new profile photo via ImgBB.
             </p>
-            <label htmlFor="avatar-upload">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="mt-2 text-xs"
-                disabled={uploadingImage}
-                onClick={() => document.getElementById("avatar-upload")?.click()}
-              >
-                {uploadingImage ? "Uploading..." : "Upload New Portrait"}
-              </Button>
-            </label>
           </div>
         </div>
 
-        {/* Profile Edit Form */}
-        <form onSubmit={handleSaveProfile} className="space-y-5">
+        {/* Profile Details Form */}
+        <form onSubmit={handleSaveProfile} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground" htmlFor="profile-name">
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Full Legal Name
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                id="profile-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="pl-10 h-11"
+                className="pl-10 h-11 rounded-xl text-xs"
+                placeholder="Your full name"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground" htmlFor="profile-email">
-              Email Address
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Email Address <span className="text-[10px] lowercase text-muted-foreground">(Locked)</span>
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                id="profile-email"
                 value={user?.email || ""}
                 disabled
-                className="pl-10 h-11 bg-muted/40 cursor-not-allowed text-muted-foreground"
+                className="pl-10 h-11 rounded-xl text-xs bg-muted/40 cursor-not-allowed"
               />
             </div>
-            <p className="text-[11px] text-muted-foreground">
-              Email is managed by authentication provider and cannot be modified directly.
-            </p>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground" htmlFor="profile-phone">
-              Phone Number
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Contact Phone
             </label>
             <div className="relative">
               <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                id="profile-phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+1 (555) 018-9922"
-                className="pl-10 h-11"
+                className="pl-10 h-11 rounded-xl text-xs"
+                placeholder="+1 (555) 000-0000"
               />
             </div>
           </div>
 
-          {/* Direct Photo URL fallback */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground" htmlFor="profile-image-url">
-              Profile Photo URL (Optional Alternative)
-            </label>
-            <Input
-              id="profile-image-url"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              placeholder="https://images.unsplash.com/..."
-              className="h-11 text-xs"
-            />
-          </div>
-
-          {/* Role & Security Guard indicator */}
-          <div className="p-3.5 rounded-xl bg-muted/30 border border-border/70 flex items-start gap-3 text-xs text-muted-foreground">
-            <Shield className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-foreground">Protected Account Profile</p>
-              <p className="text-[11px] text-muted-foreground">
-                Role attributes and access privilege levels are strictly server-enforced and cannot be elevated from this form.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex justify-end pt-2">
+          <div className="pt-2">
             <Button
               type="submit"
-              variant="luxury"
-              className="h-11 px-6 text-sm font-semibold"
+              variant="gradient"
               disabled={saving}
+              className="text-xs font-bold rounded-xl h-10 px-6 gap-2"
             >
-              {saving ? "Saving Changes..." : "Save Profile"}
+              {saving ? "Saving Changes..." : "Save Profile Details"}
             </Button>
           </div>
         </form>

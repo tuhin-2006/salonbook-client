@@ -1,5 +1,4 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 
 interface SectionHeadingProps {
   badge?: string;
@@ -16,21 +15,21 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
 }) => {
   return (
     <div
-      className={`space-y-3 mb-12 ${
+      className={`space-y-2 mb-10 ${
         center ? "text-center mx-auto max-w-2xl" : "max-w-2xl"
       }`}
     >
       {badge && (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-[0.2em] bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold-500" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs uppercase font-extrabold tracking-wider bg-primary/10 border border-primary/20 text-primary">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           {badge}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif tracking-tight text-foreground font-semibold leading-[1.2]">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-muted-foreground text-base md:text-lg leading-relaxed font-sans">
+        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
           {subtitle}
         </p>
       )}

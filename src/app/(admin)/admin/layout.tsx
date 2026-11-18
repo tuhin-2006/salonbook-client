@@ -17,7 +17,6 @@ import {
   LogOut,
   ChevronRight,
   ExternalLink,
-  Crown,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -46,9 +45,9 @@ export default function AdminDashboardLayout({
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="w-12 h-12 rounded-full border-4 border-gold-500 border-t-transparent animate-spin" />
-        <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold animate-pulse">
-          Authenticating Executive Desk Credentials...
+        <div className="w-10 h-10 rounded-full border-3 border-primary border-t-transparent animate-spin" />
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
+          Loading Admin Suite...
         </p>
       </div>
     );
@@ -66,31 +65,31 @@ export default function AdminDashboardLayout({
       exact: true,
     },
     {
-      label: "Manage Services",
+      label: "Salon Services",
       href: "/admin/services",
       icon: Scissors,
       exact: false,
     },
     {
-      label: "Appointments Dispatch",
+      label: "Appointments",
       href: "/admin/appointments",
       icon: Calendar,
       exact: false,
     },
     {
-      label: "Client Registry",
+      label: "Client Patrons",
       href: "/admin/customers",
       icon: Users,
       exact: false,
     },
     {
-      label: "Stripe Transactions",
+      label: "Stripe Payments",
       href: "/admin/transactions",
       icon: CreditCard,
       exact: false,
     },
     {
-      label: "Executive Profile",
+      label: "Admin Settings",
       href: "/admin/profile",
       icon: User,
       exact: false,
@@ -98,115 +97,118 @@ export default function AdminDashboardLayout({
   ];
 
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-secondary/30 dark:bg-background flex flex-col lg:flex-row">
-      {/* Desktop Executive Sidebar */}
-      <aside className="hidden lg:flex w-72 flex-col border-r border-gold-500/15 bg-card p-6 space-y-8 shrink-0 shadow-lg">
-        <div className="space-y-1 pb-4 border-b border-border/80">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold-600 dark:text-gold-400">
-            <Crown className="w-4 h-4 text-gold-500" />
-            <span>Executive Directorate</span>
-          </div>
-          <h2 className="font-serif text-2xl font-bold text-foreground">
-            Atelier Control
-          </h2>
-          <p className="text-[11px] text-muted-foreground">Madison Ave Flagship Operations</p>
-        </div>
-
-        <nav className="flex-1 space-y-1.5">
-          {navItems.map((item) => {
-            const isActive = item.exact
-              ? pathname === item.href
-              : pathname?.startsWith(item.href);
-            const Icon = item.icon;
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
-                  isActive
-                    ? "bg-gradient-to-r from-gold-500 to-terracotta-500 text-white shadow-md shadow-gold-500/20 font-bold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span>{item.label}</span>
-                </div>
-                {isActive && <ChevronRight className="w-4 h-4" />}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Quick Link to Public Sanctuary */}
-        <div className="pt-4 border-t border-border/80 space-y-3">
-          <Link href="/services">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-between text-xs rounded-xl border-gold-500/30 hover:bg-gold-500/10 font-semibold"
-            >
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-gold-500" />
-                Live Client Menu
+    <div className="min-h-screen bg-secondary/30 dark:bg-background flex flex-col lg:flex-row">
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex flex-col w-64 border-r border-border bg-card p-5 justify-between shrink-0">
+        <div className="space-y-6">
+          {/* Logo */}
+          <Link href="/admin" className="flex items-center gap-2.5 px-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
+              <Scissors className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-base tracking-tight text-foreground">
+                  SalonBook
+                </span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-primary/10 text-primary">
+                  Admin
+                </span>
+              </div>
+              <span className="text-[10px] text-muted-foreground block -mt-0.5">
+                Studio Management
               </span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </Button>
+            </div>
           </Link>
 
-          {/* User Signout */}
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-xs font-bold text-foreground">
-                {getInitials(user?.name || "Admin")}
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs font-bold text-foreground truncate max-w-[120px]">
-                  {user?.name}
-                </span>
-                <span className="text-[10px] uppercase tracking-wider text-gold-600 dark:text-gold-400 font-semibold">
-                  Managing Director
-                </span>
-              </div>
+          {/* Navigation Items */}
+          <nav className="space-y-1">
+            {navItems.map((item) => {
+              const isActive = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </div>
+                  {isActive && <ChevronRight className="w-3.5 h-3.5" />}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* User Card & Logout */}
+        <div className="pt-4 border-t border-border space-y-3">
+          <div className="flex items-center gap-3 px-2">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center">
+              {getInitials(user?.name || "Admin")}
             </div>
+            <div className="flex flex-col overflow-hidden">
+              <span className="text-xs font-bold text-foreground truncate">
+                {user?.name}
+              </span>
+              <span className="text-[10px] text-muted-foreground truncate">
+                {user?.email}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-1.5 pt-1">
+            <Link href="/" target="_blank">
+              <Button variant="ghost" size="sm" className="w-full text-[11px] h-8 font-bold gap-1">
+                <ExternalLink className="w-3 h-3" /> Live Site
+              </Button>
+            </Link>
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={logout}
-              className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-full"
-              title="Sign Out"
+              className="w-full text-[11px] h-8 font-bold text-destructive hover:bg-destructive/10 gap-1"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3 h-3" /> Exit
             </Button>
           </div>
         </div>
       </aside>
 
-      {/* Mobile Top Navbar for Admin */}
-      <div className="lg:hidden bg-card border-b border-gold-500/15 p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
-          <ShieldCheck className="w-4 h-4 text-gold-500" />
-          <span>Executive Desk</span>
+      {/* Mobile Top Header */}
+      <div className="lg:hidden bg-card border-b border-border p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
+            <Scissors className="w-4 h-4" />
+          </div>
+          <span className="font-extrabold text-sm text-foreground">
+            SalonBook Admin
+          </span>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="rounded-full border-border/80"
+        <button
           onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          className="p-2 rounded-xl text-foreground hover:bg-secondary border border-border"
         >
           {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          <span className="ml-2 text-xs font-semibold">Menu</span>
-        </Button>
+        </button>
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Mobile Sidebar Drawer */}
       {mobileSidebarOpen && (
-        <div className="lg:hidden bg-card border-b border-border p-4 space-y-2 animate-in slide-in-from-top-2">
+        <div className="lg:hidden bg-card border-b border-border p-4 space-y-2">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
-              : pathname?.startsWith(item.href);
+              : pathname.startsWith(item.href);
             const Icon = item.icon;
 
             return (
@@ -214,10 +216,10 @@ export default function AdminDashboardLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileSidebarOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold ${
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold ${
                   isActive
-                    ? "bg-gold-500 text-white font-bold"
-                    : "text-foreground hover:bg-muted"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -228,8 +230,8 @@ export default function AdminDashboardLayout({
         </div>
       )}
 
-      {/* Main Administrative Viewport */}
-      <main className="flex-1 p-6 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
+      {/* Main Admin Content */}
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
         {children}
       </main>
     </div>

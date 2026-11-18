@@ -14,6 +14,7 @@ import {
   Filter,
   Loader2,
   ShieldCheck,
+  Scissors,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
@@ -65,7 +66,7 @@ export default function CustomerAppointmentsPage() {
 
   const handleCancelClick = (appointment: Appointment) => {
     if (appointment.status !== "pending") {
-      toast.error("Per atelier policy, only pending appointment requests can be cancelled.");
+      toast.error("Only pending appointment requests can be cancelled.");
       return;
     }
     setAppointmentToCancel(appointment);
@@ -82,8 +83,7 @@ export default function CustomerAppointmentsPage() {
       );
 
       if (res.data.success) {
-        toast.success("Appointment reservation has been cancelled.");
-        // Refresh local state
+        toast.success("Appointment request cancelled.");
         setAppointments((prev) =>
           prev.map((app) =>
             app._id === appointmentToCancel._id
@@ -110,7 +110,7 @@ export default function CustomerAppointmentsPage() {
       );
 
       if (res.data.success && res.data.data.checkoutUrl) {
-        toast.info("Connecting to secure Stripe Checkout gateway...");
+        toast.info("Redirecting to secure Stripe Checkout...");
         window.location.href = res.data.data.checkoutUrl;
       } else {
         toast.error("Could not generate Stripe Checkout session.");
@@ -122,7 +122,6 @@ export default function CustomerAppointmentsPage() {
     }
   };
 
-  // Filtered list
   const filteredAppointments = appointments.filter((app) => {
     if (activeTab === "all") return true;
     return app.status === activeTab;
@@ -132,24 +131,24 @@ export default function CustomerAppointmentsPage() {
     switch (status) {
       case "confirmed":
         return (
-          <Badge className="bg-emerald-600/15 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 gap-1 capitalize font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 capitalize">
             <CheckCircle2 className="w-3.5 h-3.5" />
             Confirmed
-          </Badge>
+          </span>
         );
       case "cancelled":
         return (
-          <Badge variant="destructive" className="gap-1 capitalize font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-destructive/10 text-destructive border border-destructive/20 capitalize">
             <XCircle className="w-3.5 h-3.5" />
             Cancelled
-          </Badge>
+          </span>
         );
       default:
         return (
-          <Badge variant="secondary" className="bg-gold-500/15 text-gold-700 dark:text-gold-400 border border-gold-500/30 gap-1 capitalize font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 capitalize">
             <Clock className="w-3.5 h-3.5" />
-            Pending Approval
-          </Badge>
+            Pending
+          </span>
         );
     }
   };
@@ -157,41 +156,40 @@ export default function CustomerAppointmentsPage() {
   const getPaymentBadge = (paymentStatus?: string) => {
     if (paymentStatus === "paid") {
       return (
-        <Badge className="bg-emerald-600 text-white gap-1 text-[10px] uppercase font-bold tracking-wider">
-          <CheckCircle2 className="w-3 h-3" />
-          Paid
-        </Badge>
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-emerald-600 text-white">
+          <CheckCircle2 className="w-3 h-3" /> Paid
+        </span>
       );
     }
     return (
-      <Badge variant="outline" className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider border-border">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-secondary text-muted-foreground border border-border">
         Unpaid
-      </Badge>
+      </span>
     );
   };
 
   return (
     <div className="space-y-6">
-      {/* Header & Filter Controls */}
+      {/* Header & Tab Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-            My Salon Reservations
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">
+            My Appointments
           </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Review booked treatments, complete Stripe payments on confirmed sessions, or manage pending requests.
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage your booked treatments, cancel pending requests, or pay with Stripe when confirmed.
           </p>
         </div>
 
         {/* Tab Filters */}
-        <div className="inline-flex items-center p-1 rounded-2xl bg-card border border-border/80 text-xs">
+        <div className="inline-flex items-center p-1 rounded-xl bg-card border border-border text-xs self-start sm:self-auto">
           {(["all", "pending", "confirmed", "cancelled"] as FilterTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3.5 py-1.5 rounded-xl capitalize font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg capitalize font-bold transition-all ${
                 activeTab === tab
-                  ? "bg-gradient-to-r from-gold-500 to-terracotta-500 text-white shadow-md font-bold"
+                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -201,201 +199,189 @@ export default function CustomerAppointmentsPage() {
         </div>
       </div>
 
-      {/* Main Table / List */}
-      <div className="bg-card rounded-3xl border border-gold-500/20 p-6 sm:p-8 shadow-xl">
-        {loading ? (
-          <div className="py-20 text-center text-muted-foreground text-sm space-y-3">
-            <div className="w-8 h-8 rounded-full border-2 border-gold-500 border-t-transparent animate-spin mx-auto" />
-            <p className="text-xs font-semibold text-muted-foreground">Loading appointments ledger...</p>
-          </div>
-        ) : filteredAppointments.length === 0 ? (
-          <div className="py-16 text-center space-y-4 max-w-sm mx-auto">
-            <div className="w-12 h-12 rounded-full bg-gold-500/10 text-gold-500 mx-auto flex items-center justify-center">
-              <Calendar className="w-6 h-6" />
-            </div>
-            <h4 className="font-serif text-xl font-bold text-foreground">
-              No {activeTab !== "all" ? activeTab : ""} Appointments
-            </h4>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {activeTab === "all"
-                ? "You have not scheduled any appointments at SalonBook yet."
-                : `You currently have no ${activeTab} reservations in your calendar.`}
-            </p>
-            <Link href="/services">
-              <Button variant="luxury" size="sm" className="mt-2 rounded-full text-xs font-semibold">
-                Browse Rituals Menu
-              </Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead>
-                <tr className="border-b border-border/80 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-                  <th className="pb-3 pr-4">Service</th>
-                  <th className="pb-3 px-4">Date & Time</th>
-                  <th className="pb-3 px-4">Fee</th>
-                  <th className="pb-3 px-4">Booking Status</th>
-                  <th className="pb-3 px-4">Payment</th>
-                  <th className="pb-3 pl-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {filteredAppointments.map((app) => {
-                  const service = app.serviceId;
-                  const isPending = app.status === "pending";
-                  const isConfirmed = app.status === "confirmed";
-                  const isUnpaid = (app as unknown as { paymentStatus?: string }).paymentStatus !== "paid";
-                  const canPayNow = isConfirmed && isUnpaid;
+      {/* Appointment Cards */}
+      {loading ? (
+        <div className="py-20 text-center space-y-3 bg-card rounded-2xl border border-border">
+          <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
+          <p className="text-xs text-muted-foreground font-semibold">
+            Loading your appointments...
+          </p>
+        </div>
+      ) : filteredAppointments.length === 0 ? (
+        <div className="py-16 text-center space-y-3 bg-card rounded-2xl border border-dashed border-border p-8 max-w-md mx-auto">
+          <Scissors className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
+          <h3 className="text-base font-bold text-foreground">
+            No Appointments Found
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            {activeTab === "all"
+              ? "You haven't made any appointments yet."
+              : `You have no ${activeTab} appointments at this time.`}
+          </p>
+          <Link href="/services">
+            <Button variant="gradient" size="sm" className="text-xs font-bold rounded-xl mt-2">
+              Browse Services
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredAppointments.map((app) => {
+            const service =
+              typeof app.serviceId === "object" ? app.serviceId : null;
+            const serviceTitle = service?.title || "Salon Service";
+            const serviceCategory = service?.category || "Beauty";
+            const serviceDuration = service?.durationMinutes || 60;
 
-                  return (
-                    <tr key={app._id} className="hover:bg-muted/40 transition-colors">
-                      {/* Service Info */}
-                      <td className="py-4 pr-4">
-                        <div className="flex items-center gap-3">
-                          {service?.images?.[0] ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={service.images[0]}
-                              alt={service.title}
-                              className="w-14 h-14 rounded-2xl object-cover border border-border shrink-0"
-                            />
-                          ) : (
-                            <div className="w-14 h-14 rounded-2xl bg-gold-500/10 flex items-center justify-center text-gold-600 font-serif font-bold shrink-0">
-                              SB
-                            </div>
-                          )}
-                          <div>
-                            <p className="font-serif font-bold text-foreground text-sm leading-tight">
-                              {service?.title || "Bespoke Treatment"}
-                            </p>
-                            <span className="text-[11px] text-muted-foreground">
-                              {service?.category || "Salon"} · {service?.durationMinutes || 60} mins
-                            </span>
-                          </div>
-                        </div>
-                      </td>
+            const isPending = app.status === "pending";
+            const isConfirmed = app.status === "confirmed";
+            const isUnpaid = app.paymentStatus === "unpaid" || !app.paymentStatus;
+            const canPay = isConfirmed && isUnpaid;
+            const canCancel = isPending;
 
-                      {/* Date & Time */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="font-semibold text-foreground">
-                          {formatDate(app.appointmentDate)}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {app.timeSlot}
-                        </div>
-                      </td>
+            return (
+              <div
+                key={app._id}
+                className="bg-card rounded-2xl border border-border p-5 sm:p-6 shadow-sm hover:border-primary/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6"
+              >
+                {/* Left: Info */}
+                <div className="space-y-2 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-secondary text-muted-foreground border border-border">
+                      {serviceCategory}
+                    </span>
+                    {getStatusBadge(app.status)}
+                    {getPaymentBadge(app.paymentStatus)}
+                  </div>
 
-                      {/* Price */}
-                      <td className="py-4 px-4 font-serif font-bold text-foreground whitespace-nowrap">
-                        {formatCurrency(service?.price || 0)}
-                      </td>
+                  <h3 className="text-lg font-bold text-foreground">
+                    {serviceTitle}
+                  </h3>
 
-                      {/* Booking Status Badge */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        {getStatusBadge(app.status)}
-                      </td>
+                  <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 font-semibold text-foreground">
+                      <Calendar className="w-3.5 h-3.5 text-primary" />
+                      {formatDate(app.appointmentDate || app.date || "")}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-primary" />
+                      {app.timeSlot} ({serviceDuration} mins)
+                    </span>
+                    <span>•</span>
+                    <span className="text-foreground font-black text-sm">
+                      {formatCurrency(app.price || app.servicePrice || service?.price || 0)}
+                    </span>
+                  </div>
 
-                      {/* Payment Status Badge */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        {getPaymentBadge((app as unknown as { paymentStatus?: string }).paymentStatus)}
-                      </td>
+                  {app.specialist && (
+                    <p className="text-xs text-muted-foreground">
+                      Assigned Stylist:{" "}
+                      <span className="font-semibold text-foreground">
+                        {app.specialist}
+                      </span>
+                    </p>
+                  )}
+                </div>
 
-                      {/* Actions */}
-                      <td className="py-4 pl-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-2">
-                          {/* Pay Now Button (Only enabled on Confirmed + Unpaid) */}
-                          {canPayNow && (
-                            <Button
-                              variant="luxury"
-                              size="sm"
-                              className="h-9 text-xs gap-1.5 rounded-full px-4 font-semibold shadow-md shadow-gold-500/20"
-                              onClick={() => handlePayNow(app)}
-                              disabled={payingAppointmentId === app._id}
-                            >
-                              {payingAppointmentId === app._id ? (
-                                <>
-                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                  <span>Connecting...</span>
-                                </>
-                              ) : (
-                                <>
-                                  <CreditCard className="w-3.5 h-3.5" />
-                                  <span>Pay with Stripe</span>
-                                </>
-                              )}
-                            </Button>
-                          )}
+                {/* Right: Actions */}
+                <div className="flex flex-wrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-border">
+                  {canPay && (
+                    <Button
+                      variant="gradient"
+                      size="sm"
+                      onClick={() => handlePayNow(app)}
+                      disabled={payingAppointmentId === app._id}
+                      className="gap-1.5 text-xs font-bold rounded-xl h-10 px-4"
+                    >
+                      {payingAppointmentId === app._id ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          Connecting Stripe...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-3.5 h-3.5" />
+                          Pay with Stripe
+                        </>
+                      )}
+                    </Button>
+                  )}
 
-                          {/* Cancel Button (Strictly only allowed on Pending) */}
-                          {isPending && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-8 text-xs text-destructive border-destructive/30 hover:bg-destructive/10 rounded-full"
-                              onClick={() => handleCancelClick(app)}
-                            >
-                              Cancel Request
-                            </Button>
-                          )}
+                  {canCancel && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleCancelClick(app)}
+                      className="text-xs font-bold rounded-xl h-10 px-4 text-destructive hover:bg-destructive/10 hover:border-destructive/30"
+                    >
+                      Cancel Request
+                    </Button>
+                  )}
 
-                          {/* Confirmed & Paid indicator */}
-                          {isConfirmed && !isUnpaid && (
-                            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                              <ShieldCheck className="w-3.5 h-3.5" /> Ready for Visit
-                            </span>
-                          )}
+                  {!canPay && !canCancel && (
+                    <span className="text-xs text-muted-foreground italic">
+                      {app.status === "cancelled"
+                        ? "Reservation cancelled"
+                        : "Paid & scheduled"}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
-                          {app.status === "cancelled" && (
-                            <span className="text-xs text-muted-foreground italic">
-                              Closed
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* Cancel Confirmation Dialog */}
+      {/* Cancellation Confirmation Dialog */}
       <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
-        <DialogContent className="max-w-md bg-card border-gold-500/20 p-6 sm:p-8 rounded-3xl shadow-2xl">
-          <DialogHeader className="space-y-2">
-            <DialogTitle className="font-serif text-2xl font-bold">
+        <DialogContent className="sm:max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">
               Cancel Appointment Request?
             </DialogTitle>
-            <DialogDescription className="text-xs leading-relaxed pt-1 text-muted-foreground">
-              Are you sure you want to cancel your pending reservation for{" "}
-              <strong className="text-foreground">
-                {appointmentToCancel?.serviceId?.title}
-              </strong>{" "}
-              on {formatDate(appointmentToCancel?.appointmentDate || "")} at{" "}
-              {appointmentToCancel?.timeSlot}? This action cannot be reversed.
+            <DialogDescription className="text-xs leading-relaxed text-muted-foreground">
+              Are you sure you want to cancel your appointment? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="mt-6 gap-2 sm:gap-0">
+
+          {appointmentToCancel && (
+            <div className="p-4 rounded-xl bg-secondary/50 border border-border text-xs space-y-1">
+              <p className="font-bold text-foreground">
+                {typeof appointmentToCancel.serviceId === "object"
+                  ? (appointmentToCancel.serviceId as { title?: string }).title
+                  : "Salon Treatment"}
+              </p>
+              <p className="text-muted-foreground">
+                Date: {formatDate(appointmentToCancel.appointmentDate || appointmentToCancel.date || "")} at {appointmentToCancel.timeSlot}
+              </p>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-0 pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCancelModalOpen(false)}
               disabled={cancelling}
-              className="rounded-full"
+              className="rounded-xl text-xs"
             >
-              Keep Reservation
+              Keep Booking
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={confirmCancelAppointment}
               disabled={cancelling}
-              className="rounded-full"
+              className="rounded-xl text-xs gap-1.5"
             >
-              {cancelling ? "Cancelling..." : "Confirm Cancellation"}
+              {cancelling ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Cancelling...
+                </>
+              ) : (
+                "Yes, Cancel Appointment"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

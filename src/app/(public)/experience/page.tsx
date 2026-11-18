@@ -5,153 +5,145 @@ import {
   ArrowRight,
   ShieldCheck,
   Award,
-  Leaf,
-  Droplets,
+  Zap,
   Heart,
   Clock,
-  Compass,
+  Scissors,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function ExperiencePage() {
-  const sensorySteps = [
+  const steps = [
     {
       num: "01",
-      title: "Bespoke Botanical Diagnostic",
-      desc: "Every appointment begins with a slow, contemplative dialogue. Our resident specialists analyze bone structure, hair cuticle porosity, scalp microbiome, and skin undertones under calibrated daylight lamps to tailor personalized elixirs.",
-      image: "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=1000&q=85",
-      highlight: "Custom formulation prescription",
+      title: "In-Depth Consultation & Diagnostics",
+      desc: "Every appointment begins with a one-on-one session. We analyze your hair porosity, skin undertones, lifestyle demands, and styling goals before touching a product.",
+      image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
+      highlight: "Personalized Treatment Roadmap",
     },
     {
       num: "02",
-      title: "Sensory Immersion & Aromatherapy",
-      desc: "Warm steam towels steeped in organic French lavender and wild eucalyptus are applied to release muscular tensions. Enjoy complimentary organic herbal tisanes, chilled iced matcha, or artisan roast espresso.",
-      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=85",
-      highlight: "Acoustic tranquility & herbal bar",
+      title: "Aromatherapy & Tension Release",
+      desc: "Warm steam towels steeped in organic essential oils relax your shoulders and scalp. Complimentary specialty espresso, matcha, or organic herbal infusions are served.",
+      image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+      highlight: "Tranquil Studio Atmosphere",
     },
     {
       num: "03",
-      title: "Artisan Hair & Skin Application",
-      desc: "Our artists apply proprietary organic clay Balayage blends, wild caviar peptides, and warm basalt stone therapy using surgical micro-techniques honed across prestigious European academies.",
-      image: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1000&q=85",
-      highlight: "Unbroken 1-on-1 master focus",
+      title: "Master Application & Artistry",
+      desc: "Our resident specialists apply proprietary formulas, multidimensional balayage foils, or clinical skin peels using precision techniques honed over a decade.",
+      image: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=800&q=80",
+      highlight: "Uncompromising Master Focus",
     },
     {
       num: "04",
-      title: "The Daylight Reveal & Post-Care",
-      desc: "The ritual concludes with signature architectural styling and daylight review. You receive a bespoke home regimen card and concentrated maintenance elixirs to sustain your luminosity for weeks.",
-      image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1000&q=85",
-      highlight: "Sustained radiance regimen",
+      title: "Signature Styling & Post-Care",
+      desc: "Walk out with a red-carpet-worthy blowout or glowing skin. You receive a customized at-home maintenance kit to keep your results fresh for weeks.",
+      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80",
+      highlight: "Sustained Radiance Routine",
     },
   ];
 
   return (
-    <div className="min-h-screen py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl space-y-24">
-        {/* Editorial Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-[0.2em] bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300">
-            <Leaf className="w-3.5 h-3.5 text-sage-600" />
-            The Sanctuary Charter
-          </span>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.15]">
-            Where Slow Craft Meets Mindful Restoration
+    <div className="min-h-screen py-12 sm:py-20 bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl space-y-16">
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>The Salon Experience</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground">
+            More Than An Appointment.{" "}
+            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+              A Personal Ritual.
+            </span>
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            SalonBook was conceived as an antidote to hurried modern grooming. Step inside our Madison Avenue sanctuary and discover a transformative sensory experience.
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            We designed SalonBook to banish rushed haircuts and impersonal salon visits. Here is what your visit looks like.
           </p>
         </div>
 
-        {/* Hero Architectural Gallery */}
+        {/* Hero Visual */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div className="md:col-span-7 rounded-3xl overflow-hidden border border-gold-500/30 shadow-2xl relative aspect-[16/11]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="md:col-span-7 rounded-2xl overflow-hidden border border-border shadow-xl relative aspect-[16/10] bg-muted">
+            <SafeImage
               src="https://images.unsplash.com/photo-1629882201977-941d8e12f3bc?auto=format&fit=crop&w=1200&q=85"
-              alt="SalonBook Sanctuary Architecture"
+              alt="Salon Interior"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest-950/70 via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 text-white space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-gold-300">
-                Architectural Sanctuary
-              </span>
-              <p className="font-serif text-xl font-bold">Madison Avenue Flagship</p>
-              <p className="text-xs text-zinc-300">Natural travertine stone, limewash plaster & acoustic stillness</p>
-            </div>
           </div>
 
-          <div className="md:col-span-5 space-y-6">
-            <div className="p-8 rounded-3xl bg-card border border-border/80 shadow-xl space-y-4">
-              <span className="text-xs uppercase font-bold tracking-widest text-gold-600 dark:text-gold-400">
-                The Philosophy
-              </span>
-              <h3 className="font-serif text-2xl font-bold text-foreground">
-                Artistry Without Compromise
-              </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                We reject industrial assembly-line salons. Each patron is granted an unhurried, private treatment sanctuary where European master colorists and aesthetic dermatologists dedicate 100% focused attention.
-              </p>
-              <div className="pt-2 flex items-center gap-3 text-xs text-foreground font-semibold">
-                <span className="flex items-center gap-1 text-emerald-600">
-                  <ShieldCheck className="w-4 h-4" /> 100% Certified Organic
-                </span>
-                <span>•</span>
-                <span>Cruelty-Free Always</span>
+          <div className="md:col-span-5 space-y-4">
+            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
+              <div className="flex items-center gap-2 text-primary font-bold text-sm">
+                <Scissors className="w-4 h-4" />
+                <span>Zero Double-Booking</span>
               </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                When you reserve a chair with SalonBook, that stylist is 100% dedicated to you. No rushed transitions or waiting between stations.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Clean & Pure Formulas</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Every shampoo, glaze, facial masque, and oil used in our salons is free from sulfates, parabens, and micro-plastics.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl border border-border bg-card space-y-2">
+              <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-sm">
+                <Zap className="w-4 h-4" />
+                <span>Seamless Technology</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Book in 30 seconds, reschedule with one tap, and pay effortlessly with Stripe once your service is confirmed.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* The 4-Step Sensory Timeline */}
-        <div className="space-y-16">
-          <SectionHeading
-            badge="The 4-Step Protocol"
-            title="The Sensory Journey Progression"
-            subtitle="Every treatment follows our unhurried 4-phase methodology to ensure transformative results."
-            center
-          />
+        {/* 4 Steps */}
+        <div className="space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">
+              Your 4-Stage Studio Journey
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Predictable, pampering excellence from the moment you step through our doors.
+            </p>
+          </div>
 
-          <div className="space-y-12">
-            {sensorySteps.map((step, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {steps.map((step, idx) => (
               <div
                 key={idx}
-                className={`grid grid-cols-1 md:grid-cols-12 gap-8 items-center ${
-                  idx % 2 === 1 ? "md:flex-row-reverse" : ""
-                }`}
+                className="bg-card rounded-2xl border border-border overflow-hidden p-6 space-y-4 shadow-sm hover:shadow-md transition-all"
               >
-                <div
-                  className={`md:col-span-6 rounded-3xl overflow-hidden border border-gold-500/20 shadow-xl aspect-[16/10] ${
-                    idx % 2 === 1 ? "md:order-2" : ""
-                  }`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-muted">
+                  <SafeImage
                     src={step.image}
                     alt={step.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover"
                   />
+                  <div className="absolute top-3 left-3 w-8 h-8 rounded-lg bg-slate-900/90 text-white font-extrabold text-xs flex items-center justify-center">
+                    {step.num}
+                  </div>
                 </div>
 
-                <div
-                  className={`md:col-span-6 space-y-4 ${
-                    idx % 2 === 1 ? "md:order-1" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-serif text-4xl font-bold text-gold-500/40">
-                      {step.num}
-                    </span>
-                    <Badge variant="outline" className="text-xs font-semibold bg-secondary/50">
-                      {step.highlight}
-                    </Badge>
-                  </div>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+                <div className="space-y-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                    {step.highlight}
+                  </span>
+                  <h3 className="text-base font-bold text-foreground">
                     {step.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
@@ -160,27 +152,19 @@ export default function ExperiencePage() {
           </div>
         </div>
 
-        {/* Botanical Elixirs Banner */}
-        <div className="rounded-3xl bg-forest-950 text-white p-8 sm:p-12 border border-gold-500/20 shadow-2xl relative overflow-hidden">
-          <div className="max-w-xl space-y-4 relative z-10">
-            <span className="text-xs uppercase font-bold tracking-[0.2em] text-gold-400">
-              Clean Formulation Guarantee
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-white leading-tight">
-              Wild Botanical Compounds From Grasse, France
-            </h2>
-            <p className="text-sm text-zinc-300 leading-relaxed">
-              We exclusively formulate with wild-harvested French flora, cold-pressed cold argan oils, 24K colloidal gold, and marine caviar extracts. Free of sulfates, silicones, and parabens.
-            </p>
-            <div className="pt-2">
-              <Link href="/services">
-                <Button variant="luxury" size="lg" className="rounded-full gap-2 text-xs font-semibold shadow-lg shadow-gold-500/20">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Explore Botanical Menu</span>
-                </Button>
-              </Link>
-            </div>
-          </div>
+        {/* CTA */}
+        <div className="text-center py-12 px-6 rounded-3xl bg-secondary/60 border border-border space-y-4 max-w-xl mx-auto">
+          <h3 className="text-xl font-bold text-foreground">
+            Ready to experience the difference?
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            Explore our curated menu and reserve your appointment with our master stylists.
+          </p>
+          <Link href="/services">
+            <Button variant="gradient" size="lg" className="rounded-xl text-xs font-bold px-8">
+              Explore Services & Book
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -44,7 +44,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
-  // Default to tomorrow
   const getTomorrowString = () => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
@@ -59,7 +58,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [isLoadingSlots, setIsLoadingSlots] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // Fetch available slots when service or date changes
   useEffect(() => {
     if (!service || !isOpen) return;
 
@@ -78,7 +76,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         setSelectedSlot("");
       } catch (err) {
         console.warn("Failed to check availability:", err);
-        // Fallback default slots
         setAvailableSlots([
           "09:00 AM",
           "10:00 AM",
@@ -101,7 +98,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleBookNow = async () => {
     if (!isAuthenticated) {
-      toast.error("Please sign in to reserve an atelier appointment.");
+      toast.error("Please sign in to reserve an appointment.");
       router.push(`/sign-in?redirect=/services/${service._id}`);
       onClose();
       return;
@@ -124,20 +121,18 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       });
 
       if (res.data.success) {
-        // Trigger Haute Confetti Burst
         try {
           confetti({
-            particleCount: 90,
-            spread: 80,
+            particleCount: 80,
+            spread: 70,
             origin: { y: 0.6 },
-            colors: ["#be9643", "#e6ca7b", "#c4755f", "#f8f5f0", "#18181b"],
           });
         } catch {
-          // ignore confetti errors in headless test
+          // ignore confetti errors in test
         }
 
         toast.success(
-          "Reservation request registered! Our salon concierge will confirm your session shortly."
+          "Appointment request placed! You can view and manage it in your dashboard."
         );
         onClose();
         router.push("/dashboard/appointments");
@@ -149,7 +144,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     }
   };
 
-  // Quick Date Selectors
   const setQuickDate = (daysAhead: number) => {
     const d = new Date();
     d.setDate(d.getDate() + daysAhead);
@@ -158,85 +152,83 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-xl max-h-[92vh] overflow-y-auto p-6 sm:p-8 bg-card border-gold-500/20 shadow-2xl">
-        <DialogHeader className="space-y-2 text-left">
+      <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto p-6 sm:p-7 bg-card border-border shadow-2xl rounded-2xl">
+        <DialogHeader className="space-y-1.5 text-left">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-widest bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300">
-              <Sparkles className="w-3 h-3 text-gold-500" />
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider bg-primary/10 text-primary">
+              <Sparkles className="w-3 h-3" />
               {service.category}
             </span>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-primary" /> {service.durationMinutes} Minutes
+              <Clock className="w-3.5 h-3.5 text-primary" /> {service.durationMinutes} mins
             </span>
           </div>
-          <DialogTitle className="text-2xl sm:text-3xl font-serif font-bold text-foreground">
-            Reserve: {service.title}
+          <DialogTitle className="text-xl sm:text-2xl font-extrabold tracking-tight text-foreground">
+            {service.title}
           </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground">
-            Select your preferred appointment date and curated time slot. Gratuity and post-treatment refreshments are included.
+          <DialogDescription className="text-xs text-muted-foreground">
+            Choose your preferred date and time slot. Instant booking confirmation.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
+        <div className="space-y-5 py-3">
           {/* Date Picker Input & Quick Chips */}
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                <CalendarIcon className="w-4 h-4 text-primary" /> Select Date
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                <CalendarIcon className="w-3.5 h-3.5 text-primary" /> Select Date
               </label>
               <div className="flex items-center gap-1.5 text-xs">
                 <button
                   type="button"
                   onClick={() => setQuickDate(1)}
-                  className="px-2.5 py-1 rounded-full bg-secondary hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-[11px]"
+                  className="px-2 py-0.5 rounded-lg bg-secondary hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-[11px] font-semibold"
                 >
                   Tomorrow
                 </button>
                 <button
                   type="button"
                   onClick={() => setQuickDate(2)}
-                  className="px-2.5 py-1 rounded-full bg-secondary hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-[11px]"
+                  className="px-2 py-0.5 rounded-lg bg-secondary hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-[11px] font-semibold"
                 >
                   In 2 Days
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setQuickDate(7)}
-                  className="px-2.5 py-1 rounded-full bg-secondary hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-[11px]"
-                >
-                  Next Week
-                </button>
               </div>
             </div>
+
             <input
               type="date"
-              min={new Date().toISOString().split("T")[0]}
               value={selectedDate}
+              min={new Date().toISOString().split("T")[0]}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full flex h-11 rounded-xl border border-input bg-background px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50"
+              className="w-full h-11 px-3.5 rounded-xl border border-border bg-background text-xs font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
           {/* Time Slot Picker */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-primary" /> Available Openings
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-primary" /> Choose Time Slot
               </label>
-              {isLoadingSlots && (
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin text-gold-500" /> Verifying schedule...
+              {selectedSlot && (
+                <span className="text-xs font-bold text-primary">
+                  Selected: {selectedSlot}
                 </span>
               )}
             </div>
 
-            {availableSlots.length === 0 && !isLoadingSlots ? (
-              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-center text-sm text-destructive flex items-center justify-center gap-2">
-                <AlertCircle className="w-4 h-4" />
-                All resident specialists are reserved for this date. Please choose another date.
+            {isLoadingSlots ? (
+              <div className="py-8 text-center space-y-2">
+                <Loader2 className="w-6 h-6 text-primary animate-spin mx-auto" />
+                <p className="text-xs text-muted-foreground">Checking live slots...</p>
+              </div>
+            ) : availableSlots.length === 0 ? (
+              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs text-center">
+                All chairs are fully booked for this date. Please choose another day.
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto p-1">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                 {availableSlots.map((slot) => {
                   const isSelected = selectedSlot === slot;
                   return (
@@ -244,10 +236,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                       key={slot}
                       type="button"
                       onClick={() => setSelectedSlot(slot)}
-                      className={`py-2.5 px-3 rounded-xl text-xs font-semibold border text-center transition-all duration-200 ${
+                      className={`h-10 rounded-xl text-xs font-bold transition-all border ${
                         isSelected
-                          ? "bg-gradient-to-r from-gold-500 to-terracotta-600 text-white border-transparent shadow-md shadow-gold-500/20 scale-[1.02]"
-                          : "bg-secondary/40 hover:bg-secondary border-border/80 text-foreground hover:border-gold-500/40"
+                          ? "bg-primary text-primary-foreground border-primary shadow-sm shadow-primary/25 scale-[1.02]"
+                          : "bg-secondary text-foreground border-border hover:border-primary/40"
                       }`}
                     >
                       {slot}
@@ -258,68 +250,66 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             )}
           </div>
 
-          {/* Client Notes */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Stylist Notes & Sensory Preferences (Optional)
+          {/* Notes Input */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Special Requests / Hair Concerns (Optional)
             </label>
             <textarea
-              rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Sensitive scalp, preferred silence during ritual, iced matcha tea preference..."
-              className="w-full rounded-xl border border-input bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/50"
+              rows={2}
+              placeholder="e.g. Sensitive scalp, preferred stylist, allergy to certain oils..."
+              className="w-full p-3 rounded-xl border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
-          {/* Luxury Summary Box */}
-          <div className="rounded-2xl bg-gradient-to-br from-secondary/50 via-background to-secondary/30 border border-gold-500/20 p-5 space-y-3 text-sm shadow-inner">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Session Investment:</span>
-              <span className="font-serif text-lg font-bold text-foreground">
+          {/* Summary Strip */}
+          <div className="p-3.5 rounded-xl bg-secondary/50 border border-border flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                Service Fee
+              </span>
+              <div className="text-xl font-black text-foreground">
                 {formatCurrency(service.price)}
-              </span>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Reserved Schedule:</span>
-              <span className="font-semibold text-gold-600 dark:text-gold-400">
-                {selectedDate} at {selectedSlot || "Select slot above"}
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border/60">
-              <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Instant Confirmation & Stripe Protection
-              </span>
-              <span>No pre-payment required until approved</span>
-            </div>
+            <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5" /> No pre-charge required
+            </span>
           </div>
-        </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            className="sm:w-1/3 rounded-xl"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="luxury"
-            onClick={handleBookNow}
-            disabled={!selectedSlot || isSubmitting}
-            className="sm:w-2/3 gap-2 rounded-xl text-sm font-semibold shadow-lg shadow-gold-500/20"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Confirming with Atelier...
-              </>
-            ) : (
-              <>
-                Confirm Reservation <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </Button>
+          {/* Action Buttons */}
+          <div className="pt-2 flex items-center justify-end gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onClose}
+              className="rounded-xl text-xs font-bold"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="gradient"
+              size="sm"
+              onClick={handleBookNow}
+              disabled={isSubmitting || !selectedSlot}
+              className="rounded-xl text-xs font-bold h-10 px-5 gap-1.5"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Confirming...
+                </>
+              ) : (
+                <>
+                  Confirm Reservation <ArrowRight className="w-3.5 h-3.5" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
