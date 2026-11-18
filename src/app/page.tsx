@@ -32,47 +32,67 @@ import { Service, ApiResponse } from "@/types";
 const heroSlides = [
   {
     id: 1,
+    tag: "01 · SANCTUARY",
+    badge: "Flagship Atelier · Madison Ave, NYC",
+    kicker: "EST. 2018 · BESPOKE GROOMING & BEAUTY",
+    title: "Elevated Craft.",
+    titleAccent: "Unhurried Sanctuary.",
+    subtitle:
+      "A quiet New York atelier where master barbers, colorists, and dermal estheticians practice their craft with unhurried precision. Transparent pricing, single-guest chairs, and timeless hospitality.",
+    nextOpening: "Today at 2:30 PM",
+    nextArtist: "Marcus Sterling (Lead Groomer)",
+    serviceHighlight: "Executive Straight-Razor Shave & Scalp Detox",
+    price: "$85",
     image:
       "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=75",
-    tagline: "FLAGSHIP SANCTUARY · MADISON AVENUE",
-    title: "Grooming, done properly.",
-    subtitle:
-      "A neighbourhood barbershop and aesthetic sanctuary for hair, skin, nails and spa rituals. Browse our menu, request a time that suits you, and let our resident artisans take care of the rest.",
-    openingNotice: "Open today until 8:00 PM · Madison Avenue, NYC",
-    badge: "Est. 2018 · New York",
   },
   {
     id: 2,
+    tag: "02 · COIFFURE",
+    badge: "Hair Architecture & Organic Gloss",
+    kicker: "HAUTE COIFFURE & BOTANICAL GLOSS",
+    title: "Sculpted Silhouettes.",
+    titleAccent: "Luminous Colour.",
+    subtitle:
+      "Hand-painted dimensional balayage customized to cranial bone structure, bespoke precision cuts, and restorative glossing infusions formulated with organic European botanicals.",
+    nextOpening: "Tomorrow at 11:30 AM",
+    nextArtist: "Elena Vance (Master Colorist)",
+    serviceHighlight: "Signature Balayage & Silk Glossing",
+    price: "$195",
     image:
       "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=75",
-    tagline: "HAIR ARCHITECTURE & ORGANIC GLOSS",
-    title: "The art of lived-in hair.",
-    subtitle:
-      "Hand-painted multidimensional balayage, custom cranial cuts, and restorative botanical hair wraps formulated with clean European actives.",
-    openingNotice: "Next Balayage Opening · Tomorrow at 11:30 AM",
-    badge: "12 Master Colorists",
   },
   {
     id: 3,
+    tag: "03 · BARBERING",
+    badge: "Traditional Gentlemen's Grooming",
+    kicker: "TRADITIONAL GENTLEMEN'S CRAFT",
+    title: "Razor-Sharp Precision.",
+    titleAccent: "Timeless Rituals.",
+    subtitle:
+      "Japanese feather blades, eucalyptus-steamed hot towels, badger lathering, and aged sandalwood pre-shave tonics. The quintessential gentleman's grooming ritual executed with absolute mastery.",
+    nextOpening: "Today at 3:45 PM",
+    nextArtist: "Marcus Sterling (Lead Groomer)",
+    serviceHighlight: "Classic Cut & Hot Towel Detailing",
+    price: "$65",
     image:
       "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1400&q=75",
-    tagline: "TRADITIONAL GENTLEMEN'S BARBERING",
-    title: "Unhurried, razor-sharp craft.",
-    subtitle:
-      "Eucalyptus hot towels, Japanese feather blades, and sandalwood pre-shave oils. Classic grooming executed with absolute precision.",
-    openingNotice: "Barber Chairs Open · Today at 2:30 PM",
-    badge: "Master Groomers",
   },
   {
     id: 4,
+    tag: "04 · HYDRO-SPA",
+    badge: "Holistic Skin & Body Therapy",
+    kicker: "HOLISTIC SKIN & HYDRO-SPA SANCTUARY",
+    title: "Deep Restoration.",
+    titleAccent: "Mind, Body & Skin.",
+    subtitle:
+      "Heated volcanic basalt river stones, ultrasonic dermabrasion, and thermal hydrotherapy in private soundproof treatment chambers designed for complete sensory renewal.",
+    nextOpening: "Daily 9:00 AM – 8:00 PM",
+    nextArtist: "Sofia Rossi (Dermal Esthetician)",
+    serviceHighlight: "Hydra-Botanical Deep Recovery Facial",
+    price: "$155",
     image:
       "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=75",
-    tagline: "HOLISTIC SKIN & HYDRO-SPA RITUALS",
-    title: "Slow restoration for body and mind.",
-    subtitle:
-      "Cryo oxygen facials, warm basalt river stones, and thermal hydrotherapy in our quiet Madison Avenue treatment chambers.",
-    openingNotice: "Spa Sessions Available · Daily 9 AM – 8 PM",
-    badge: "Botanical Therapy",
   },
 ];
 
@@ -423,186 +443,194 @@ export default function HomePage() {
           })}
 
           {/* Cinematic Multi-Layer Gradient Overlays for High Contrast Readability & Vibrant Atelier Warmth */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/25 z-20 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#170F13] via-transparent to-black/35 z-20 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#170F13]/90 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-black/40 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#170F13] via-transparent to-black/40 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-radial from-transparent via-black/25 to-black/60 z-20 pointer-events-none" />
         </div>
 
-        {/* Hero Foreground Content Container */}
-        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-20 pt-16 pb-20 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Column: Animated Typography & CTAs */}
-            <motion.div
-              key={`text-${activeSlideData.id}`}
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="lg:col-span-7 space-y-6 text-left"
-            >
-              {/* Status Pill */}
-              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg text-white">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+        {/* Hero Foreground Content Container — Centered Luxury Editorial Atelier */}
+        <div className="container mx-auto max-w-5xl px-4 sm:px-6 relative z-30 pt-20 pb-12 lg:pt-28 lg:pb-16 flex flex-col items-center text-center">
+          {/* Top Status Pill */}
+          <motion.div
+            key={`badge-${activeSlideData.id}`}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-[#FAF7F2] shadow-xl mb-4"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            </span>
+            <span className="text-[11px] sm:text-xs font-semibold tracking-wide uppercase text-white/90">
+              {activeSlideData.badge}
+            </span>
+            <span className="text-white/30">•</span>
+            <span className="text-[11px] sm:text-xs font-medium text-[#C5A880]">
+              Open Today Until 8:00 PM
+            </span>
+          </motion.div>
+
+          {/* Kicker Tagline */}
+          <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.3em] text-[#C5A880] mb-3">
+            {activeSlideData.kicker}
+          </p>
+
+          {/* Grand Serif Headline with Italic Accent */}
+          <motion.div
+            key={`heading-${activeSlideData.id}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="space-y-4 max-w-4xl mx-auto"
+          >
+            <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-bold tracking-tight text-[#FAF7F2] leading-[1.08] drop-shadow-xl">
+              <span>{activeSlideData.title}</span>{" "}
+              <span className="italic font-normal text-[#E8D9C5] block sm:inline">
+                {activeSlideData.titleAccent}
+              </span>
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-[#FAF7F2]/90 leading-relaxed font-normal max-w-2xl mx-auto pt-1 drop-shadow">
+              {activeSlideData.subtitle}
+            </p>
+          </motion.div>
+
+          {/* Interactive Quick-Category Selector Bar */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-6">
+            {[
+              { label: "Hair & Styling", href: "/services?category=Hair" },
+              { label: "Gentlemen's Barbering", href: "/services?category=Barbering" },
+              { label: "Dermal Facials", href: "/services?category=Facial%20%26%20Skin" },
+              { label: "Basalt Massage", href: "/services?category=Massage" },
+              { label: "Nail Therapy", href: "/services?category=Nails" },
+            ].map((cat) => (
+              <Link key={cat.label} href={cat.href}>
+                <span className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/35 hover:bg-white/20 text-white/90 border border-white/20 hover:border-[#C5A880] backdrop-blur-md transition-all hover:text-[#C5A880] shadow-sm">
+                  ✦ {cat.label}
                 </span>
-                <span className="text-xs font-semibold tracking-tight">
-                  {activeSlideData.openingNotice}
-                </span>
-              </div>
-
-              {/* Tagline */}
-              <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#C5A880]">
-                {activeSlideData.tagline}
-              </p>
-
-              {/* Serif Headline */}
-              <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#FAF7F2] leading-[1.08] drop-shadow-md">
-                {activeSlideData.title}
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-sm sm:text-base lg:text-lg text-[#FAF7F2]/85 leading-relaxed font-normal max-w-xl">
-                {activeSlideData.subtitle}
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                <Link href="/services">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#170F13] font-bold text-sm shadow-xl transition-all flex items-center justify-center gap-2 group"
-                  >
-                    <span>Explore services</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-
-                <Link href="/sign-up">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/30 text-white bg-white/10 hover:bg-white/20 backdrop-blur-md font-semibold text-sm transition-all flex items-center justify-center gap-2"
-                  >
-                    <Calendar className="w-4 h-4 text-[#C5A880]" />
-                    <span>Create an account</span>
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Social Proof / Stats Bar */}
-              <div className="pt-6 border-t border-white/15 grid grid-cols-3 gap-4 max-w-lg text-white">
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-serif text-2xl font-bold">4.9/5</span>
-                    <div className="flex text-amber-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-white/75 font-medium mt-0.5">
-                    Client rating
-                  </p>
-                </div>
-
-                <div>
-                  <span className="font-serif text-2xl font-bold block">
-                    8k+
-                  </span>
-                  <p className="text-xs text-white/75 font-medium mt-0.5">
-                    Appointments
-                  </p>
-                </div>
-
-                <div>
-                  <span className="font-serif text-2xl font-bold block">
-                    12
-                  </span>
-                  <p className="text-xs text-white/75 font-medium mt-0.5">
-                    Salon barbers
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Column: Floating Live Appointment Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.2 }}
-              className="lg:col-span-5 relative"
-            >
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-white/25 bg-[#170F13]/80 backdrop-blur-xl p-6 sm:p-7 text-[#FAF7F2] space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-white/15">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
-                      NEXT OPENING: Today · 2:30 PM
-                    </span>
-                  </div>
-                  <span className="text-xs font-semibold text-[#C5A880] bg-[#C5A880]/15 px-2.5 py-0.5 rounded-md border border-[#C5A880]/30">
-                    Chair 02
-                  </span>
-                </div>
-
-                <div className="space-y-1">
-                  <h4 className="font-serif text-xl font-bold text-white">
-                    Classic Cut &amp; Straight-Razor Detailing
-                  </h4>
-                  <p className="text-xs text-white/70">
-                    Marcus Sterling · 45 mins · Single-Guest Duration
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
-                  <span className="text-xs text-white/80">
-                    Consultation &amp; Hot Towel Included
-                  </span>
-                  <span className="font-serif text-xl font-bold text-[#C5A880]">
-                    $65
-                  </span>
-                </div>
-
-                <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/15">
-                  <div className="flex items-center gap-1.5 text-xs text-white/80">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Instant confirmation</span>
-                  </div>
-                  <Link href="/services">
-                    <Button
-                      size="sm"
-                      className="rounded-xl text-xs font-bold uppercase tracking-wider bg-[#C5A880] text-[#170F13] hover:bg-[#d6bc96] px-4 py-2"
-                    >
-                      Reserve Slot <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
+              </Link>
+            ))}
           </div>
 
-          {/* Slide Navigation Controls & Indicators Bar */}
-          <div className="mt-12 pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Pill Indicators */}
-            <div className="flex items-center gap-2">
+          {/* Dual Action CTAs */}
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto">
+            <Link href="/services" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#170F13] font-bold text-sm shadow-2xl transition-all flex items-center justify-center gap-2 group hover:scale-[1.02]"
+              >
+                <span>Reserve an Appointment</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+
+            <Link href="/services" className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/30 text-white bg-black/40 hover:bg-white/20 backdrop-blur-md font-semibold text-sm transition-all flex items-center justify-center gap-2"
+              >
+                <Calendar className="w-4 h-4 text-[#C5A880]" />
+                <span>Explore Signature Menu</span>
+              </Button>
+            </Link>
+          </div>
+
+          {/* Docked Floating Concierge Bar (Horizontal Atelier Pulse) */}
+          <div className="w-full max-w-4xl mx-auto mt-10 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/20 p-4 sm:p-5 shadow-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:divide-x sm:divide-white/15 text-left">
+              {/* Live Opening */}
+              <div className="space-y-1 sm:pr-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">
+                    Next Available Seat: {activeSlideData.nextOpening}
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-white truncate">
+                  {activeSlideData.serviceHighlight}
+                </p>
+                <p className="text-[11px] text-white/70 truncate flex items-center justify-between">
+                  <span>With {activeSlideData.nextArtist}</span>
+                  <span className="text-[#C5A880] font-bold font-mono">{activeSlideData.price}</span>
+                </p>
+              </div>
+
+              {/* Client Acclaim */}
+              <div className="space-y-1 sm:px-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold text-white font-mono">4.98 / 5.0</span>
+                </div>
+                <p className="text-xs font-semibold text-white/95">
+                  Discerning Guest Acclaim
+                </p>
+                <p className="text-[11px] text-white/70">
+                  Based on 2,400+ verified appointments
+                </p>
+              </div>
+
+              {/* Location & Guarantee */}
+              <div className="space-y-1 sm:pl-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs text-[#C5A880] font-semibold">
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>452 Madison Ave · Midtown NYC</span>
+                  </div>
+                  <p className="text-[11px] text-white/70 mt-0.5">
+                    No waiting · Single-guest chairs
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 mt-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Instant online booking confirmation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Editorial Slide Navigation Tabs & Controls Bar */}
+          <div className="w-full max-w-4xl mx-auto mt-6 pt-4 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Named Tab Buttons */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full sm:w-auto">
               {heroSlides.map((slide, idx) => (
                 <button
                   key={slide.id}
                   onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  className={`px-3 py-2 rounded-xl text-left transition-all ${
                     currentSlide === idx
-                      ? "w-8 bg-[#C5A880]"
-                      : "w-2.5 bg-white/40 hover:bg-white/70"
+                      ? "bg-white/20 border border-[#C5A880]/60 text-white shadow-md"
+                      : "bg-black/30 hover:bg-white/10 border border-white/10 text-white/60"
                   }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`text-[10px] font-mono font-bold ${
+                        currentSlide === idx ? "text-[#C5A880]" : "text-white/40"
+                      }`}
+                    >
+                      0{idx + 1}
+                    </span>
+                    <span className="text-xs font-semibold truncate">
+                      {slide.tag.split("·")[1]?.trim() || slide.tag}
+                    </span>
+                  </div>
+                  <div className="w-full bg-white/10 h-0.5 rounded-full mt-1.5 overflow-hidden">
+                    <div
+                      className={`h-full bg-[#C5A880] transition-all duration-300 ${
+                        currentSlide === idx ? "w-full" : "w-0"
+                      }`}
+                    />
+                  </div>
+                </button>
               ))}
-              <span className="text-xs text-white/60 ml-2 font-mono">
-                0{currentSlide + 1} / 0{heroSlides.length}
-              </span>
             </div>
 
-            {/* Prev / Next & Pause Buttons */}
+            {/* Controls */}
             <div className="flex items-center gap-2 text-white">
               <button
                 onClick={prevSlide}
