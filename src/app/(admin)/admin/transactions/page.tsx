@@ -13,11 +13,20 @@ import {
   Calendar,
   Lock,
   Receipt,
+  Trash2,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Transaction, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { InvoiceModal } from "@/components/payment/InvoiceModal";
@@ -28,6 +37,11 @@ export default function AdminTransactionsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedTxForInvoice, setSelectedTxForInvoice] = useState<Transaction | null>(null);
+
+  // Delete transaction state
+  const [txToDelete, setTxToDelete] = useState<Transaction | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchTransactions = async () => {
     try {
@@ -50,8 +64,30 @@ export default function AdminTransactionsPage() {
     fetchTransactions();
   }, []);
 
+  const handleDeleteTransaction = async () => {
+    if (!txToDelete) return;
+    try {
+      setDeleting(true);
+      const res = await api.delete<ApiResponse<null>>(
+        `/payments/transactions/${txToDelete._id}`
+      );
+      if (res.data.success) {
+        toast.success("Transaction record deleted from ledger.");
+        setTransactions((prev) => prev.filter((t) => t._id !== txToDelete._id));
+        setDeleteDialogOpen(false);
+        setTxToDelete(null);
+      }
+    } catch (err: unknown) {
+      toast.error(
+        (err as Error).message || "Failed to delete transaction record"
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const filteredTransactions = useMemo(() => {
-    return transactions.filter((tx) => {
+    const list = transactions.filter((tx) => {
       const customer = typeof tx.customerId === "object" ? tx.customerId : null;
       const name = customer?.name?.toLowerCase() || "";
       const email = customer?.email?.toLowerCase() || "";
@@ -59,6 +95,12 @@ export default function AdminTransactionsPage() {
       const q = search.toLowerCase();
 
       return !search || name.includes(q) || email.includes(q) || sessionId.includes(q);
+    });
+
+    return [...list].sort((a, b) => {
+      const timeA = new Date(a.createdAt || 0).getTime();
+      const timeB = new Date(b.createdAt || 0).getTime();
+      return timeB - timeA;
     });
   }, [transactions, search]);
 
@@ -269,15 +311,29 @@ export default function AdminTransactionsPage() {
 
                       {/* Action */}
                       <td className="py-4 px-6 text-right whitespace-nowrap">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setSelectedTxForInvoice(tx)}
-                          className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
-                        >
-                          <Receipt className="w-3.5 h-3.5 text-accent" />
-                          <span>View Invoice</span>
-                        </Button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setSelectedTxForInvoice(tx)}
+                            className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
+                          >
+                            <Receipt className="w-3.5 h-3.5 text-accent" />
+                            <span>View Invoice</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              setTxToDelete(tx);
+                              setDeleteDialogOpen(true);
+                            }}
+                            className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
+                            title="Delete Transaction"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -287,12 +343,64 @@ export default function AdminTransactionsPage() {
           </div>
         )}
       </div>
+
       {/* Luxury Invoice & Receipt Modal */}
       <InvoiceModal
         isOpen={!!selectedTxForInvoice}
         onClose={() => setSelectedTxForInvoice(null)}
         transaction={selectedTxForInvoice}
       />
+
+      {/* Permanent Delete Transaction Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+          <DialogHeader className="space-y-2">
+            <div className="w-10 h-10 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <Trash2 className="w-5 h-5" />
+            </div>
+            <DialogTitle className="font-serif text-xl font-bold text-foreground">
+              Delete Ledger Entry
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+              Are you sure you want to permanently delete transaction{" "}
+              <strong className="text-foreground font-mono">
+                {txToDelete?.invoiceNumber || txToDelete?.stripeSessionId || txToDelete?._id}
+              </strong>
+              ? This action will permanently remove the financial record from the ledger.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={deleting}
+              onClick={() => setDeleteDialogOpen(false)}
+              className="w-full sm:w-auto rounded-xl text-xs border-border"
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              disabled={deleting}
+              onClick={handleDeleteTransaction}
+              className="w-full sm:w-auto rounded-xl text-xs bg-rose-600 hover:bg-rose-700 text-white gap-1.5"
+            >
+              {deleting ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Deleting...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete Permanently</span>
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

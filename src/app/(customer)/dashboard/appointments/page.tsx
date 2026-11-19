@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Receipt,
   Zap,
+  Trash2,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
@@ -47,6 +48,11 @@ export default function CustomerAppointmentsPage() {
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [appointmentToCancel, setAppointmentToCancel] = useState<Appointment | null>(null);
   const [cancelling, setCancelling] = useState(false);
+
+  // Permanent Delete modal state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [appointmentToDelete, setAppointmentToDelete] = useState<Appointment | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Stripe Payment modal state
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -177,9 +183,42 @@ export default function CustomerAppointmentsPage() {
     }
   };
 
+  const handleDeleteAppointment = async () => {
+    if (!appointmentToDelete) return;
+    try {
+      setDeleting(true);
+      const res = await api.delete<ApiResponse<null>>(
+        `/appointments/${appointmentToDelete._id}`
+      );
+      if (res.data.success) {
+        toast.success("Appointment record deleted from your diary.");
+        setAppointments((prev) =>
+          prev.filter((app) => app._id !== appointmentToDelete._id)
+        );
+        setDeleteDialogOpen(false);
+        setAppointmentToDelete(null);
+      }
+    } catch (err: unknown) {
+      toast.error(
+        (err as Error).message || "Failed to delete appointment record."
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const filteredAppointments = useMemo(() => {
-    if (activeTab === "all") return appointments;
-    return appointments.filter((a) => a.status === activeTab);
+    const list =
+      activeTab === "all"
+        ? appointments
+        : appointments.filter((a) => a.status === activeTab);
+
+    // Strictly order by arrival sequence (newest request first)
+    return [...list].sort((a, b) => {
+      const timeA = new Date(a.createdAt || 0).getTime();
+      const timeB = new Date(b.createdAt || 0).getTime();
+      return timeB - timeA;
+    });
   }, [appointments, activeTab]);
 
   const counts = {
@@ -420,11 +459,25 @@ export default function CustomerAppointmentsPage() {
                         size="sm"
                         variant="outline"
                         onClick={() => handleCancelClick(app)}
-                        className="rounded-xl text-xs text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                        className="rounded-xl text-xs text-amber-600 border-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/20"
                       >
                         Cancel Request
                       </Button>
                     )}
+
+                    {/* Delete Record Button (Available for all appointments) */}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setAppointmentToDelete(app);
+                        setDeleteDialogOpen(true);
+                      }}
+                      className="rounded-xl h-8 w-8 p-0 text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+                      title="Delete Record"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -587,6 +640,59 @@ export default function CustomerAppointmentsPage() {
         onClose={() => setSelectedAppointmentForInvoice(null)}
         appointment={selectedAppointmentForInvoice}
       />
+
+      {/* 7. Permanent Delete Dialog for Patron */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+          <DialogHeader className="space-y-2">
+            <div className="w-10 h-10 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <Trash2 className="w-5 h-5" />
+            </div>
+            <DialogTitle className="font-serif text-xl font-bold text-foreground">
+              Remove Reservation Record
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+              Are you sure you want to remove this appointment record for{" "}
+              <strong className="text-foreground">
+                {typeof appointmentToDelete?.serviceId === "object"
+                  ? appointmentToDelete?.serviceId?.title
+                  : "Treatment"}
+              </strong>{" "}
+              from your diary? This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={deleting}
+              onClick={() => setDeleteDialogOpen(false)}
+              className="w-full sm:w-auto rounded-xl text-xs border-border"
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              disabled={deleting}
+              onClick={handleDeleteAppointment}
+              className="w-full sm:w-auto rounded-xl text-xs bg-rose-600 hover:bg-rose-700 text-white gap-1.5"
+            >
+              {deleting ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Removing...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove Record</span>
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
