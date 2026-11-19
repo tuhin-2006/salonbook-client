@@ -50,6 +50,7 @@ export interface Transaction {
   appointmentId: Appointment | string;
   stripeSessionId: string;
   stripePaymentIntentId?: string;
+  invoiceNumber?: string;
   amount: number;
   currency: string;
   status: "pending" | "succeeded" | "failed" | "refunded";

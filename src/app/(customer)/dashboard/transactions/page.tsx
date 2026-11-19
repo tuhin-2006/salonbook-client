@@ -19,11 +19,13 @@ import { Transaction, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
+import { InvoiceModal } from "@/components/payment/InvoiceModal";
 
 export default function CustomerTransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedTxForInvoice, setSelectedTxForInvoice] = useState<Transaction | null>(null);
 
   const fetchTransactions = async () => {
     try {
@@ -173,70 +175,104 @@ export default function CustomerTransactionsPage() {
             <table className="w-full min-w-[600px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-4 px-6">Transaction Reference</th>
+                  <th className="py-4 px-6">Invoice # &amp; Ref</th>
+                  <th className="py-4 px-4">Treatment</th>
                   <th className="py-4 px-4">Amount</th>
-                  <th className="py-4 px-4">Gateway</th>
+                  <th className="py-4 px-4">Channel</th>
                   <th className="py-4 px-4">Date</th>
-                  <th className="py-4 px-6 text-right">Status</th>
+                  <th className="py-4 px-4 text-center">Status</th>
+                  <th className="py-4 px-6 text-right">Receipt</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
-                {transactions.map((tx) => (
-                  <tr
-                    key={tx._id}
-                    className="hover:bg-muted/40 transition-colors group"
-                  >
-                    {/* Reference */}
-                    <td className="py-4 px-6">
-                      <div className="space-y-0.5">
-                        <span className="font-mono text-xs font-semibold text-foreground block">
-                          {tx.stripeSessionId
-                            ? `${tx.stripeSessionId.slice(0, 18)}...`
-                            : `TX-${tx._id.slice(-8).toUpperCase()}`}
+                {transactions.map((tx) => {
+                  const app: any = typeof tx.appointmentId === "object" ? tx.appointmentId : null;
+                  const service: any = app?.serviceId && typeof app.serviceId === "object" ? app.serviceId : null;
+
+                  return (
+                    <tr
+                      key={tx._id}
+                      className="hover:bg-muted/40 transition-colors group"
+                    >
+                      {/* Reference */}
+                      <td className="py-4 px-6">
+                        <div className="space-y-0.5">
+                          <span className="font-mono text-xs font-bold text-accent block">
+                            {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
+                          </span>
+                          <span className="font-mono text-[10px] text-muted-foreground block truncate max-w-[140px]">
+                            {tx.stripeSessionId ? tx.stripeSessionId.slice(0, 18) + "..." : tx._id}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Treatment */}
+                      <td className="py-4 px-4">
+                        <span className="font-serif font-bold text-xs text-foreground block">
+                          {service?.title || "Bespoke Treatment"}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">
-                          ID: {tx._id}
+                        <span className="text-[10px] text-muted-foreground block">
+                          {service?.category || "Specialty Care"}
                         </span>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Amount */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="font-sans text-base font-bold text-foreground tabular-nums">
-                        {formatCurrency(tx.amount)}
-                      </span>
-                    </td>
+                      {/* Amount */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="font-sans text-sm font-bold text-foreground tabular-nums">
+                          {formatCurrency(tx.amount)}
+                        </span>
+                      </td>
 
-                    {/* Gateway */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-[11px] text-foreground font-medium">
-                        <CreditCard className="w-3 h-3 text-accent" />
-                        <span>Stripe Checkout</span>
-                      </div>
-                    </td>
+                      {/* Gateway */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-[10px] text-foreground font-medium">
+                          <CreditCard className="w-3 h-3 text-accent" />
+                          <span>Stripe TLS</span>
+                        </div>
+                      </td>
 
-                    {/* Date */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                        <Calendar className="w-3.5 h-3.5 text-accent" />
-                        <span>{formatDate(tx.createdAt)}</span>
-                      </div>
-                    </td>
+                      {/* Date */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <Calendar className="w-3.5 h-3.5 text-accent" />
+                          <span className="tabular-nums">{formatDate(tx.createdAt)}</span>
+                        </div>
+                      </td>
 
-                    {/* Status */}
-                    <td className="py-4 px-6 text-right whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                        <ShieldCheck className="w-3 h-3" />
-                        <span>Succeeded</span>
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                      {/* Status */}
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <ShieldCheck className="w-3 h-3" />
+                          <span>Paid</span>
+                        </span>
+                      </td>
+
+                      {/* Receipt Action */}
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelectedTxForInvoice(tx)}
+                          className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
+                        >
+                          <Receipt className="w-3.5 h-3.5 text-accent" />
+                          <span>View Invoice</span>
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
       </div>
+      {/* Luxury Invoice & Receipt Modal */}
+      <InvoiceModal
+        isOpen={!!selectedTxForInvoice}
+        onClose={() => setSelectedTxForInvoice(null)}
+        transaction={selectedTxForInvoice}
+      />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Calendar,
   Lock,
+  Receipt,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Transaction, ApiResponse } from "@/types";
@@ -19,12 +20,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
+import { InvoiceModal } from "@/components/payment/InvoiceModal";
 
 export default function AdminTransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectedTxForInvoice, setSelectedTxForInvoice] = useState<Transaction | null>(null);
 
   const fetchTransactions = async () => {
     try {
@@ -190,12 +193,13 @@ export default function AdminTransactionsPage() {
             <table className="w-full min-w-[750px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-4 px-6">Transaction Ref</th>
+                  <th className="py-4 px-6">Invoice # &amp; Ref</th>
                   <th className="py-4 px-4">Patron</th>
                   <th className="py-4 px-4">Amount</th>
                   <th className="py-4 px-4">Settlement Date</th>
                   <th className="py-4 px-4">Payment Method</th>
-                  <th className="py-4 px-6 text-right">Status</th>
+                  <th className="py-4 px-4 text-center">Status</th>
+                  <th className="py-4 px-6 text-right">Receipt</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
@@ -208,16 +212,14 @@ export default function AdminTransactionsPage() {
                       key={tx._id}
                       className="hover:bg-muted/40 transition-colors group"
                     >
-                      {/* Transaction Reference */}
+                      {/* Transaction Reference & Invoice */}
                       <td className="py-4 px-6">
                         <div className="space-y-0.5">
-                          <span className="font-mono text-xs font-semibold text-foreground block">
-                            {tx.stripeSessionId
-                              ? `${tx.stripeSessionId.slice(0, 16)}...`
-                              : `TX-${tx._id.slice(-8).toUpperCase()}`}
+                          <span className="font-mono text-xs font-bold text-accent block">
+                            {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
                           </span>
-                          <span className="text-[10px] text-muted-foreground">
-                            Internal: {tx._id.slice(-8)}
+                          <span className="font-mono text-[10px] text-muted-foreground block truncate max-w-[140px]">
+                            {tx.stripeSessionId ? tx.stripeSessionId.slice(0, 16) + "..." : tx._id}
                           </span>
                         </div>
                       </td>
@@ -253,16 +255,29 @@ export default function AdminTransactionsPage() {
                       <td className="py-4 px-4 whitespace-nowrap">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-[11px] text-foreground font-medium">
                           <CreditCard className="w-3 h-3 text-accent" />
-                          <span>Stripe Checkout</span>
+                          <span>Stripe TLS</span>
                         </div>
                       </td>
 
                       {/* Status */}
-                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>Succeeded</span>
                         </span>
+                      </td>
+
+                      {/* Action */}
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelectedTxForInvoice(tx)}
+                          className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
+                        >
+                          <Receipt className="w-3.5 h-3.5 text-accent" />
+                          <span>View Invoice</span>
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -272,6 +287,12 @@ export default function AdminTransactionsPage() {
           </div>
         )}
       </div>
+      {/* Luxury Invoice & Receipt Modal */}
+      <InvoiceModal
+        isOpen={!!selectedTxForInvoice}
+        onClose={() => setSelectedTxForInvoice(null)}
+        transaction={selectedTxForInvoice}
+      />
     </div>
   );
 }

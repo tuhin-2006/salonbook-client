@@ -34,11 +34,26 @@ export function getInitials(name: string): string {
 
 export function getAppointmentPrice(app: any): number {
   if (!app) return 0;
-  if (typeof app.servicePrice === "number" && app.servicePrice > 0) return app.servicePrice;
-  if (typeof app.serviceId === "object" && typeof app.serviceId?.price === "number" && app.serviceId.price > 0) {
-    return app.serviceId.price;
+  // 1. Check direct servicePrice
+  const sp = Number(app.servicePrice);
+  if (!isNaN(sp) && sp > 0) return sp;
+
+  // 2. Check populated serviceId object
+  if (typeof app.serviceId === "object" && app.serviceId !== null) {
+    const sPrice = Number(app.serviceId.price);
+    if (!isNaN(sPrice) && sPrice > 0) return sPrice;
   }
-  if (typeof app.price === "number" && app.price > 0) return app.price;
+
+  // 3. Check direct price field or virtual
+  const p = Number(app.price);
+  if (!isNaN(p) && p > 0) return p;
+
+  // 4. Check nested service object
+  if (typeof app.service === "object" && app.service !== null) {
+    const s2 = Number(app.service.price);
+    if (!isNaN(s2) && s2 > 0) return s2;
+  }
+
   return 0;
 }
 

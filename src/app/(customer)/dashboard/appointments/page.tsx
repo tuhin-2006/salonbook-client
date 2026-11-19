@@ -16,6 +16,8 @@ import {
   User,
   ShieldCheck,
   RefreshCw,
+  Receipt,
+  Zap,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
@@ -31,6 +33,7 @@ import {
 import { formatCurrency, formatDate, getAppointmentPrice, getAppointmentDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { SafeImage } from "@/components/ui/SafeImage";
+import { InvoiceModal } from "@/components/payment/InvoiceModal";
 
 type FilterTab = "all" | "pending" | "confirmed" | "cancelled";
 
@@ -45,8 +48,14 @@ export default function CustomerAppointmentsPage() {
   const [appointmentToCancel, setAppointmentToCancel] = useState<Appointment | null>(null);
   const [cancelling, setCancelling] = useState(false);
 
-  // Stripe Checkout loading state
+  // Stripe Payment modal state
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [appointmentToPay, setAppointmentToPay] = useState<Appointment | null>(null);
   const [payingAppointmentId, setPayingAppointmentId] = useState<string | null>(null);
+  const [instantPaying, setInstantPaying] = useState(false);
+
+  // Invoice modal state
+  const [selectedAppointmentForInvoice, setSelectedAppointmentForInvoice] = useState<Appointment | null>(null);
 
   const fetchAppointments = async () => {
     try {
@@ -104,15 +113,21 @@ export default function CustomerAppointmentsPage() {
     }
   };
 
-  const handlePayNow = async (appointment: Appointment) => {
+  const handlePayNow = (appointment: Appointment) => {
+    setAppointmentToPay(appointment);
+    setPaymentModalOpen(true);
+  };
+
+  const proceedToStripeCheckout = async () => {
+    if (!appointmentToPay) return;
     try {
-      setPayingAppointmentId(appointment._id);
+      setPayingAppointmentId(appointmentToPay._id);
       toast.info("Connecting to Stripe 256-bit secure checkout...");
 
       const res = await api.post<ApiResponse<{ checkoutUrl?: string; url?: string }>>(
         "/payments/create-checkout-session",
         {
-          appointmentId: appointment._id,
+          appointmentId: appointmentToPay._id,
         }
       );
 
@@ -126,6 +141,39 @@ export default function CustomerAppointmentsPage() {
       toast.error((err as Error).message || "Payment initiation failed.");
     } finally {
       setPayingAppointmentId(null);
+    }
+  };
+
+  const handleInstantTestPayment = async () => {
+    if (!appointmentToPay) return;
+    try {
+      setInstantPaying(true);
+      toast.info("Processing Stripe Sandbox Settlement...");
+
+      const res = await api.post<ApiResponse<{ appointment: Appointment; transaction: any }>>(
+        "/payments/simulate-dev-payment",
+        {
+          appointmentId: appointmentToPay._id,
+        }
+      );
+
+      if (res.data.success) {
+        toast.success("Payment verified and confirmed via Stripe!");
+        setAppointments((prev) =>
+          prev.map((app) =>
+            app._id === appointmentToPay._id
+              ? { ...app, paymentStatus: "paid", status: "confirmed" }
+              : app
+          )
+        );
+        setPaymentModalOpen(false);
+        const updatedApp = res.data.data?.appointment || { ...appointmentToPay, paymentStatus: "paid" };
+        setSelectedAppointmentForInvoice(updatedApp as Appointment);
+      }
+    } catch (err: unknown) {
+      toast.error((err as Error).message || "Instant test settlement failed.");
+    } finally {
+      setInstantPaying(false);
     }
   };
 
@@ -353,18 +401,17 @@ export default function CustomerAppointmentsPage() {
                       </Button>
                     )}
 
-                    {/* Paid Receipt Link */}
+                    {/* Paid Receipt / Invoice Button */}
                     {app.paymentStatus === "paid" && (
-                      <Link href="/dashboard/transactions">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="rounded-xl text-xs font-semibold tracking-wider gap-1.5 border-border hover:bg-muted"
-                        >
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>View Receipt</span>
-                        </Button>
-                      </Link>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedAppointmentForInvoice(app)}
+                        className="rounded-xl text-xs font-semibold tracking-wider gap-1.5 border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+                      >
+                        <Receipt className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>View Invoice &amp; Receipt</span>
+                      </Button>
                     )}
 
                     {/* Cancel Button (Only if pending) */}
@@ -432,6 +479,114 @@ export default function CustomerAppointmentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* 5. Payment Options & Stripe Test Mode Dialog */}
+      <Dialog open={paymentModalOpen} onOpenChange={setPaymentModalOpen}>
+        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+          <DialogHeader className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] uppercase tracking-widest font-bold text-emerald-600 dark:text-emerald-400">
+                Stripe 256-bit Secure Gateway
+              </span>
+            </div>
+            <DialogTitle className="font-serif text-2xl font-bold text-foreground">
+              Settle Atelier Reservation
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
+              Confirm and settle your appointment fee via Stripe. Real service rates are dynamically generated.
+            </DialogDescription>
+          </DialogHeader>
+
+          {appointmentToPay && (
+            <div className="space-y-3 pt-2">
+              <div className="p-4 rounded-xl border border-border bg-muted/30 text-xs space-y-2">
+                <div className="flex justify-between items-center pb-2 border-b border-border/50">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground">
+                    Treatment
+                  </span>
+                  <span className="font-serif font-bold text-sm text-foreground">
+                    {typeof appointmentToPay.serviceId === "object"
+                      ? appointmentToPay.serviceId?.title
+                      : "Salon Treatment"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-muted-foreground">
+                  <span>Scheduled Session</span>
+                  <span className="font-medium text-foreground tabular-nums">
+                    {formatDate(getAppointmentDate(appointmentToPay))} @ {appointmentToPay.timeSlot}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-border/50">
+                  <span className="font-bold text-foreground">Total Fee</span>
+                  <span className="font-sans text-xl font-bold text-accent tabular-nums">
+                    {formatCurrency(getAppointmentPrice(appointmentToPay))}
+                  </span>
+                </div>
+              </div>
+
+              {/* Stripe Test Mode Card Helper */}
+              <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 text-xs space-y-1 text-accent">
+                <div className="flex items-center gap-1.5 font-bold text-[11px]">
+                  <CreditCard className="w-3.5 h-3.5" />
+                  <span>Stripe Test Mode Simulator Active</span>
+                </div>
+                <p className="text-[10px] text-muted-foreground">
+                  Test Card: <code className="font-mono font-bold text-foreground bg-muted px-1 py-0.5 rounded">4242 4242 4242 4242</code> · Exp: any future · CVC: 123
+                </p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="pt-4 border-t border-border flex flex-col gap-2">
+            <Button
+              size="sm"
+              disabled={payingAppointmentId !== null || instantPaying}
+              onClick={proceedToStripeCheckout}
+              className="w-full rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-sm h-10"
+            >
+              {payingAppointmentId ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Connecting to Stripe...</span>
+                </>
+              ) : (
+                <>
+                  <CreditCard className="w-4 h-4" />
+                  <span>Proceed to Stripe Hosted Checkout</span>
+                </>
+              )}
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={payingAppointmentId !== null || instantPaying}
+              onClick={handleInstantTestPayment}
+              className="w-full rounded-xl text-xs font-semibold border-accent/40 text-accent hover:bg-accent/10 gap-2 h-10"
+            >
+              {instantPaying ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Settling Sandbox Payment...</span>
+                </>
+              ) : (
+                <>
+                  <Zap className="w-4 h-4 text-accent" />
+                  <span>1-Click Instant Test Settlement (Sandbox)</span>
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 6. Luxury Invoice & Receipt Modal */}
+      <InvoiceModal
+        isOpen={!!selectedAppointmentForInvoice}
+        onClose={() => setSelectedAppointmentForInvoice(null)}
+        appointment={selectedAppointmentForInvoice}
+      />
     </div>
   );
 }
