@@ -19,11 +19,13 @@ import {
   Image as ImageIcon,
   Check,
   X,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { uploadImageToImgBB } from "@/lib/imgbb";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { AuthHeroVisual } from "@/components/auth/AuthHeroVisual";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -118,6 +120,32 @@ export default function SignUpPage() {
   const [avatarMode, setAvatarMode] = useState<"preset" | "custom">("preset");
   const [selectedAvatarUrl, setSelectedAvatarUrl] = useState<string>(CARTOON_AVATARS[0].url);
   const [customAvatarUrl, setCustomAvatarUrl] = useState("");
+  const [uploadingImgBB, setUploadingImgBB] = useState(false);
+
+  const handleAvatarFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file (PNG, JPG, WEBP).");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image file must be under 10MB.");
+      return;
+    }
+
+    try {
+      setUploadingImgBB(true);
+      toast.info("Uploading portrait to ImgBB cloud...");
+      const url = await uploadImageToImgBB(file);
+      setCustomAvatarUrl(url);
+      toast.success("Portrait uploaded to ImgBB successfully!");
+    } catch (err: unknown) {
+      toast.error((err as Error).message || "ImgBB upload failed.");
+    } finally {
+      setUploadingImgBB(false);
+    }
+  };
 
   const activePhotoUrl = avatarMode === "custom" ? customAvatarUrl.trim() : selectedAvatarUrl;
 
@@ -359,15 +387,35 @@ export default function SignUpPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="space-y-1">
-                      <span className="text-[10px] text-[#786C68]/80 dark:text-[#B9AEB0]/80 block font-medium">
-                        Paste custom image web link:
-                      </span>
+                    <div className="space-y-2">
+                      <label className="block cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarFileUpload}
+                          disabled={uploadingImgBB}
+                          className="hidden"
+                        />
+                        <div className="h-8 px-3 rounded-lg border border-dashed border-[#94704C]/50 dark:border-[#C8A879]/50 bg-[#FFFFFF] dark:bg-[#20171B] flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#94704C] dark:text-[#C8A879] hover:bg-[#94704C]/10 transition-colors">
+                          {uploadingImgBB ? (
+                            <>
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              <span>Uploading to ImgBB...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-3.5 h-3.5" />
+                              <span>Upload Photo to ImgBB</span>
+                            </>
+                          )}
+                        </div>
+                      </label>
+
                       <div className="relative">
                         <ImageIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#786C68]/60 dark:text-[#B9AEB0]/60" />
                         <Input
                           type="url"
-                          placeholder="https://images.com/my-photo.jpg"
+                          placeholder="Or paste image web link..."
                           value={customAvatarUrl}
                           onChange={(e) => setCustomAvatarUrl(e.target.value)}
                           className="pl-8 pr-7 h-8 text-[11px] rounded-lg border-[rgba(90,65,48,0.2)] dark:border-[rgba(200,168,121,0.2)] bg-[#FFFFFF] dark:bg-[#20171B]"
