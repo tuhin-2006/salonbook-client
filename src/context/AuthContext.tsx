@@ -28,6 +28,11 @@ interface AuthContextType {
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
   quickDemoLogin: (role: "customer" | "admin") => Promise<void>;
+  loginWithGoogle: (tokenOrCredential: {
+    credential?: string;
+    idToken?: string;
+    accessToken?: string;
+  }) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -118,6 +123,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const loginWithGoogle = async (tokenOrCredential: {
+    credential?: string;
+    idToken?: string;
+    accessToken?: string;
+  }) => {
+    setIsLoading(true);
+    try {
+      const res = await api.post<ApiResponse<{ user: User; token: string }>>(
+        "/auth/google",
+        tokenOrCredential
+      );
+      const { user: googleUser, token: authToken } = res.data.data;
+      localStorage.setItem("salonbook_token", authToken);
+      setToken(authToken);
+      setUser(googleUser);
+      toast.success(`Welcome to SalonBook, ${googleUser.name}!`);
+      return googleUser;
+    } catch (error: unknown) {
+      toast.error((error as Error).message || "Google authentication failed");
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("salonbook_token");
     setToken(null);
@@ -155,6 +185,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         logout,
         updateProfile,
         quickDemoLogin,
+        loginWithGoogle,
       }}
     >
       {children}

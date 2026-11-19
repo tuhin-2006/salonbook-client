@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { AuthHeroVisual } from "@/components/auth/AuthHeroVisual";
 import { toast } from "sonner";
@@ -55,6 +56,7 @@ function SignInContent() {
   const redirectParam = searchParams.get("redirect");
 
   const { login, quickDemoLogin, isLoading, isAuthenticated, isAdmin } = useAuth();
+  const { handleGoogleSignIn, isGoogleLoading } = useGoogleAuth(redirectParam || undefined);
 
   const [activePortal, setActivePortal] = useState<"client" | "admin">("client");
   const [email, setEmail] = useState("");
@@ -128,24 +130,6 @@ function SignInContent() {
       }
     } catch (err: unknown) {
       setFormError((err as Error).message || "Demo login failed");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleGoogleAuth = async () => {
-    setFormError("");
-    try {
-      setSubmitting(true);
-      toast.info("Connecting to Google Secure Sign-In...");
-      await new Promise((r) => setTimeout(r, 600));
-      await quickDemoLogin("customer");
-      toast.success("Signed in with Google Account!");
-      if (redirectParam) {
-        router.push(redirectParam);
-      }
-    } catch (err: unknown) {
-      setFormError((err as Error).message || "Google sign-in failed");
     } finally {
       setSubmitting(false);
     }
@@ -292,12 +276,14 @@ function SignInContent() {
             {/* Continue with Google Button */}
             <Button
               type="button"
-              onClick={handleGoogleAuth}
-              disabled={submitting || isLoading}
+              onClick={handleGoogleSignIn}
+              disabled={submitting || isLoading || isGoogleLoading}
               className="w-full h-11 rounded-xl border border-[rgba(90,65,48,0.2)] dark:border-[rgba(200,168,121,0.22)] bg-[#FFFFFF] dark:bg-[#251C20] text-xs font-semibold text-[#251C1D] dark:text-[#F7F0E8] hover:bg-[#F8F5F0] dark:hover:bg-[#2D1F26] flex items-center justify-center gap-2.5 transition-all shadow-xs"
             >
               <GoogleIcon className="w-4 h-4 shrink-0" />
-              <span>Continue with Google</span>
+              <span>
+                {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
+              </span>
             </Button>
 
             {/* Elegant OR Divider */}

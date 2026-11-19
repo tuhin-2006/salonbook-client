@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { AuthHeroVisual } from "@/components/auth/AuthHeroVisual";
 import { SafeImage } from "@/components/ui/SafeImage";
@@ -100,6 +101,7 @@ function GoogleIcon({ className = "w-4 h-4" }: { className?: string }) {
 export default function SignUpPage() {
   const router = useRouter();
   const { register, quickDemoLogin, isLoading, isAuthenticated, isAdmin } = useAuth();
+  const { handleGoogleSignIn, isGoogleLoading } = useGoogleAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -171,36 +173,6 @@ export default function SignUpPage() {
     }
   };
 
-  const handleGoogleAuth = async () => {
-    setFormError("");
-    try {
-      setSubmitting(true);
-      toast.info("Connecting to Google Secure Sign-In...");
-      await new Promise((r) => setTimeout(r, 600));
-
-      const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-      try {
-        await register({
-          name: name.trim() || "Google Patron",
-          email: `google.client${randomSuffix}@gmail.com`,
-          password: "GoogleAuth@123456",
-          image: activePhotoUrl || CARTOON_AVATARS[0].url,
-        });
-        toast.success("Account created via Google Workspace!");
-        router.push("/dashboard");
-      } catch {
-        // Fallback to demo login if registration endpoint encounters duplicate
-        await quickDemoLogin("customer");
-        toast.success("Access granted via Google Authentication");
-        router.push("/dashboard");
-      }
-    } catch (err: unknown) {
-      setFormError((err as Error).message || "Google authentication failed");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row bg-[#F8F5F0] dark:bg-[#150F13] text-[#251C1D] dark:text-[#F7F0E8] transition-colors duration-300 relative overflow-hidden">
       {/* Dynamic Background Ambient Light Orbs */}
@@ -258,12 +230,14 @@ export default function SignUpPage() {
             {/* Continue with Google Button */}
             <Button
               type="button"
-              onClick={handleGoogleAuth}
-              disabled={submitting || isLoading}
+              onClick={handleGoogleSignIn}
+              disabled={submitting || isLoading || isGoogleLoading}
               className="w-full h-11 rounded-xl border border-[rgba(90,65,48,0.2)] dark:border-[rgba(200,168,121,0.22)] bg-[#FFFFFF] dark:bg-[#251C20] text-xs font-semibold text-[#251C1D] dark:text-[#F7F0E8] hover:bg-[#F8F5F0] dark:hover:bg-[#2D1F26] flex items-center justify-center gap-2.5 transition-all shadow-xs"
             >
               <GoogleIcon className="w-4 h-4 shrink-0" />
-              <span>Continue with Google</span>
+              <span>
+                {isGoogleLoading ? "Connecting to Google..." : "Continue with Google"}
+              </span>
             </Button>
 
             {/* Elegant OR Divider */}

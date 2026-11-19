@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -35,6 +36,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${serifFont.variable} ${sansFont.variable}`}>
       <body className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased selection:bg-[#3B1F2B] selection:text-[#FAF7F2] transition-colors duration-200">
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="afterInteractive"
+        />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
           <QueryProvider>
             <AuthProvider>
