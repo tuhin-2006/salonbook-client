@@ -36,7 +36,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   onClose,
 }) => {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const getTomorrowString = () => {
     const d = new Date();
@@ -95,6 +95,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       toast.error("Please sign in to reserve an appointment.");
       router.push(`/sign-in?redirect=/services/${service._id}`);
       onClose();
+      return;
+    }
+
+    if (user?.isBlocked) {
+      toast.error("Your account has been suspended. You cannot make reservations.");
       return;
     }
 
@@ -301,7 +306,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
-                  Reserving...
+                  Creating Appointment Request...
                 </>
               ) : (
                 <>

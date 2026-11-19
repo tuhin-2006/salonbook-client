@@ -170,23 +170,36 @@ export default function AdminServicesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !price || !durationMinutes || !description.trim()) {
-      toast.error("Please fill in all required fields.");
+    if (!title.trim() || !description.trim()) {
+      toast.error("Please provide both Service Name and Description.");
+      return;
+    }
+
+    const numericPrice = Number(price);
+    if (isNaN(numericPrice) || numericPrice <= 0) {
+      toast.error("Price must be a positive number greater than 0.");
+      return;
+    }
+
+    const numericDuration = Number(durationMinutes);
+    if (isNaN(numericDuration) || numericDuration <= 0) {
+      toast.error("Estimated duration must be a positive number greater than 0 minutes.");
+      return;
+    }
+
+    if (!imageUrl.trim()) {
+      toast.error("Please upload a service image file using the image upload zone.");
       return;
     }
 
     const payload = {
       title: title.trim(),
       category,
-      price: Number(price),
-      durationMinutes: Number(durationMinutes),
+      price: numericPrice,
+      durationMinutes: numericDuration,
       description: description.trim(),
       isActive,
-      images: imageUrl.trim()
-        ? [imageUrl.trim()]
-        : [
-            "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80",
-          ],
+      images: [imageUrl.trim()],
     };
 
     try {
@@ -411,7 +424,7 @@ export default function AdminServicesPage() {
           <div className="py-24 text-center space-y-3">
             <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Loading Treatment Carte...
+              Loading Dashboard Data...
             </p>
           </div>
         ) : filteredServices.length === 0 ? (
@@ -704,21 +717,62 @@ export default function AdminServicesPage() {
               />
             </div>
 
-            {/* Image Upload / URL */}
+            {/* Image Upload: Strictly Image Upload (Not Image URL) */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
-                Treatment Photography (ImgBB Cloud or URL)
-              </label>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="https://images.unsplash.com/..."
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className="h-10 rounded-xl text-xs border-border bg-background flex-1"
-                />
-                <label className="h-10 px-4 rounded-xl border border-border bg-muted/60 hover:bg-muted text-foreground text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors shrink-0">
-                  <Upload className="w-3.5 h-3.5 text-accent" />
-                  <span>{uploadingImage ? "Uploading..." : "Upload"}</span>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Service Image (Image Upload; Not Image URL) *
+                </label>
+                {imageUrl && (
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3" /> Image Uploaded
+                  </span>
+                )}
+              </div>
+
+              {imageUrl ? (
+                <div className="relative rounded-xl border border-border overflow-hidden p-3 bg-muted/30 flex items-center gap-4">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 border border-border/70 relative">
+                    <SafeImage
+                      src={imageUrl}
+                      alt="Treatment formulation"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <span className="font-semibold text-xs text-foreground block truncate">
+                      Formulation Photograph
+                    </span>
+                    <p className="text-[11px] text-muted-foreground truncate">
+                      Hosted on ImgBB CDN
+                    </p>
+                    <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted text-xs font-semibold cursor-pointer transition-colors text-foreground">
+                      <Upload className="w-3.5 h-3.5 text-accent" />
+                      <span>{uploadingImage ? "Uploading..." : "Replace Image File"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        disabled={uploadingImage}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+              ) : (
+                <label className="border-2 border-dashed border-border hover:border-accent/60 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 bg-muted/20 hover:bg-muted/40">
+                  <div className="w-10 h-10 rounded-full bg-accent/15 text-accent flex items-center justify-center">
+                    <Upload className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <span className="font-semibold text-xs text-foreground block">
+                      {uploadingImage ? "Uploading to ImgBB Cloud..." : "Upload Treatment Image"}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground block">
+                      Select a photograph file from your device (PNG, JPG, WEBP)
+                    </span>
+                  </div>
                   <input
                     type="file"
                     accept="image/*"
@@ -727,35 +781,47 @@ export default function AdminServicesPage() {
                     className="hidden"
                   />
                 </label>
-              </div>
-
-              {imageUrl && (
-                <div className="mt-2 w-full h-32 rounded-xl overflow-hidden border border-border relative bg-muted/40">
-                  <SafeImage
-                    src={imageUrl}
-                    alt="Preview"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
               )}
             </div>
 
-            {/* Active Toggle */}
-            <div className="flex items-center gap-3 pt-2">
-              <input
-                type="checkbox"
-                id="isActiveService"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-                className="w-4 h-4 rounded text-accent accent-accent"
-              />
-              <label
-                htmlFor="isActiveService"
-                className="text-xs font-medium text-foreground cursor-pointer"
-              >
-                Display offering as active in public reservation catalog
+            {/* Service Status (Active / Inactive -> Default Status: Active) */}
+            <div className="space-y-1.5 pt-1">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wider block">
+                Service Status (Default: Active) *
               </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsActive(true)}
+                  className={`p-3 rounded-xl border text-left transition-all flex items-center gap-2.5 ${
+                    isActive
+                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-bold"
+                      : "border-border bg-background text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  <CheckCircle className={`w-4 h-4 ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`} />
+                  <div>
+                    <span className="text-xs block">Active</span>
+                    <span className="text-[10px] font-normal opacity-80 block">Visible in catalog</span>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsActive(false)}
+                  className={`p-3 rounded-xl border text-left transition-all flex items-center gap-2.5 ${
+                    !isActive
+                      ? "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-300 font-bold"
+                      : "border-border bg-background text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Archive className={`w-4 h-4 ${!isActive ? "text-amber-600 dark:text-amber-400" : "text-muted-foreground"}`} />
+                  <div>
+                    <span className="text-xs block">Inactive</span>
+                    <span className="text-[10px] font-normal opacity-80 block">Archived from catalog</span>
+                  </div>
+                </button>
+              </div>
             </div>
 
             <DialogFooter className="pt-4 border-t border-border gap-2">

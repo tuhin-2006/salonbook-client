@@ -90,7 +90,7 @@ export default function ServiceDetailsPage() {
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#3B1F2B] dark:border-[#C5A880] border-t-transparent animate-spin rounded-full" />
           <p className="text-xs uppercase tracking-[0.2em] text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-semibold">
-            {!isAuthenticated && !authLoading ? "Redirecting to Sign In..." : "Loading Ritual Dossier..."}
+            {!isAuthenticated && !authLoading ? "Redirecting to Sign In..." : "Fetching Service..."}
           </p>
         </div>
       </div>

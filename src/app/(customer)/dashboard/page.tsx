@@ -281,7 +281,7 @@ export default function CustomerDashboardOverview() {
         {loading ? (
           <div className="py-16 text-center text-xs text-muted-foreground">
             <div className="w-6 h-6 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto mb-2" />
-            Loading recent bookings...
+            Loading Dashboard Data...
           </div>
         ) : recentAppointments.length === 0 ? (
           <div className="py-12 text-center text-xs text-muted-foreground">

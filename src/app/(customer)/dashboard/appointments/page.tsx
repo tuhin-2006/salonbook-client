@@ -277,7 +277,7 @@ export default function CustomerAppointmentsPage() {
           <div className="py-24 text-center space-y-3 rounded-2xl border border-border bg-card">
             <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Retrieving Atelier Diary...
+              Loading Dashboard Data...
             </p>
           </div>
         ) : filteredAppointments.length === 0 ? (
@@ -575,7 +575,7 @@ export default function CustomerAppointmentsPage() {
               {payingAppointmentId ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Connecting to Stripe...</span>
+                  <span>Processing Payment...</span>
                 </>
               ) : (
                 <>

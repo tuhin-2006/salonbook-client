@@ -13,12 +13,25 @@ import {
   Sparkles,
   RefreshCw,
   Phone,
+  Eye,
+  User as UserIcon,
+  Clock,
+  Scissors,
+  CheckCircle2,
 } from "lucide-react";
 import { api } from "@/lib/api";
-import { User, ApiResponse } from "@/types";
+import { User, ApiResponse, Appointment } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { formatDate, getInitials } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { formatDate, getInitials, formatCurrency } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function AdminCustomersPage() {
@@ -28,6 +41,13 @@ export default function AdminCustomersPage() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+
+  // View User Dossier Modal
+  const [viewUserModalOpen, setViewUserModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userDetailsLoading, setUserDetailsLoading] = useState(false);
+  const [userBookingsCount, setUserBookingsCount] = useState<number>(0);
+  const [userRecentBookings, setUserRecentBookings] = useState<Appointment[]>([]);
 
   const fetchUsers = async () => {
     try {
@@ -47,6 +67,37 @@ export default function AdminCustomersPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleViewUser = async (user: User) => {
+    setSelectedUser(user);
+    setViewUserModalOpen(true);
+    setUserDetailsLoading(true);
+    setUserBookingsCount(0);
+    setUserRecentBookings([]);
+
+    try {
+      const userId = user.id || user._id || "";
+      const res = await api.get<
+        ApiResponse<{
+          user: User;
+          appointmentsCount: number;
+          recentAppointments: Appointment[];
+        }>
+      >(`/admin/users/${userId}`);
+
+      if (res.data.success && res.data.data) {
+        setUserBookingsCount(res.data.data.appointmentsCount || 0);
+        setUserRecentBookings(res.data.data.recentAppointments || []);
+        if (res.data.data.user) {
+          setSelectedUser(res.data.data.user);
+        }
+      }
+    } catch {
+      // Fallback: If single fetch fails, still show the user from table
+    } finally {
+      setUserDetailsLoading(false);
+    }
+  };
 
   const handleToggleBlock = async (user: User) => {
     try {
@@ -72,6 +123,12 @@ export default function AdminCustomersPage() {
             (u.id || u._id) === userId ? { ...u, isBlocked: !isCurrentlyBlocked } : u
           )
         );
+
+        if (selectedUser && (selectedUser.id || selectedUser._id) === userId) {
+          setSelectedUser((prev) =>
+            prev ? { ...prev, isBlocked: !isCurrentlyBlocked } : null
+          );
+        }
       }
     } catch (err: unknown) {
       toast.error((err as Error).message || "Action failed");
@@ -159,7 +216,7 @@ export default function AdminCustomersPage() {
           <div className="py-24 text-center space-y-3">
             <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Loading Patron Registry...
+              Loading Dashboard Data...
             </p>
           </div>
         ) : filteredUsers.length === 0 ? (
@@ -176,7 +233,7 @@ export default function AdminCustomersPage() {
           </div>
         ) : (
           <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[750px] text-left text-xs">
+            <table className="w-full min-w-[850px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
                   <th className="py-4 px-6">Patron Profile</th>
@@ -184,7 +241,7 @@ export default function AdminCustomersPage() {
                   <th className="py-4 px-4">Role</th>
                   <th className="py-4 px-4">Registered</th>
                   <th className="py-4 px-4">Status</th>
-                  <th className="py-4 px-6 text-right">Privilege Governance</th>
+                  <th className="py-4 px-6 text-right">Actions &amp; Governance</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
@@ -283,35 +340,50 @@ export default function AdminCustomersPage() {
 
                       {/* Privilege Action */}
                       <td className="py-4 px-6 text-right whitespace-nowrap">
-                        {client.role !== "admin" ? (
+                        <div className="flex items-center justify-end gap-2">
+                          {/* View User Button */}
                           <Button
                             size="sm"
                             variant="outline"
-                            disabled={isProcessing}
-                            onClick={() => handleToggleBlock(client)}
-                            className={`rounded-xl text-[11px] font-semibold tracking-wider h-8 gap-1.5 ${
-                              client.isBlocked
-                                ? "border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
-                                : "border-rose-500/30 text-rose-600 hover:bg-rose-500/10"
-                            }`}
+                            onClick={() => handleViewUser(client)}
+                            className="rounded-xl text-[11px] font-semibold tracking-wider h-8 gap-1.5 border-border hover:bg-muted text-foreground"
+                            title="Inspect Patron Dossier"
                           >
-                            {client.isBlocked ? (
-                              <>
-                                <UserCheck className="w-3.5 h-3.5" />
-                                <span>Reinstate</span>
-                              </>
-                            ) : (
-                              <>
-                                <UserX className="w-3.5 h-3.5" />
-                                <span>Suspend</span>
-                              </>
-                            )}
+                            <Eye className="w-3.5 h-3.5 text-accent" />
+                            <span>View User</span>
                           </Button>
-                        ) : (
-                          <span className="text-[10px] text-muted-foreground italic px-2">
-                            Protected Role
-                          </span>
-                        )}
+
+                          {/* Block / Unblock Toggle */}
+                          {client.role !== "admin" ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={isProcessing}
+                              onClick={() => handleToggleBlock(client)}
+                              className={`rounded-xl text-[11px] font-semibold tracking-wider h-8 gap-1.5 ${
+                                client.isBlocked
+                                  ? "border-emerald-500/30 text-emerald-600 hover:bg-emerald-500/10"
+                                  : "border-rose-500/30 text-rose-600 hover:bg-rose-500/10"
+                              }`}
+                            >
+                              {client.isBlocked ? (
+                                <>
+                                  <UserCheck className="w-3.5 h-3.5" />
+                                  <span>Unblock</span>
+                                </>
+                              ) : (
+                                <>
+                                  <UserX className="w-3.5 h-3.5" />
+                                  <span>Block</span>
+                                </>
+                              )}
+                            </Button>
+                          ) : (
+                            <span className="text-[10px] text-muted-foreground italic px-2">
+                              Protected
+                            </span>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -321,6 +393,203 @@ export default function AdminCustomersPage() {
           </div>
         )}
       </div>
+
+      {/* 4. Luxury View User Dossier Modal */}
+      <Dialog open={viewUserModalOpen} onOpenChange={setViewUserModalOpen}>
+        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-6 sm:p-8 no-scrollbar">
+          <DialogHeader className="space-y-1 pb-4 border-b border-border">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold">
+                Patron Dossier &amp; Profile
+              </span>
+              {selectedUser && (
+                <span
+                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                    selectedUser.isBlocked
+                      ? "bg-rose-500/10 text-rose-600 border-rose-500/20"
+                      : "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                  }`}
+                >
+                  {selectedUser.isBlocked ? "Suspended" : "Active Privilege"}
+                </span>
+              )}
+            </div>
+            <DialogTitle className="font-serif text-2xl font-bold text-foreground">
+              {selectedUser?.name || "Patron Profile"}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              User ID: {selectedUser?.id || selectedUser?._id}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedUser && (
+            <div className="space-y-6 pt-3 text-xs">
+              {/* Primary Profile Badge */}
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/40 border border-border/80">
+                <div className="w-14 h-14 rounded-full bg-accent/20 text-accent font-serif font-bold text-lg flex items-center justify-center border border-accent/30 overflow-hidden shrink-0">
+                  {selectedUser.image ? (
+                    <img
+                      src={selectedUser.image}
+                      alt={selectedUser.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    getInitials(selectedUser.name)
+                  )}
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-serif text-lg font-bold text-foreground">
+                    {selectedUser.name}
+                  </h3>
+                  <div className="flex flex-wrap items-center gap-3 text-muted-foreground text-[11px]">
+                    <span className="flex items-center gap-1 text-foreground">
+                      <Mail className="w-3.5 h-3.5 text-accent" />
+                      {selectedUser.email}
+                    </span>
+                    {selectedUser.phone && (
+                      <span className="flex items-center gap-1">
+                        <Phone className="w-3.5 h-3.5 text-accent" />
+                        {selectedUser.phone}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Account Meta Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="p-3.5 rounded-xl border border-border bg-background space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">
+                    Account Role
+                  </span>
+                  <span className="font-semibold text-foreground capitalize">
+                    {selectedUser.role === "admin" ? "Administrator" : "Patron Client"}
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl border border-border bg-background space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">
+                    Member Since
+                  </span>
+                  <span className="font-semibold text-foreground">
+                    {selectedUser.createdAt ? formatDate(selectedUser.createdAt) : "Registered"}
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl border border-border bg-background space-y-1 col-span-2 sm:col-span-1">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">
+                    Total Bookings
+                  </span>
+                  <span className="font-sans text-base font-bold text-accent tabular-nums">
+                    {userDetailsLoading ? "..." : userBookingsCount} Reservations
+                  </span>
+                </div>
+              </div>
+
+              {/* Status & Security Notice */}
+              <div
+                className={`p-4 rounded-xl border text-xs space-y-1 ${
+                  selectedUser.isBlocked
+                    ? "bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-300"
+                    : "bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-300"
+                }`}
+              >
+                <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px]">
+                  {selectedUser.isBlocked ? (
+                    <>
+                      <ShieldAlert className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      <span>Account Suspended (Blocked)</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span>Account Active &amp; Verified</span>
+                    </>
+                  )}
+                </div>
+                <p className="text-[11px] opacity-90 leading-relaxed">
+                  {selectedUser.isBlocked
+                    ? "This user is restricted from accessing customer lounge protected routes and submitting appointment requests."
+                    : "This user holds full privileges to browse, book atelier chair treatments, and settle invoices via Stripe."}
+                </p>
+              </div>
+
+              {/* Recent Appointments Preview */}
+              {userRecentBookings.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">
+                    Recent Booking History
+                  </span>
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto no-scrollbar">
+                    {userRecentBookings.map((b) => {
+                      const service = typeof b.serviceId === "object" ? b.serviceId : null;
+                      return (
+                        <div
+                          key={b._id}
+                          className="flex items-center justify-between p-2.5 rounded-lg border border-border bg-background text-[11px]"
+                        >
+                          <div className="space-y-0.5">
+                            <span className="font-semibold text-foreground block">
+                              {service?.title || "Atelier Ritual"}
+                            </span>
+                            <span className="text-muted-foreground text-[10px]">
+                              {formatDate(b.appointmentDate)} @ {b.timeSlot}
+                            </span>
+                          </div>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${
+                              b.status === "confirmed"
+                                ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                                : b.status === "pending"
+                                ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                                : "bg-rose-500/10 text-rose-600 border-rose-500/20"
+                            }`}
+                          >
+                            {b.status}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Footer Actions */}
+              <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+                {selectedUser.role !== "admin" && (
+                  <Button
+                    onClick={() => handleToggleBlock(selectedUser)}
+                    className={`rounded-xl text-xs font-bold gap-1.5 ${
+                      selectedUser.isBlocked
+                        ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                        : "bg-rose-600 hover:bg-rose-700 text-white"
+                    }`}
+                  >
+                    {selectedUser.isBlocked ? (
+                      <>
+                        <UserCheck className="w-3.5 h-3.5" />
+                        <span>Unblock Patron</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserX className="w-3.5 h-3.5" />
+                        <span>Block Patron</span>
+                      </>
+                    )}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => setViewUserModalOpen(false)}
+                  className="rounded-xl text-xs border-border"
+                >
+                  Close Dossier
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -599,9 +599,9 @@ export default function ServicesPage() {
     <Suspense
       fallback={
         <div className="py-24 text-center">
-          <div className="w-8 h-8 border-2 border-[#3B1F2B] border-t-transparent animate-spin mx-auto rounded-full" />
+          <div className="w-8 h-8 border-2 border-[#3B1F2B] dark:border-[#C5A880] border-t-transparent animate-spin mx-auto rounded-full" />
           <p className="text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 mt-3 uppercase tracking-wider font-semibold">
-            Loading Services...
+            Fetching Services...
           </p>
         </div>
       }

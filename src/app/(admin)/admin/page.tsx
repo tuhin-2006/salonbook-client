@@ -255,7 +255,7 @@ export default function AdminOverviewPage() {
             {loading ? (
               <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
                 <div className="w-6 h-6 border-2 border-accent border-t-transparent animate-spin rounded-full mr-2" />
-                Loading revenue telemetry...
+                Loading Dashboard Data...
               </div>
             ) : data?.monthlyRevenue && data.monthlyRevenue.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
