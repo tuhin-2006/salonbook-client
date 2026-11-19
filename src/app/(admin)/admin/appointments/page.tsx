@@ -292,7 +292,7 @@ export default function AdminAppointmentsPage() {
                       {/* Patron Column */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-serif font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30">
+                          <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-sans font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30">
                             {getInitials(customer?.name || "Patron")}
                           </div>
                           <div className="space-y-0.5">
@@ -321,11 +321,11 @@ export default function AdminAppointmentsPage() {
                       {/* Date & Time Column */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <div className="space-y-0.5">
-                          <div className="flex items-center gap-1.5 text-foreground font-medium">
+                          <div className="flex items-center gap-1.5 text-foreground font-medium tabular-nums">
                             <Calendar className="w-3.5 h-3.5 text-accent" />
                             <span>{formatDate(app.date || "")}</span>
                           </div>
-                          <div className="flex items-center gap-1.5 text-muted-foreground text-[11px]">
+                          <div className="flex items-center gap-1.5 text-muted-foreground text-[11px] tabular-nums">
                             <Clock className="w-3 h-3" />
                             <span>{app.timeSlot}</span>
                           </div>
@@ -473,7 +473,7 @@ export default function AdminAppointmentsPage() {
                 </span>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-serif font-bold flex items-center justify-center">
+                    <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-sans font-bold flex items-center justify-center">
                       {getInitials(
                         typeof selectedAppointment.customerId === "object"
                           ? selectedAppointment.customerId?.name || "Patron"

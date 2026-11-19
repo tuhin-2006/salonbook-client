@@ -98,6 +98,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       return;
     }
 
+    if (service.isActive === false) {
+      toast.error("This service is inactive and cannot be booked.");
+      return;
+    }
+
     if (!selectedSlot) {
       toast.error("Please select an available chair time slot.");
       return;
@@ -246,10 +251,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             )}
           </div>
 
-          {/* Notes Input */}
+          {/* Additional Message (Optional) */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold uppercase tracking-wider text-[#231C1E]/75 dark:text-[#FAF7F2]/75 block">
-              Appointment Notes &amp; Requests (Optional)
+              Additional Message (Optional)
             </label>
             <textarea
               value={notes}
@@ -266,7 +271,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               <span className="text-[10px] uppercase tracking-wider text-[#231C1E]/60 dark:text-[#FAF7F2]/60 block font-semibold">
                 TREATMENT FEE
               </span>
-              <div className="font-serif text-2xl font-bold text-[#3B1F2B] dark:text-[#C5A880]">
+              <div className="font-sans text-2xl font-bold tabular-nums text-[#3B1F2B] dark:text-[#C5A880]">
                 {formatCurrency(service.price)}
               </div>
             </div>

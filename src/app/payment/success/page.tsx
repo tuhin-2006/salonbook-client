@@ -26,11 +26,22 @@ function PaymentSuccessContent() {
       // ignore
     }
 
-    if (appointmentId && (isMock || (sessionId && sessionId.startsWith("cs_mock_")))) {
-      api.post("/payments/simulate-dev-payment", {
-        appointmentId,
-        sessionId,
-      }).catch((err) => console.warn("Dev payment simulation sync:", err));
+    if (sessionId || appointmentId) {
+      // Verify checkout session and record transaction in transactions collection
+      api
+        .post("/payments/verify-checkout-session", {
+          sessionId,
+          appointmentId,
+        })
+        .catch((err) => {
+          console.warn("Direct Stripe verification attempt:", err);
+          if (appointmentId && (isMock || (sessionId && sessionId.startsWith("cs_mock_")))) {
+            api.post("/payments/simulate-dev-payment", {
+              appointmentId,
+              sessionId,
+            }).catch((e) => console.warn("Dev fallback sync:", e));
+          }
+        });
     }
   }, [appointmentId, sessionId, isMock]);
 

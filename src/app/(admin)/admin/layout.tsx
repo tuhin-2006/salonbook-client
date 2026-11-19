@@ -190,7 +190,7 @@ export default function AdminDashboardLayout({
           {/* User Profile Summary */}
           <div className="flex items-center justify-between p-2.5 rounded-xl border border-border/50 bg-muted/30">
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="w-9 h-9 rounded-full bg-accent text-accent-foreground font-serif font-bold text-xs flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+              <div className="w-9 h-9 rounded-full bg-accent text-accent-foreground font-sans font-bold text-xs flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
                 {user?.image ? (
                   <img
                     src={user.image}

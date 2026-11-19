@@ -109,15 +109,16 @@ export default function CustomerAppointmentsPage() {
       setPayingAppointmentId(appointment._id);
       toast.info("Connecting to Stripe 256-bit secure checkout...");
 
-      const res = await api.post<ApiResponse<{ url: string }>>(
+      const res = await api.post<ApiResponse<{ checkoutUrl?: string; url?: string }>>(
         "/payments/create-checkout-session",
         {
           appointmentId: appointment._id,
         }
       );
 
-      if (res.data.success && res.data.data.url) {
-        window.location.href = res.data.data.url;
+      const redirectUrl = res.data.data?.checkoutUrl || res.data.data?.url;
+      if (res.data.success && redirectUrl) {
+        window.location.href = redirectUrl;
       } else {
         toast.error("Could not generate Stripe payment session.");
       }
@@ -298,11 +299,11 @@ export default function CustomerAppointmentsPage() {
                     <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-accent" />
-                        <span className="font-medium text-foreground">{formatDate(app.date || "")}</span>
+                        <span className="font-medium text-foreground tabular-nums">{formatDate(app.date || "")}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-accent" />
-                        <span>{app.timeSlot}</span>
+                        <span className="tabular-nums">{app.timeSlot}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <User className="w-3.5 h-3.5 text-accent" />

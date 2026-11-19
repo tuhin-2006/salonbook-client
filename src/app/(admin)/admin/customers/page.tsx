@@ -200,7 +200,7 @@ export default function AdminCustomersPage() {
                       {/* Patron Profile */}
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3.5">
-                          <div className="w-10 h-10 rounded-full bg-accent/20 text-accent font-serif font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
+                          <div className="w-10 h-10 rounded-full bg-accent/20 text-accent font-sans font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
                             {client.image ? (
                               <img
                                 src={client.image}
@@ -212,10 +212,10 @@ export default function AdminCustomersPage() {
                             )}
                           </div>
                           <div>
-                            <span className="font-serif text-sm font-bold text-foreground block">
+                            <span className="font-semibold text-sm text-foreground block">
                               {client.name || "Unnamed Patron"}
                             </span>
-                            <span className="text-[11px] text-muted-foreground block">
+                            <span className="text-[11px] text-muted-foreground block tabular-nums">
                               ID: {clientId.slice(-8)}
                             </span>
                           </div>

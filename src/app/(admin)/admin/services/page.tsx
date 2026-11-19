@@ -435,7 +435,7 @@ export default function AdminServicesPage() {
           </div>
         ) : (
           <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[700px] text-left text-xs">
+            <table className="w-full min-w-[760px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
                   <th className="py-4 px-6">Treatment</th>
@@ -467,9 +467,9 @@ export default function AdminServicesPage() {
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
-                        <div className="space-y-1 min-w-0 max-w-xs sm:max-w-md">
+                        <div className="space-y-1 min-w-[200px] max-w-sm sm:max-w-md">
                           <div className="flex items-center gap-2">
-                            <span className="font-serif text-sm sm:text-base font-bold text-foreground block truncate">
+                            <span className="font-sans font-semibold sm:font-bold text-sm sm:text-base text-foreground block truncate">
                               {service.title}
                             </span>
                             {!service.isActive && (

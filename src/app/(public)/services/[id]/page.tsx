@@ -248,7 +248,7 @@ export default function ServiceDetailsPage() {
                   <span className="text-[10px] uppercase tracking-wider text-[#231C1E]/60 dark:text-[#FAF7F2]/60 font-semibold block">
                     PRICE
                   </span>
-                  <div className="font-serif text-3xl font-bold text-[#3B1F2B] dark:text-[#C5A880]">
+                  <div className="font-sans text-3xl font-bold tabular-nums text-[#3B1F2B] dark:text-[#C5A880]">
                     {formatCurrency(service.price)}
                   </div>
                 </div>
@@ -288,9 +288,16 @@ export default function ServiceDetailsPage() {
 
               {/* Action Button */}
               <div className="space-y-3 pt-2">
+                {service.isActive === false && (
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-medium text-center">
+                    This treatment is currently archived and unavailable for new bookings.
+                  </div>
+                )}
                 <Button
                   size="lg"
+                  disabled={service.isActive === false}
                   onClick={() => {
+                    if (service.isActive === false) return;
                     if (!isAuthenticated) {
                       toast.info("Please sign in to reserve an appointment.");
                       router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
@@ -298,10 +305,18 @@ export default function ServiceDetailsPage() {
                     }
                     setIsModalOpen(true);
                   }}
-                  className="w-full h-12 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] text-[#FAF7F2] dark:text-[#170F13] shadow-md"
+                  className={`w-full h-12 rounded-xl text-xs font-bold uppercase tracking-wider text-[#FAF7F2] dark:text-[#170F13] shadow-md transition-all ${
+                    service.isActive === false
+                      ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
+                      : "bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96]"
+                  }`}
                 >
                   <Calendar className="w-4 h-4 mr-2 text-[#C5A880] dark:text-[#170F13]" />
-                  <span>Book Appointment Now</span>
+                  <span>
+                    {service.isActive === false
+                      ? "Treatment Archived (Unavailable)"
+                      : "Book Appointment Now"}
+                  </span>
                 </Button>
                 <p className="text-[11px] text-center text-[#231C1E]/60 dark:text-[#FAF7F2]/60">
                   Instant confirmation · Complimentary cancellation up to 24 hours prior.

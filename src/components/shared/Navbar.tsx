@@ -128,7 +128,7 @@ export const Navbar = () => {
                   }`}
                 >
                   {/* User Profile Avatar with Gold Border */}
-                  <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-sans text-xs font-bold flex items-center justify-center shrink-0">
                     {user.image ? (
                       <SafeImage
                         src={user.image}
@@ -165,7 +165,7 @@ export const Navbar = () => {
                     >
                       {/* 1. User Header with Name, Email & Role Badge */}
                       <div className="p-2.5 rounded-xl bg-[#F8F5F0] dark:bg-[#261C22] border border-[rgba(90,65,48,0.1)] dark:border-[rgba(200,168,121,0.15)] flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C5A880]/60 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center shrink-0 shadow-xs">
+                        <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C5A880]/60 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-sans text-xs font-bold flex items-center justify-center shrink-0 shadow-xs">
                           {user.image ? (
                             <SafeImage
                               src={user.image}
@@ -268,7 +268,7 @@ export const Navbar = () => {
             {isAuthenticated && user && (
               <Link
                 href={isAdmin ? "/admin" : "/dashboard"}
-                className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-serif text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs"
+                className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-sans text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs"
                 title="Go to Dashboard"
               >
                 {user.image ? (
@@ -325,7 +325,7 @@ export const Navbar = () => {
               <>
                 {/* User Info Card in Mobile */}
                 <div className="flex items-center gap-3 p-3 bg-[#F5EFEB] dark:bg-[#251B20] rounded-xl border border-[#E8E2D8] dark:border-[#38252E]">
-                  <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-serif text-xs font-bold flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-sans text-xs font-bold flex items-center justify-center shrink-0">
                     {user.image ? (
                       <SafeImage
                         src={user.image}

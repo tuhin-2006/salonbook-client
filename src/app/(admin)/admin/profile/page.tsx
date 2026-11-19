@@ -112,7 +112,7 @@ export default function AdminProfilePage() {
         {/* Avatar Upload Section */}
         <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-border/60">
           <div className="relative group">
-            <div className="w-24 h-24 rounded-2xl border-2 border-border/80 bg-muted/60 flex items-center justify-center text-foreground font-serif text-2xl font-bold overflow-hidden shadow-sm">
+            <div className="w-24 h-24 rounded-2xl border-2 border-border/80 bg-muted/60 flex items-center justify-center text-foreground font-sans text-2xl font-bold overflow-hidden shadow-sm">
               {image ? (
                 <img
                   src={image}

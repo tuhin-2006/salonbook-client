@@ -102,10 +102,10 @@ export default function CustomerDashboardOverview() {
                   <Calendar className="w-3.5 h-3.5 text-accent" />
                   <span>Session Date</span>
                 </span>
-                <p className="font-serif text-lg font-bold text-foreground">
+                <p className="font-sans text-base sm:text-lg font-bold text-foreground tabular-nums">
                   {formatDate(nextAppointment.date || "")}
                 </p>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground tabular-nums">
                   Time Slot: {nextAppointment.timeSlot}
                 </span>
               </div>
@@ -115,7 +115,7 @@ export default function CustomerDashboardOverview() {
                   <User className="w-3.5 h-3.5 text-accent" />
                   <span>Master Specialist</span>
                 </span>
-                <p className="font-serif text-lg font-bold text-foreground">
+                <p className="font-sans text-base sm:text-lg font-semibold text-foreground">
                   {nextAppointment.specialist || "Lead Atelier Artist"}
                 </p>
                 <span className="text-xs text-muted-foreground">
@@ -128,7 +128,7 @@ export default function CustomerDashboardOverview() {
                   <CreditCard className="w-3.5 h-3.5 text-accent" />
                   <span>Fee &amp; Payment</span>
                 </span>
-                <p className="font-serif text-lg font-bold text-foreground">
+                <p className="font-sans text-base sm:text-lg font-bold text-foreground tabular-nums">
                   {formatCurrency(nextAppointment.price || 0)}
                 </p>
                 <span
