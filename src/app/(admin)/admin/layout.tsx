@@ -110,9 +110,9 @@ export default function AdminDashboardLayout({
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row antialiased selection:bg-accent/30 selection:text-foreground">
+    <div className="min-h-[calc(100vh-4rem)] bg-background text-foreground flex flex-col lg:flex-row antialiased selection:bg-accent/30 selection:text-foreground">
       {/* 1. Desktop Executive Sidebar */}
-      <aside className="hidden lg:flex flex-col w-72 shrink-0 border-r border-border/70 bg-card/60 backdrop-blur-xl justify-between p-6 shadow-sm sticky top-0 h-screen overflow-y-auto">
+      <aside className="hidden lg:flex flex-col w-72 shrink-0 border-r border-border/70 bg-card/60 backdrop-blur-xl justify-between p-6 shadow-sm sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
         <div className="space-y-8">
           {/* Brand Monogram */}
           <Link
@@ -241,7 +241,7 @@ export default function AdminDashboardLayout({
       {/* 2. Main Executive Workspace */}
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         {/* Top Header Bar */}
-        <header className="sticky top-0 z-30 border-b border-border/70 bg-card/80 backdrop-blur-xl px-4 sm:px-8 py-3.5 flex items-center justify-between">
+        <header className="sticky top-16 z-30 border-b border-border/70 bg-card/80 backdrop-blur-xl px-4 sm:px-8 py-3.5 flex items-center justify-between">
           {/* Breadcrumb / Title */}
           <div className="flex items-center gap-3">
             {/* Mobile menu trigger */}

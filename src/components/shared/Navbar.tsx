@@ -30,17 +30,6 @@ export const Navbar = () => {
   const pathname = usePathname();
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Exclude public Navbar from full-screen dedicated auth flows and admin dashboards
-  const isAuthRoute =
-    pathname === "/sign-in" ||
-    pathname === "/sign-up" ||
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/forgot-password" ||
-    pathname === "/reset-password" ||
-    pathname === "/signed-out";
-  const isAdminRoute = pathname.startsWith("/admin");
-
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 15);
@@ -69,10 +58,6 @@ export const Navbar = () => {
     setProfileDropdownOpen(false);
     setMobileMenuOpen(false);
   }, [pathname]);
-
-  if (isAuthRoute || isAdminRoute) {
-    return null;
-  }
 
   const navLinks = [
     { label: "Home", href: "/" },

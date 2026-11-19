@@ -202,13 +202,13 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#F8F5F0] dark:bg-[#150F13] text-[#251C1D] dark:text-[#F7F0E8] transition-colors duration-300 relative overflow-hidden">
+    <div className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row bg-[#F8F5F0] dark:bg-[#150F13] text-[#251C1D] dark:text-[#F7F0E8] transition-colors duration-300 relative overflow-hidden">
       {/* Dynamic Background Ambient Light Orbs */}
       <div className="absolute top-[-10%] left-[-5%] w-[420px] h-[420px] rounded-full bg-[#C8A879]/10 dark:bg-[#C8A879]/15 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[20%] w-[450px] h-[450px] rounded-full bg-[#3B1F2B]/10 dark:bg-[#4A2035]/25 blur-[140px] pointer-events-none" />
 
       {/* Left Column: Dynamic Registration Panel */}
-      <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-7 sm:px-10 md:px-14 lg:px-12 xl:px-16 min-h-screen relative z-10">
+      <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-6 sm:px-10 md:px-14 lg:px-12 xl:px-16 min-h-[calc(100vh-4rem)] relative z-10">
         <AuthHeader />
 
         <div className="w-full max-w-[450px] mx-auto my-auto py-3 space-y-4">
