@@ -283,6 +283,9 @@ function ServicesContent() {
   const filteredServices = useMemo(() => {
     return services
       .filter((service) => {
+        // Strictly exclude any inactive / archived treatments from patron catalog
+        if (service.isActive === false) return false;
+
         const matchesCategory =
           selectedCategory === "All categories" ||
           service.category.toLowerCase() === selectedCategory.toLowerCase();
@@ -470,7 +473,7 @@ function ServicesContent() {
                     </span>
 
                     {/* Price Overlay */}
-                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm">
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold font-sans tabular-nums bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] shadow-sm">
                       {formatCurrency(service.price)}
                     </span>
                   </div>
@@ -478,9 +481,9 @@ function ServicesContent() {
                   {/* Body Content */}
                   <div className="p-6 space-y-3">
                     <div className="flex items-center justify-between text-xs text-[#231C1E]/70 dark:text-[#FAF7F2]/70 font-medium">
-                      <span className="flex items-center gap-1.5">
+                      <span className="flex items-center gap-1.5 font-sans tabular-nums">
                         <Clock className="w-3.5 h-3.5 text-[#C5A880]" />
-                        ⏱ {service.durationMinutes} min
+                        <span>{service.durationMinutes} min</span>
                       </span>
                       <span className="text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                         At the salon

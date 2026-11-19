@@ -342,7 +342,7 @@ export default function AdminAppointmentsPage() {
                       {/* Price Column */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <div className="space-y-0.5">
-                          <span className="font-serif text-sm font-bold text-foreground block">
+                          <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
                             {formatCurrency(app.price || 0)}
                           </span>
                           <span
@@ -531,7 +531,7 @@ export default function AdminAppointmentsPage() {
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
                     Fee &amp; Payment
                   </span>
-                  <span className="font-serif text-sm font-bold text-foreground block">
+                  <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
                     {formatCurrency(selectedAppointment.price || 0)} ({selectedAppointment.paymentStatus})
                   </span>
                 </div>

@@ -315,7 +315,7 @@ export default function CustomerAppointmentsPage() {
                 {/* Right Price & Actions */}
                 <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between sm:justify-end gap-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-border/50 shrink-0">
                   <div className="text-left sm:text-right space-y-0.5">
-                    <span className="font-serif text-2xl font-bold text-foreground block">
+                    <span className="font-sans text-2xl font-bold text-foreground tabular-nums block">
                       {formatCurrency(app.price || 0)}
                     </span>
                     <span

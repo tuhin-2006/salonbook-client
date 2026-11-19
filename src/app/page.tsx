@@ -395,7 +395,7 @@ export default function HomePage() {
           "/services?limit=12&isActive=true"
         );
         if (res.data.success && res.data.data.services.length > 0) {
-          setServices(res.data.data.services);
+          setServices(res.data.data.services.filter((s) => s.isActive !== false));
         }
       } catch (err) {
         console.warn("Using curated services fallback:", err);
@@ -425,8 +425,10 @@ export default function HomePage() {
 
   const filteredServices =
     activeTab === "All"
-      ? services.slice(0, 6)
-      : services.filter((s) => s.category.toLowerCase() === activeTab.toLowerCase());
+      ? services.filter((s) => s.isActive !== false).slice(0, 6)
+      : services.filter(
+          (s) => s.isActive !== false && s.category.toLowerCase() === activeTab.toLowerCase()
+        );
 
   const activeSlideData = heroSlides[currentSlide];
 

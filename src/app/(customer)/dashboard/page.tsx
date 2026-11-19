@@ -188,7 +188,7 @@ export default function CustomerDashboardOverview() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-serif text-3xl font-bold text-foreground">
+            <span className="font-sans text-3xl font-bold text-foreground tabular-nums tracking-tight">
               {loading ? "..." : totalAppointments}
             </span>
             <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
@@ -207,7 +207,7 @@ export default function CustomerDashboardOverview() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-serif text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="font-sans text-3xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums tracking-tight">
               {loading ? "..." : confirmedAppointments}
             </span>
             <span className="text-[10px] text-emerald-600/80 uppercase font-bold tracking-wider">
@@ -226,7 +226,7 @@ export default function CustomerDashboardOverview() {
             </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-serif text-3xl font-bold text-amber-600 dark:text-amber-400">
+            <span className="font-sans text-3xl font-bold text-amber-600 dark:text-amber-400 tabular-nums tracking-tight">
               {loading ? "..." : pendingAppointments}
             </span>
             <span className="text-[10px] text-amber-600/80 uppercase font-bold tracking-wider">

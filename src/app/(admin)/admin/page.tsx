@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Users,
@@ -84,6 +84,11 @@ export default function AdminOverviewPage() {
     data?.statusCounts.find((s) => s._id === "confirmed")?.count || 0;
   const cancelledCount =
     data?.statusCounts.find((s) => s._id === "cancelled")?.count || 0;
+
+  const totalFormulations = useMemo(() => {
+    if (!data?.categoryDistribution) return 0;
+    return data.categoryDistribution.reduce((acc, curr) => acc + (curr.count || 0), 0);
+  }, [data?.categoryDistribution]);
 
   const statCards = [
     {
@@ -207,7 +212,7 @@ export default function AdminOverviewPage() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-border/40 flex items-baseline justify-between">
-                  <h3 className="font-serif text-3xl font-bold text-foreground tracking-tight">
+                  <h3 className="font-sans text-3xl font-bold text-foreground tracking-tight tabular-nums">
                     {loading ? (
                       <span className="inline-block w-16 h-8 bg-muted animate-pulse rounded-md" />
                     ) : (
@@ -306,65 +311,115 @@ export default function AdminOverviewPage() {
 
         {/* Category Distribution Donut Chart */}
         <div className="rounded-2xl border border-border/80 bg-card p-6 sm:p-7 flex flex-col justify-between space-y-6 shadow-sm">
-          <div className="border-b border-border/60 pb-5 space-y-1">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold block">
-              Carte Portfolio
+          <div className="border-b border-border/60 pb-5 flex items-center justify-between">
+            <div className="space-y-1">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold block">
+                Carte Portfolio
+              </span>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+                Formulation Distribution
+              </h3>
+            </div>
+            <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20">
+              Live Mix
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
-              Formulation Distribution
-            </h3>
           </div>
 
-          <div className="h-60 w-full flex items-center justify-center">
+          <div className="relative h-60 w-full flex items-center justify-center">
             {loading ? (
               <span className="text-xs text-muted-foreground">Analyzing offerings...</span>
             ) : data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={data.categoryDistribution}
-                    dataKey="count"
-                    nameKey="_id"
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={55}
-                    outerRadius={85}
-                    paddingAngle={3}
-                  >
-                    {data.categoryDistribution.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={LUXURY_PALETTE[index % LUXURY_PALETTE.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      borderColor: "hsl(var(--border))",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                      color: "hsl(var(--foreground))",
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+              <>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data.categoryDistribution}
+                      dataKey="count"
+                      nameKey="_id"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={65}
+                      outerRadius={92}
+                      paddingAngle={4}
+                    >
+                      {data.categoryDistribution.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={LUXURY_PALETTE[index % LUXURY_PALETTE.length]}
+                          stroke="hsl(var(--card))"
+                          strokeWidth={2}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        borderColor: "hsl(var(--border))",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                        color: "hsl(var(--foreground))",
+                        boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)",
+                      }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                {/* Center Ring Telemetry */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
+                    {totalFormulations}
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
+                    Treatments
+                  </span>
+                </div>
+              </>
             ) : (
               <span className="text-xs text-muted-foreground">No categories indexed.</span>
             )}
           </div>
 
-          <div className="pt-4 border-t border-border/60 flex flex-wrap items-center justify-center gap-3 text-[11px] text-muted-foreground">
-            {data?.categoryDistribution.slice(0, 5).map((cat, i) => (
-              <div key={i} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/40 border border-border/40">
-                <span
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: LUXURY_PALETTE[i % LUXURY_PALETTE.length] }}
-                />
-                <span className="font-medium text-foreground">{cat._id}</span>
-                <span className="text-muted-foreground/80">({cat.count})</span>
+          {/* Dynamic Category Progress Bars & Distribution List */}
+          <div className="pt-4 border-t border-border/60 space-y-2.5">
+            {data?.categoryDistribution && data.categoryDistribution.length > 0 ? (
+              data.categoryDistribution.slice(0, 5).map((cat, i) => {
+                const color = LUXURY_PALETTE[i % LUXURY_PALETTE.length];
+                const pct = totalFormulations > 0 ? Math.round((cat.count / totalFormulations) * 100) : 0;
+                return (
+                  <div key={i} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span
+                          className="w-2.5 h-2.5 rounded-full shrink-0"
+                          style={{ backgroundColor: color }}
+                        />
+                        <span className="font-medium text-foreground truncate">
+                          {cat._id}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="font-sans font-semibold text-foreground tabular-nums text-[11px]">
+                          {cat.count} {cat.count === 1 ? "offering" : "offerings"}
+                        </span>
+                        <span className="font-sans text-[10px] font-bold text-muted-foreground tabular-nums px-1.5 py-0.5 rounded bg-muted">
+                          {pct}%
+                        </span>
+                      </div>
+                    </div>
+                    {/* Micro Progress Bar */}
+                    <div className="h-1.5 w-full bg-muted/60 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${pct}%`, backgroundColor: color }}
+                      />
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-2 text-xs text-muted-foreground">
+                No carte distribution data available.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -407,7 +462,7 @@ export default function AdminOverviewPage() {
                 </span>
               </div>
             </div>
-            <span className="font-serif text-2xl font-bold text-amber-600 dark:text-amber-400">
+            <span className="font-sans text-2xl font-bold tabular-nums text-amber-600 dark:text-amber-400">
               {pendingCount}
             </span>
           </div>
@@ -426,7 +481,7 @@ export default function AdminOverviewPage() {
                 </span>
               </div>
             </div>
-            <span className="font-serif text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="font-sans text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
               {confirmedCount}
             </span>
           </div>
@@ -445,7 +500,7 @@ export default function AdminOverviewPage() {
                 </span>
               </div>
             </div>
-            <span className="font-serif text-2xl font-bold text-rose-600 dark:text-rose-400">
+            <span className="font-sans text-2xl font-bold tabular-nums text-rose-600 dark:text-rose-400">
               {cancelledCount}
             </span>
           </div>

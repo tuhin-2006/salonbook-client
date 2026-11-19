@@ -93,7 +93,7 @@ export default function CustomerTransactionsPage() {
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Total Invested in Care
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+            <h3 className="font-sans text-2xl sm:text-3xl font-bold text-foreground tabular-nums tracking-tight">
               {formatCurrency(totalSpent)}
             </h3>
           </div>
@@ -107,8 +107,8 @@ export default function CustomerTransactionsPage() {
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Settled Invoices
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-              {transactions.length} Receipts
+            <h3 className="font-sans text-2xl sm:text-3xl font-bold text-foreground tabular-nums tracking-tight">
+              {transactions.length} <span className="text-base font-medium text-muted-foreground">Receipts</span>
             </h3>
           </div>
           <div className="w-10 h-10 rounded-xl bg-muted/60 text-foreground flex items-center justify-center">
@@ -121,9 +121,14 @@ export default function CustomerTransactionsPage() {
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Payment Standard
             </span>
-            <h3 className="font-serif text-lg font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-              <Lock className="w-4 h-4" /> PCI-DSS Compliant
-            </h3>
+            <div className="flex items-center gap-2">
+              <span className="font-sans text-base font-bold text-emerald-600 dark:text-emerald-400 tracking-tight flex items-center gap-1.5">
+                <Lock className="w-4 h-4" /> PCI-DSS Compliant
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                Verified
+              </span>
+            </div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
             <ShieldCheck className="w-5 h-5" />
@@ -197,7 +202,7 @@ export default function CustomerTransactionsPage() {
 
                     {/* Amount */}
                     <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="font-serif text-base font-bold text-foreground">
+                      <span className="font-sans text-base font-bold text-foreground tabular-nums">
                         {formatCurrency(tx.amount)}
                       </span>
                     </td>
