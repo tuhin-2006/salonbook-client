@@ -18,7 +18,7 @@ import {
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, getAppointmentPrice, getAppointmentDate } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { SafeImage } from "@/components/ui/SafeImage";
 
@@ -103,7 +103,7 @@ export default function CustomerDashboardOverview() {
                   <span>Session Date</span>
                 </span>
                 <p className="font-sans text-base sm:text-lg font-bold text-foreground tabular-nums">
-                  {formatDate(nextAppointment.date || "")}
+                  {formatDate(getAppointmentDate(nextAppointment))}
                 </p>
                 <span className="text-xs text-muted-foreground tabular-nums">
                   Time Slot: {nextAppointment.timeSlot}
@@ -129,7 +129,7 @@ export default function CustomerDashboardOverview() {
                   <span>Fee &amp; Payment</span>
                 </span>
                 <p className="font-sans text-base sm:text-lg font-bold text-foreground tabular-nums">
-                  {formatCurrency(nextAppointment.price || 0)}
+                  {formatCurrency(getAppointmentPrice(nextAppointment))}
                 </p>
                 <span
                   className={`text-xs font-semibold ${
@@ -312,9 +312,11 @@ export default function CustomerDashboardOverview() {
                         {service?.title || "Bespoke Treatment"}
                       </span>
                       <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                        <span>{formatDate(app.date || "")}</span>
+                        <span>{formatDate(getAppointmentDate(app))}</span>
                         <span>•</span>
                         <span>{app.timeSlot}</span>
+                        <span>•</span>
+                        <span className="font-semibold text-foreground">{formatCurrency(getAppointmentPrice(app))}</span>
                       </div>
                     </div>
                   </div>

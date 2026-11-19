@@ -31,3 +31,19 @@ export function getInitials(name: string): string {
     .join("")
     .toUpperCase();
 }
+
+export function getAppointmentPrice(app: any): number {
+  if (!app) return 0;
+  if (typeof app.servicePrice === "number" && app.servicePrice > 0) return app.servicePrice;
+  if (typeof app.serviceId === "object" && typeof app.serviceId?.price === "number" && app.serviceId.price > 0) {
+    return app.serviceId.price;
+  }
+  if (typeof app.price === "number" && app.price > 0) return app.price;
+  return 0;
+}
+
+export function getAppointmentDate(app: any): string {
+  if (!app) return "";
+  const val = app.appointmentDate || app.date || "";
+  return val ? String(val) : "";
+}

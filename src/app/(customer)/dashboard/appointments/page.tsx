@@ -28,7 +28,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatCurrency, formatDate, getAppointmentPrice, getAppointmentDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { SafeImage } from "@/components/ui/SafeImage";
 
@@ -299,7 +299,7 @@ export default function CustomerAppointmentsPage() {
                     <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-accent" />
-                        <span className="font-medium text-foreground tabular-nums">{formatDate(app.date || "")}</span>
+                        <span className="font-medium text-foreground tabular-nums">{formatDate(getAppointmentDate(app))}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-accent" />
@@ -317,7 +317,7 @@ export default function CustomerAppointmentsPage() {
                 <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between sm:justify-end gap-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-border/50 shrink-0">
                   <div className="text-left sm:text-right space-y-0.5">
                     <span className="font-sans text-2xl font-bold text-foreground tabular-nums block">
-                      {formatCurrency(app.price || 0)}
+                      {formatCurrency(getAppointmentPrice(app))}
                     </span>
                     <span
                       className={`text-[10px] font-bold uppercase tracking-wider block ${

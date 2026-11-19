@@ -32,7 +32,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { formatCurrency, formatDate, getInitials } from "@/lib/utils";
+import { formatCurrency, formatDate, getInitials, getAppointmentPrice, getAppointmentDate } from "@/lib/utils";
 import { toast } from "sonner";
 
 type StatusTab = "all" | "pending" | "confirmed" | "cancelled";
@@ -323,7 +323,7 @@ export default function AdminAppointmentsPage() {
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-1.5 text-foreground font-medium tabular-nums">
                             <Calendar className="w-3.5 h-3.5 text-accent" />
-                            <span>{formatDate(app.date || "")}</span>
+                            <span>{formatDate(getAppointmentDate(app))}</span>
                           </div>
                           <div className="flex items-center gap-1.5 text-muted-foreground text-[11px] tabular-nums">
                             <Clock className="w-3 h-3" />
@@ -343,7 +343,7 @@ export default function AdminAppointmentsPage() {
                       <td className="py-4 px-4 whitespace-nowrap">
                         <div className="space-y-0.5">
                           <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
-                            {formatCurrency(app.price || 0)}
+                            {formatCurrency(getAppointmentPrice(app))}
                           </span>
                           <span
                             className={`text-[9px] uppercase tracking-wider font-bold block ${
@@ -514,7 +514,7 @@ export default function AdminAppointmentsPage() {
                     Scheduled Chair Time
                   </span>
                   <span className="font-semibold text-foreground block">
-                    {formatDate(selectedAppointment.date || "")} @ {selectedAppointment.timeSlot}
+                    {formatDate(getAppointmentDate(selectedAppointment))} @ {selectedAppointment.timeSlot}
                   </span>
                 </div>
 
@@ -532,7 +532,7 @@ export default function AdminAppointmentsPage() {
                     Fee &amp; Payment
                   </span>
                   <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
-                    {formatCurrency(selectedAppointment.price || 0)} ({selectedAppointment.paymentStatus})
+                    {formatCurrency(getAppointmentPrice(selectedAppointment))} ({selectedAppointment.paymentStatus})
                   </span>
                 </div>
               </div>
