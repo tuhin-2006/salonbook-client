@@ -158,8 +158,8 @@ function SignInContent() {
       <div className="absolute bottom-[-10%] left-[20%] w-[450px] h-[450px] rounded-full bg-[#3B1F2B]/10 dark:bg-[#4A2035]/25 blur-[140px] pointer-events-none" />
       <div className="absolute top-[40%] right-[52%] w-[280px] h-[280px] rounded-full bg-[#B8755B]/10 dark:bg-[#B8755B]/10 blur-[100px] pointer-events-none hidden lg:block" />
 
-      {/* Left Column: Dynamic Luxury Authentication Panel (~48% width on desktop) */}
-      <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-6 sm:px-10 md:px-14 lg:px-12 xl:px-16 min-h-[calc(100vh-4rem)] relative z-10">
+      {/* Left Column: Dynamic Luxury Authentication Panel (~48% width on desktop, 100% on mobile/tablet) */}
+      <div className="w-full lg:w-[48%] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-10 xl:px-16 py-6 min-h-[calc(100vh-4rem)] relative z-10">
         {/* Top Header with Brand & Theme Toggle */}
         <AuthHeader />
 

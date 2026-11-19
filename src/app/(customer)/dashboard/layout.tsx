@@ -129,8 +129,8 @@ export default function CustomerDashboardLayout({
             </div>
           </div>
 
-          {/* 2. Horizontal Navigation Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-4 border-t border-border/50 scrollbar-none">
+          {/* 2. Horizontal Navigation Tabs (Responsive with smooth touch scroll) */}
+          <div className="flex items-center gap-2 overflow-x-auto pt-4 pb-1 border-t border-border/50 no-scrollbar">
             {CUSTOMER_TABS.map((tab) => {
               const isActive = tab.exact
                 ? pathname === tab.href

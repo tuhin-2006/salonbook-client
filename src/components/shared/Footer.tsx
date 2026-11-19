@@ -80,7 +80,7 @@ export const Footer = () => {
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="px-4 py-2.5 rounded-xl bg-[#FFFFFF] dark:bg-[#251A20] border border-[rgba(90,65,48,0.2)] dark:border-[#FAF7F2]/20 text-xs text-[#251C1D] dark:text-[#FAF7F2] placeholder:text-[#786C68]/60 dark:placeholder:text-[#FAF7F2]/50 focus:outline-none focus:border-[#94704C] dark:focus:border-[#C5A880] min-w-[260px] transition-colors"
+                className="w-full sm:w-auto sm:min-w-[260px] px-4 py-2.5 rounded-xl bg-[#FFFFFF] dark:bg-[#251A20] border border-[rgba(90,65,48,0.2)] dark:border-[#FAF7F2]/20 text-xs text-[#251C1D] dark:text-[#FAF7F2] placeholder:text-[#786C68]/60 dark:placeholder:text-[#FAF7F2]/50 focus:outline-none focus:border-[#94704C] dark:focus:border-[#C5A880] transition-colors"
               />
               <button
                 type="submit"

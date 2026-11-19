@@ -265,6 +265,23 @@ export const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
             <ThemeToggle />
+            {isAuthenticated && user && (
+              <Link
+                href={isAdmin ? "/admin" : "/dashboard"}
+                className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-serif text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs"
+                title="Go to Dashboard"
+              >
+                {user.image ? (
+                  <SafeImage
+                    src={user.image}
+                    alt={user.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  getInitials(user.name)
+                )}
+              </Link>
+            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#F5EFEB] dark:hover:bg-[#281F23] transition-colors"

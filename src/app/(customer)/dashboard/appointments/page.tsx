@@ -185,7 +185,7 @@ export default function CustomerAppointmentsPage() {
 
       {/* 2. Status Filter Tabs */}
       <div className="p-3 sm:p-4 rounded-2xl border border-border/80 bg-card shadow-sm">
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
           {(
             [
               { id: "all", label: "All Bookings", count: counts.all },

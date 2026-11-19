@@ -146,7 +146,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto p-7 sm:p-8 bg-[#FAF7F2] dark:bg-[#1E1519] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 shadow-2xl rounded-2xl text-[#231C1E] dark:text-[#FAF7F2] transition-colors">
+      <DialogContent className="w-[95vw] sm:max-w-lg max-h-[92vh] overflow-y-auto p-5 sm:p-8 bg-[#FAF7F2] dark:bg-[#1E1519] border border-[#3B1F2B]/15 dark:border-[#FAF7F2]/15 shadow-2xl rounded-2xl text-[#231C1E] dark:text-[#FAF7F2] transition-colors no-scrollbar">
         <DialogHeader className="space-y-2 text-left pb-4 border-b border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10">
           <div className="flex items-center gap-3">
             <span className="px-2.5 py-0.5 text-[9px] uppercase tracking-[0.2em] font-semibold rounded-md bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13]">

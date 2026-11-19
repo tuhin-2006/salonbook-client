@@ -388,7 +388,7 @@ function ServicesContent() {
           </div>
 
           {/* Category Quick Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-[#3B1F2B]/10 dark:border-[#FAF7F2]/10 no-scrollbar">
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#3B1F2B] dark:text-[#C5A880] shrink-0 mr-1" />
             {categoriesList.map((cat) => {
               const isSelected = selectedCategory === cat;

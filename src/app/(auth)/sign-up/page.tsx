@@ -207,8 +207,8 @@ export default function SignUpPage() {
       <div className="absolute top-[-10%] left-[-5%] w-[420px] h-[420px] rounded-full bg-[#C8A879]/10 dark:bg-[#C8A879]/15 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[20%] w-[450px] h-[450px] rounded-full bg-[#3B1F2B]/10 dark:bg-[#4A2035]/25 blur-[140px] pointer-events-none" />
 
-      {/* Left Column: Dynamic Registration Panel */}
-      <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-6 sm:px-10 md:px-14 lg:px-12 xl:px-16 min-h-[calc(100vh-4rem)] relative z-10">
+      {/* Left Column: Dynamic Registration Panel (Responsive full-width on mobile/tablet) */}
+      <div className="w-full lg:w-[48%] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-10 xl:px-16 py-6 min-h-[calc(100vh-4rem)] relative z-10">
         <AuthHeader />
 
         <div className="w-full max-w-[450px] mx-auto my-auto py-3 space-y-4">
@@ -351,7 +351,7 @@ export default function SignUpPage() {
                       <span className="text-[10px] text-[#786C68]/80 dark:text-[#B9AEB0]/80 block mb-1 font-medium">
                         Tap a cartoon character to pick:
                       </span>
-                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                         {CARTOON_AVATARS.map((avatar) => {
                           const isSelected = selectedAvatarUrl === avatar.url;
                           return (

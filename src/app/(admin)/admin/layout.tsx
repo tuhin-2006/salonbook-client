@@ -320,8 +320,8 @@ export default function AdminDashboardLayout({
           </div>
         )}
 
-        {/* Content Body */}
-        <main className="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl w-full mx-auto">
+        {/* Content Body (Optimized for small mobile, tablet, and executive desktop) */}
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {children}
         </main>
       </div>

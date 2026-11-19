@@ -47,9 +47,9 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#F8F5F0] dark:bg-[#171114] text-[#251C1D] dark:text-[#F7F0E8] transition-colors duration-300">
-      {/* Left Column: Form Panel */}
-      <div className="w-full lg:w-[48%] flex flex-col justify-between px-6 py-8 sm:px-12 md:px-16 lg:px-14 xl:px-20 min-h-screen">
+    <div className="min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row bg-[#F8F5F0] dark:bg-[#171114] text-[#251C1D] dark:text-[#F7F0E8] transition-colors duration-300">
+      {/* Left Column: Form Panel (Responsive full-width on mobile/tablet) */}
+      <div className="w-full lg:w-[48%] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-10 xl:px-16 py-6 min-h-[calc(100vh-4rem)]">
         <AuthHeader />
 
         <motion.div
