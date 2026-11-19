@@ -149,6 +149,10 @@ export default function SignUpPage() {
 
   const activePhotoUrl = avatarMode === "custom" ? customAvatarUrl.trim() : selectedAvatarUrl;
 
+  const hasMinLength = password.length >= 6;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+
   React.useEffect(() => {
     if (isAuthenticated) {
       if (isAdmin) {
@@ -169,17 +173,37 @@ export default function SignUpPage() {
     }
 
     if (password.length < 6) {
-      setFormError("Password must contain at least 6 characters.");
+      const msg = "Password must contain at least 6 characters.";
+      setFormError(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      const msg = "Password must contain at least one uppercase letter (A-Z).";
+      setFormError(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!/[a-z]/.test(password)) {
+      const msg = "Password must contain at least one lowercase letter (a-z).";
+      setFormError(msg);
+      toast.error(msg);
       return;
     }
 
     if (password !== confirmPassword) {
-      setFormError("Passwords do not match. Please re-enter your password.");
+      const msg = "Passwords do not match. Please re-enter your password.";
+      setFormError(msg);
+      toast.error(msg);
       return;
     }
 
     if (!agreeTerms) {
-      setFormError("Please accept the salon terms and booking policy.");
+      const msg = "Please accept the salon terms and booking policy.";
+      setFormError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -561,6 +585,57 @@ export default function SignUpPage() {
                     >
                       {showConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Password Strength Requirement Indicators */}
+              <div className="p-2.5 rounded-xl bg-[#F8F5F0]/80 dark:bg-[#181115]/80 border border-[rgba(90,65,48,0.12)] dark:border-[rgba(200,168,121,0.15)] space-y-1.5">
+                <span className="text-[10px] uppercase tracking-wider font-semibold text-[#786C68] dark:text-[#B9AEB0] block">
+                  Password Requirements:
+                </span>
+                <div className="grid grid-cols-3 gap-1 text-[10px]">
+                  <div
+                    className={`flex items-center gap-1 transition-colors ${
+                      hasMinLength
+                        ? "text-emerald-600 dark:text-emerald-400 font-semibold"
+                        : "text-[#786C68]/70 dark:text-[#B9AEB0]/70"
+                    }`}
+                  >
+                    {hasMinLength ? (
+                      <Check className="w-3 h-3 text-emerald-500 shrink-0" />
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#786C68]/40 dark:bg-[#B9AEB0]/40 shrink-0" />
+                    )}
+                    <span>6+ Chars</span>
+                  </div>
+                  <div
+                    className={`flex items-center gap-1 transition-colors ${
+                      hasUpperCase
+                        ? "text-emerald-600 dark:text-emerald-400 font-semibold"
+                        : "text-[#786C68]/70 dark:text-[#B9AEB0]/70"
+                    }`}
+                  >
+                    {hasUpperCase ? (
+                      <Check className="w-3 h-3 text-emerald-500 shrink-0" />
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#786C68]/40 dark:bg-[#B9AEB0]/40 shrink-0" />
+                    )}
+                    <span>1 Uppercase (A-Z)</span>
+                  </div>
+                  <div
+                    className={`flex items-center gap-1 transition-colors ${
+                      hasLowerCase
+                        ? "text-emerald-600 dark:text-emerald-400 font-semibold"
+                        : "text-[#786C68]/70 dark:text-[#B9AEB0]/70"
+                    }`}
+                  >
+                    {hasLowerCase ? (
+                      <Check className="w-3 h-3 text-emerald-500 shrink-0" />
+                    ) : (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#786C68]/40 dark:bg-[#B9AEB0]/40 shrink-0" />
+                    )}
+                    <span>1 Lowercase (a-z)</span>
                   </div>
                 </div>
               </div>

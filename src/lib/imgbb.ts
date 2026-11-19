@@ -1,7 +1,6 @@
 import { api } from "./api";
 
-const IMGBB_API_KEY =
-  process.env.NEXT_PUBLIC_IMGBB_API_KEY || "615b30da22b42011b56496451ca50147";
+const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY || "";
 
 /**
  * Uploads an image file to ImgBB and returns the optimized CDN URL.
@@ -34,6 +33,10 @@ export async function uploadImageToImgBB(file: File): Promise<string> {
     } catch (directErr) {
       console.warn("Direct ImgBB upload fallback to server:", directErr);
     }
+  } else {
+    console.warn(
+      "NEXT_PUBLIC_IMGBB_API_KEY is not defined. Routing upload through server proxy."
+    );
   }
 
   // 2. Server proxy fallback

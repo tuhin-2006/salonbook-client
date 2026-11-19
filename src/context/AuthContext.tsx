@@ -40,13 +40,42 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cachedUser = localStorage.getItem("salonbook_user");
+        if (cachedUser) return JSON.parse(cachedUser);
+      } catch (e) {
+        console.warn("Failed to parse cached user:", e);
+      }
+    }
+    return null;
+  });
+
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("salonbook_token");
+    }
+    return null;
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("salonbook_token");
+      const cachedUser = localStorage.getItem("salonbook_user");
+      if (storedToken && cachedUser) return false;
+      if (!storedToken) return false;
+    }
+    return true;
+  });
 
   const fetchCurrentUser = useCallback(async () => {
+    if (typeof window === "undefined") return;
     const storedToken = localStorage.getItem("salonbook_token");
     if (!storedToken) {
+      localStorage.removeItem("salonbook_user");
+      setUser(null);
+      setToken(null);
       setIsLoading(false);
       return;
     }
@@ -54,10 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setToken(storedToken);
       const res = await api.get<ApiResponse<{ user: User }>>("/auth/me");
-      setUser(res.data.data.user);
+      const freshUser = res.data.data.user;
+      setUser(freshUser);
+      localStorage.setItem("salonbook_user", JSON.stringify(freshUser));
     } catch (error) {
       console.warn("Session restore failed:", error);
       localStorage.removeItem("salonbook_token");
+      localStorage.removeItem("salonbook_user");
       setToken(null);
       setUser(null);
     } finally {
@@ -66,6 +98,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const storedToken = localStorage.getItem("salonbook_token");
+        const cachedUser = localStorage.getItem("salonbook_user");
+        if (storedToken && cachedUser) {
+          const parsed = JSON.parse(cachedUser);
+          setUser(parsed);
+          setToken(storedToken);
+          setIsLoading(false);
+        } else if (!storedToken) {
+          setIsLoading(false);
+        }
+      } catch (e) {
+        console.warn("Failed to sync cached user in effect:", e);
+      }
+    }
     fetchCurrentUser();
   }, [fetchCurrentUser]);
 
@@ -78,6 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const { user: loggedInUser, token: authToken } = res.data.data;
       localStorage.setItem("salonbook_token", authToken);
+      localStorage.setItem("salonbook_user", JSON.stringify(loggedInUser));
       setToken(authToken);
       setUser(loggedInUser);
       toast.success(`Welcome back, ${loggedInUser.name}`);
@@ -104,6 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const { user: registeredUser, token: authToken } = res.data.data;
       localStorage.setItem("salonbook_token", authToken);
+      localStorage.setItem("salonbook_user", JSON.stringify(registeredUser));
       setToken(authToken);
       setUser(registeredUser);
       toast.success("Account created successfully!");
@@ -136,6 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const { user: googleUser, token: authToken } = res.data.data;
       localStorage.setItem("salonbook_token", authToken);
+      localStorage.setItem("salonbook_user", JSON.stringify(googleUser));
       setToken(authToken);
       setUser(googleUser);
       toast.success(`Welcome to SalonBook, ${googleUser.name}!`);
@@ -150,6 +201,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = () => {
     localStorage.removeItem("salonbook_token");
+    localStorage.removeItem("salonbook_user");
     setToken(null);
     setUser(null);
     toast.info("Logged out successfully");
@@ -164,7 +216,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         "/auth/profile",
         data
       );
-      setUser(res.data.data.user);
+      const updatedUser = res.data.data.user;
+      setUser(updatedUser);
+      localStorage.setItem("salonbook_user", JSON.stringify(updatedUser));
       toast.success("Profile updated successfully!");
     } catch (error: unknown) {
       toast.error((error as Error).message || "Profile update failed");

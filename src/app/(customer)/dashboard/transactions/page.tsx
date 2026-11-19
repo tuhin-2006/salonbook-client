@@ -141,11 +141,21 @@ export default function CustomerTransactionsPage() {
       {/* 3. Luxury Transactions Table */}
       <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-sm">
         {loading ? (
-          <div className="py-24 text-center space-y-3">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Loading Ledger Records...
-            </p>
+          <div className="p-6 space-y-4 animate-pulse">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between py-3.5 border-b border-border/40 last:border-none"
+              >
+                <div className="space-y-2">
+                  <div className="w-28 h-4 bg-muted rounded-md" />
+                  <div className="w-40 h-3 bg-muted rounded-md" />
+                </div>
+                <div className="w-32 h-4 bg-muted rounded-md hidden sm:block" />
+                <div className="w-16 h-4 bg-muted rounded-md" />
+                <div className="w-20 h-7 bg-muted rounded-full" />
+              </div>
+            ))}
           </div>
         ) : transactions.length === 0 ? (
           <div className="py-20 text-center space-y-3 max-w-sm mx-auto p-6">

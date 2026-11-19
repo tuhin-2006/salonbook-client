@@ -12,6 +12,7 @@ import {
   Scissors,
   User,
   CheckCircle2,
+  XCircle,
   AlertCircle,
   ExternalLink,
 } from "lucide-react";
@@ -48,6 +49,7 @@ export default function CustomerDashboardOverview() {
   const totalAppointments = appointments.length;
   const pendingAppointments = appointments.filter((a) => a.status === "pending").length;
   const confirmedAppointments = appointments.filter((a) => a.status === "confirmed").length;
+  const cancelledAppointments = appointments.filter((a) => a.status === "cancelled").length;
   const nextAppointment = appointments.find(
     (a) => a.status === "confirmed" || a.status === "pending"
   );
@@ -70,15 +72,19 @@ export default function CustomerDashboardOverview() {
                 </span>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-                {nextAppointment
-                  ? typeof nextAppointment.serviceId === "object"
+                {loading ? (
+                  <span className="inline-block w-48 h-8 bg-muted animate-pulse rounded-lg" />
+                ) : nextAppointment ? (
+                  typeof nextAppointment.serviceId === "object"
                     ? nextAppointment.serviceId?.title
                     : "Atelier Appointment"
-                  : "No Active Reservations"}
+                ) : (
+                  "No Active Reservations"
+                )}
               </h2>
             </div>
 
-            {nextAppointment && (
+            {!loading && nextAppointment && (
               <div className="flex items-center gap-3">
                 <span
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border ${
@@ -95,7 +101,17 @@ export default function CustomerDashboardOverview() {
             )}
           </div>
 
-          {nextAppointment ? (
+          {loading ? (
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="space-y-2">
+                  <div className="w-20 h-3 bg-muted rounded" />
+                  <div className="w-32 h-5 bg-muted rounded" />
+                  <div className="w-24 h-3 bg-muted rounded" />
+                </div>
+              ))}
+            </div>
+          ) : nextAppointment ? (
             <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="space-y-1">
                 <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5">
@@ -181,7 +197,7 @@ export default function CustomerDashboardOverview() {
         <div className="p-5 rounded-2xl border border-border/80 bg-card flex flex-col justify-between shadow-sm min-h-[130px]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Reservations
+              Total Appointment Requests
             </span>
             <div className="w-8 h-8 rounded-lg bg-muted text-foreground flex items-center justify-center">
               <Calendar className="w-4 h-4 text-accent" />
@@ -192,7 +208,7 @@ export default function CustomerDashboardOverview() {
               {loading ? "..." : totalAppointments}
             </span>
             <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
-              Lifetime
+              All Requests
             </span>
           </div>
         </div>
@@ -200,26 +216,7 @@ export default function CustomerDashboardOverview() {
         <div className="p-5 rounded-2xl border border-border/80 bg-card flex flex-col justify-between shadow-sm min-h-[130px]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Confirmed Sessions
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-sans text-3xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums tracking-tight">
-              {loading ? "..." : confirmedAppointments}
-            </span>
-            <span className="text-[10px] text-emerald-600/80 uppercase font-bold tracking-wider">
-              Ready
-            </span>
-          </div>
-        </div>
-
-        <div className="p-5 rounded-2xl border border-border/80 bg-card flex flex-col justify-between shadow-sm min-h-[130px]">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Pending Review
+              Pending Appointments
             </span>
             <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
               <Clock className="w-4 h-4" />
@@ -238,18 +235,37 @@ export default function CustomerDashboardOverview() {
         <div className="p-5 rounded-2xl border border-border/80 bg-card flex flex-col justify-between shadow-sm min-h-[130px]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Client Status
+              Confirmed Appointments
             </span>
-            <div className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-serif text-xl font-bold text-accent">
-              Verified Patron
+            <span className="font-sans text-3xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums tracking-tight">
+              {loading ? "..." : confirmedAppointments}
             </span>
-            <span className="text-[10px] text-accent/80 uppercase font-bold tracking-wider">
-              Active Tier
+            <span className="text-[10px] text-emerald-600/80 uppercase font-bold tracking-wider">
+              Confirmed
+            </span>
+          </div>
+        </div>
+
+        <div className="p-5 rounded-2xl border border-border/80 bg-card flex flex-col justify-between shadow-sm min-h-[130px]">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Cancelled Appointments
+            </span>
+            <div className="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <XCircle className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-2 flex items-baseline justify-between">
+            <span className="font-sans text-3xl font-bold text-rose-600 dark:text-rose-400 tabular-nums tracking-tight">
+              {loading ? "..." : cancelledAppointments}
+            </span>
+            <span className="text-[10px] text-rose-600/80 uppercase font-bold tracking-wider">
+              Cancelled
             </span>
           </div>
         </div>
@@ -279,9 +295,22 @@ export default function CustomerDashboardOverview() {
         </div>
 
         {loading ? (
-          <div className="py-16 text-center text-xs text-muted-foreground">
-            <div className="w-6 h-6 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto mb-2" />
-            Loading Dashboard Data...
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="p-4 rounded-xl border border-border/60 bg-muted/20 animate-pulse flex items-center justify-between gap-4"
+              >
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="w-12 h-12 rounded-xl bg-muted shrink-0" />
+                  <div className="space-y-2">
+                    <div className="w-32 h-3.5 bg-muted rounded" />
+                    <div className="w-24 h-2.5 bg-muted rounded" />
+                  </div>
+                </div>
+                <div className="w-16 h-5 bg-muted rounded-full" />
+              </div>
+            ))}
           </div>
         ) : recentAppointments.length === 0 ? (
           <div className="py-12 text-center text-xs text-muted-foreground">

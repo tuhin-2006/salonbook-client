@@ -26,7 +26,7 @@ export default function ServiceDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const serviceId = params?.id as string;
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
 
   const [service, setService] = useState<Service | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -293,11 +293,23 @@ export default function ServiceDetailsPage() {
                     This treatment is currently archived and unavailable for new bookings.
                   </div>
                 )}
+                {user?.role === "admin" && (
+                  <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs font-medium flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 shrink-0" />
+                    <span>
+                      Admins manage bookings from the Admin Dashboard and cannot place customer reservations.
+                    </span>
+                  </div>
+                )}
                 <Button
                   size="lg"
-                  disabled={service.isActive === false}
+                  disabled={service.isActive === false || user?.role === "admin"}
                   onClick={() => {
                     if (service.isActive === false) return;
+                    if (user?.role === "admin") {
+                      toast.error("Admins cannot submit customer appointment requests. Please use a patron account.");
+                      return;
+                    }
                     if (!isAuthenticated) {
                       toast.info("Please sign in to reserve an appointment.");
                       router.push(`/sign-in?redirect=${encodeURIComponent(`/services/${serviceId}`)}`);
@@ -306,7 +318,7 @@ export default function ServiceDetailsPage() {
                     setIsModalOpen(true);
                   }}
                   className={`w-full h-12 rounded-xl text-xs font-bold uppercase tracking-wider text-[#FAF7F2] dark:text-[#170F13] shadow-md transition-all ${
-                    service.isActive === false
+                    service.isActive === false || user?.role === "admin"
                       ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
                       : "bg-[#3B1F2B] dark:bg-[#C5A880] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96]"
                   }`}
@@ -315,6 +327,8 @@ export default function ServiceDetailsPage() {
                   <span>
                     {service.isActive === false
                       ? "Treatment Archived (Unavailable)"
+                      : user?.role === "admin"
+                      ? "Admins Manage via Dashboard"
                       : "Book Appointment Now"}
                   </span>
                 </Button>

@@ -238,23 +238,23 @@ export const Navbar = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <Link href="/sign-in">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-xs font-semibold text-[#231C1E] dark:text-[#FAF7F2]"
+                    className="text-xs font-semibold text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#F5EFEB] dark:hover:bg-[#281D23] rounded-xl px-3.5"
                   >
                     Sign In
                   </Button>
                 </Link>
-                <Link href={isAuthenticated ? "/services" : "/sign-in?redirect=/services"}>
+                <Link href="/sign-up">
                   <Button
                     variant="default"
                     size="sm"
                     className="gap-1.5 text-xs font-bold px-4 py-2 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#3B2B2D] dark:hover:bg-[#E2C69D] rounded-xl shadow-sm transition-all"
                   >
-                    <span>Book now</span>
+                    <span>Sign Up</span>
                     <ArrowRight className="w-3.5 h-3.5 text-[#C8A879] dark:text-[#170F13]" />
                   </Button>
                 </Link>
@@ -374,13 +374,19 @@ export const Navbar = () => {
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="outline" className="w-full text-xs font-bold rounded-xl">
+                  <Button
+                    variant="outline"
+                    className="w-full text-xs font-bold rounded-xl border-[#E8E2D8] dark:border-[#38252E] text-[#231C1E] dark:text-[#FAF7F2]"
+                  >
                     Sign In
                   </Button>
                 </Link>
-                <Link href={isAuthenticated ? "/services" : "/sign-in?redirect=/services"} onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="default" className="w-full text-xs font-bold rounded-xl bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13]">
-                    Book now
+                <Link href="/sign-up" onClick={() => setMobileMenuOpen(false)}>
+                  <Button
+                    variant="default"
+                    className="w-full text-xs font-bold rounded-xl bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13]"
+                  >
+                    Sign Up
                   </Button>
                 </Link>
               </div>

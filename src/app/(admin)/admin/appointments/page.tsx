@@ -140,6 +140,14 @@ export default function AdminAppointmentsPage() {
   // Permanently delete appointment
   const handleDelete = async () => {
     if (!appointmentToDelete) return;
+
+    if (appointmentToDelete.paymentStatus === "paid") {
+      toast.error("Paid reservations cannot be deleted to preserve financial audit trail.");
+      setDeleteDialogOpen(false);
+      setAppointmentToDelete(null);
+      return;
+    }
+
     try {
       setDeleting(true);
       const res = await api.delete<ApiResponse<null>>(
@@ -503,20 +511,32 @@ export default function AdminAppointmentsPage() {
                             <Eye className="w-4 h-4" />
                           </Button>
 
-                          {/* Permanently Delete Appointment (Available for ALL appointments) */}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={isActing}
-                            onClick={() => {
-                              setAppointmentToDelete(app);
-                              setDeleteDialogOpen(true);
-                            }}
-                            className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
-                            title="Delete Reservation"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                          {/* Permanently Delete Appointment (Prohibited if already paid) */}
+                          {app.paymentStatus === "paid" ? (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled
+                              className="h-8 w-8 rounded-lg text-muted-foreground/30 cursor-not-allowed opacity-35"
+                              title="Paid reservations cannot be deleted to preserve financial audit trail"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={isActing}
+                              onClick={() => {
+                                setAppointmentToDelete(app);
+                                setDeleteDialogOpen(true);
+                              }}
+                              className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
+                              title="Delete Reservation"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -756,17 +776,19 @@ export default function AdminAppointmentsPage() {
                   </Button>
                 )}
 
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setAppointmentToDelete(selectedAppointment);
-                    setDeleteDialogOpen(true);
-                  }}
-                  className="w-full sm:w-auto rounded-xl text-xs text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/20 gap-1.5"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Delete Record</span>
-                </Button>
+                {selectedAppointment.paymentStatus !== "paid" && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setAppointmentToDelete(selectedAppointment);
+                      setDeleteDialogOpen(true);
+                    }}
+                    className="w-full sm:w-auto rounded-xl text-xs text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/20 gap-1.5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete Record</span>
+                  </Button>
+                )}
 
                 <Button
                   variant="outline"

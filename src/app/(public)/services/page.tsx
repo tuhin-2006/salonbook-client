@@ -215,7 +215,7 @@ const ITEMS_PER_PAGE = 9;
 function ServicesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const initialCategoryParam = searchParams.get("category");
 
   const [services, setServices] = useState<Service[]>(fallbackServices);
@@ -258,6 +258,12 @@ function ServicesContent() {
     if (!isAuthenticated) {
       toast.info("Please sign in or create an account to book an appointment.");
       router.push(`/sign-in?redirect=${encodeURIComponent(`/services`)}`);
+      return;
+    }
+    if (user?.role === "admin") {
+      toast.error(
+        "Admins cannot submit customer appointment requests. Please use a patron account."
+      );
       return;
     }
     setSelectedService(service);

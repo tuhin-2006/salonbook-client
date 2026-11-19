@@ -53,10 +53,14 @@ export default function CustomerDashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/sign-in");
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push("/sign-in");
+      } else if (user?.role === "admin") {
+        router.push("/admin");
+      }
     }
-  }, [isLoading, isAuthenticated, router]);
+  }, [isLoading, isAuthenticated, user, router]);
 
   if (isLoading) {
     return (
@@ -67,6 +71,10 @@ export default function CustomerDashboardLayout({
         </p>
       </div>
     );
+  }
+
+  if (user?.role === "admin") {
+    return null;
   }
 
   if (user?.isBlocked) {

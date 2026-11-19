@@ -21,6 +21,9 @@ export interface Service {
   images: string[];
   isActive: boolean;
   specialists: string[];
+  serviceName?: string;
+  duration?: number;
+  status?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,6 +42,7 @@ export interface Appointment {
   specialist?: string;
   transactionId?: Transaction | string;
   notes?: string;
+  message?: string;
   cancelledAt?: string;
   createdAt: string;
   updatedAt: string;

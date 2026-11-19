@@ -150,6 +150,12 @@ export default function CustomerAppointmentsPage() {
 
   const handleDeleteAppointment = async () => {
     if (!appointmentToDelete) return;
+    if (appointmentToDelete.paymentStatus === "paid") {
+      toast.error("Paid appointments cannot be deleted to preserve financial ledger.");
+      setDeleteDialogOpen(false);
+      setAppointmentToDelete(null);
+      return;
+    }
     try {
       setDeleting(true);
       const res = await api.delete<ApiResponse<null>>(
@@ -274,11 +280,24 @@ export default function CustomerAppointmentsPage() {
       {/* 3. Luxury Appointment Cards List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="py-24 text-center space-y-3 rounded-2xl border border-border bg-card">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Loading Dashboard Data...
-            </p>
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="p-6 rounded-2xl border border-border/80 bg-card animate-pulse space-y-4"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl bg-muted shrink-0" />
+                    <div className="space-y-2">
+                      <div className="w-48 h-5 bg-muted rounded-md" />
+                      <div className="w-32 h-3.5 bg-muted rounded-md" />
+                    </div>
+                  </div>
+                  <div className="w-28 h-8 bg-muted rounded-full" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredAppointments.length === 0 ? (
           <div className="py-20 text-center space-y-3 max-w-sm mx-auto p-6 rounded-2xl border border-border bg-card">
@@ -430,19 +449,31 @@ export default function CustomerAppointmentsPage() {
                       </Button>
                     )}
 
-                    {/* Delete Record Button (Available for all appointments) */}
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setAppointmentToDelete(app);
-                        setDeleteDialogOpen(true);
-                      }}
-                      className="rounded-xl h-8 w-8 p-0 text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
-                      title="Delete Record"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {/* Delete Record Button (Prohibited if already paid) */}
+                    {app.paymentStatus === "paid" ? (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        disabled
+                        className="rounded-xl h-8 w-8 p-0 text-muted-foreground/30 cursor-not-allowed opacity-35"
+                        title="Paid appointments cannot be deleted"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setAppointmentToDelete(app);
+                          setDeleteDialogOpen(true);
+                        }}
+                        className="rounded-xl h-8 w-8 p-0 text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+                        title="Delete Record"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>

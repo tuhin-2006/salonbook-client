@@ -580,7 +580,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/30 text-white bg-black/40 hover:bg-white/20 backdrop-blur-md font-semibold text-sm transition-all flex items-center justify-center gap-2"
               >
                 <Calendar className="w-4 h-4 text-[#C5A880]" />
-                <span>Explore Signature Menu</span>
+                <span>Explore Salon Services</span>
               </Button>
             </Link>
           </div>

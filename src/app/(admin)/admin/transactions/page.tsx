@@ -11,12 +11,13 @@ import {
   RefreshCw,
   CheckCircle2,
   Calendar,
+  Clock,
   Lock,
   Receipt,
   Trash2,
 } from "lucide-react";
 import { api } from "@/lib/api";
-import { Transaction, ApiResponse } from "@/types";
+import { Transaction, Appointment, Service, ApiResponse } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -89,12 +90,34 @@ export default function AdminTransactionsPage() {
   const filteredTransactions = useMemo(() => {
     const list = transactions.filter((tx) => {
       const customer = typeof tx.customerId === "object" ? tx.customerId : null;
+      const appointment =
+        typeof tx.appointmentId === "object" && tx.appointmentId !== null
+          ? (tx.appointmentId as Appointment)
+          : null;
+      const service =
+        appointment &&
+        typeof appointment.serviceId === "object" &&
+        appointment.serviceId !== null
+          ? (appointment.serviceId as Service)
+          : null;
+
       const name = customer?.name?.toLowerCase() || "";
       const email = customer?.email?.toLowerCase() || "";
       const sessionId = tx.stripeSessionId?.toLowerCase() || "";
+      const invoice = tx.invoiceNumber?.toLowerCase() || "";
+      const serviceTitle = service?.title?.toLowerCase() || "";
+      const serviceCategory = service?.category?.toLowerCase() || "";
       const q = search.toLowerCase();
 
-      return !search || name.includes(q) || email.includes(q) || sessionId.includes(q);
+      return (
+        !search ||
+        name.includes(q) ||
+        email.includes(q) ||
+        sessionId.includes(q) ||
+        invoice.includes(q) ||
+        serviceTitle.includes(q) ||
+        serviceCategory.includes(q)
+      );
     });
 
     return [...list].sort((a, b) => {
@@ -232,84 +255,132 @@ export default function AdminTransactionsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[750px] text-left text-xs">
+            <table className="w-full min-w-[980px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-4 px-6">Invoice # &amp; Ref</th>
-                  <th className="py-4 px-4">Patron</th>
-                  <th className="py-4 px-4">Amount</th>
+                  <th className="py-4 px-5">Patron &amp; Contact</th>
+                  <th className="py-4 px-4">Related Service</th>
+                  <th className="py-4 px-4">Appointment Date</th>
+                  <th className="py-4 px-4">Amount &amp; Currency</th>
+                  <th className="py-4 px-4">Stripe Ref &amp; Session</th>
+                  <th className="py-4 px-4 text-center">Payment Status</th>
                   <th className="py-4 px-4">Settlement Date</th>
-                  <th className="py-4 px-4">Payment Method</th>
-                  <th className="py-4 px-4 text-center">Status</th>
-                  <th className="py-4 px-6 text-right">Receipt</th>
+                  <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
                 {filteredTransactions.map((tx) => {
                   const customer =
                     typeof tx.customerId === "object" ? tx.customerId : null;
+                  const appointment =
+                    typeof tx.appointmentId === "object" && tx.appointmentId !== null
+                      ? (tx.appointmentId as Appointment)
+                      : null;
+                  const service =
+                    appointment &&
+                    typeof appointment.serviceId === "object" &&
+                    appointment.serviceId !== null
+                      ? (appointment.serviceId as Service)
+                      : null;
+                  const appDate =
+                    appointment?.appointmentDate || appointment?.date;
 
                   return (
                     <tr
                       key={tx._id}
                       className="hover:bg-muted/40 transition-colors group"
                     >
-                      {/* Transaction Reference & Invoice */}
-                      <td className="py-4 px-6">
-                        <div className="space-y-0.5">
-                          <span className="font-mono text-xs font-bold text-accent block">
-                            {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
-                          </span>
-                          <span className="font-mono text-[10px] text-muted-foreground block truncate max-w-[140px]">
-                            {tx.stripeSessionId ? tx.stripeSessionId.slice(0, 16) + "..." : tx._id}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Patron */}
-                      <td className="py-4 px-4 whitespace-nowrap">
+                      {/* 1. Customer Information (Name & Email) */}
+                      <td className="py-4 px-5 whitespace-nowrap">
                         <div className="space-y-0.5">
                           <span className="font-semibold text-foreground block">
                             {customer?.name || "Verified Client"}
                           </span>
-                          <span className="text-[11px] text-muted-foreground block">
+                          <span className="text-[11px] text-muted-foreground block font-mono">
                             {customer?.email || "Email recorded"}
                           </span>
                         </div>
                       </td>
 
-                      {/* Amount */}
+                      {/* 2. Related Service (Service Title & Category) */}
                       <td className="py-4 px-4 whitespace-nowrap">
-                        <span className="font-sans text-base font-bold text-foreground tabular-nums">
-                          {formatCurrency(tx.amount)}
+                        <div className="space-y-0.5">
+                          <span
+                            className="font-semibold text-foreground block max-w-[180px] truncate"
+                            title={service?.title || "Salon Service"}
+                          >
+                            {service?.title || "Atelier Service"}
+                          </span>
+                          <span className="text-[10px] text-accent uppercase font-bold tracking-wider block">
+                            {service?.category || "Hair & Atelier"}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* 3. Appointment Date (Scheduled session date & timeSlot) */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5 text-foreground font-medium tabular-nums">
+                            <Calendar className="w-3.5 h-3.5 text-accent shrink-0" />
+                            <span>
+                              {appDate ? formatDate(appDate) : "Booked Session"}
+                            </span>
+                          </div>
+                          {appointment?.timeSlot && (
+                            <div className="flex items-center gap-1.5 text-muted-foreground text-[11px] tabular-nums">
+                              <Clock className="w-3 h-3 text-muted-foreground shrink-0" />
+                              <span>{appointment.timeSlot}</span>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* 4. Payment Amount & Currency */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="space-y-0.5">
+                          <span className="font-sans text-base font-bold text-foreground tabular-nums block">
+                            {formatCurrency(tx.amount)}
+                          </span>
+                          <span className="text-[10px] uppercase font-bold text-muted-foreground block">
+                            {tx.currency?.toUpperCase() || "USD"}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* 5. Stripe Checkout Session ID (shortened ref) & Invoice */}
+                      <td className="py-4 px-4">
+                        <div className="space-y-0.5">
+                          <span className="font-mono text-xs font-bold text-accent block">
+                            {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
+                          </span>
+                          <span
+                            className="font-mono text-[10px] text-muted-foreground block truncate max-w-[130px]"
+                            title={tx.stripeSessionId || tx._id}
+                          >
+                            {tx.stripeSessionId
+                              ? tx.stripeSessionId.slice(0, 16) + "..."
+                              : tx._id.slice(0, 12)}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* 6. Payment Status (Succeeded / Paid) */}
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>{tx.status === "succeeded" ? "Succeeded / Paid" : "Paid"}</span>
                         </span>
                       </td>
 
-                      {/* Date */}
+                      {/* 7. Transaction Settlement Date */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <div className="flex items-center gap-1.5 text-muted-foreground">
-                          <Calendar className="w-3.5 h-3.5 text-accent" />
+                          <Calendar className="w-3.5 h-3.5 text-accent shrink-0" />
                           <span>{formatDate(tx.createdAt)}</span>
                         </div>
                       </td>
 
-                      {/* Payment Method */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-[11px] text-foreground font-medium">
-                          <CreditCard className="w-3 h-3 text-accent" />
-                          <span>Stripe TLS</span>
-                        </div>
-                      </td>
-
-                      {/* Status */}
-                      <td className="py-4 px-4 text-center whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                          <CheckCircle2 className="w-3 h-3" />
-                          <span>Succeeded</span>
-                        </span>
-                      </td>
-
-                      {/* Action */}
+                      {/* 8. Action (View Invoice / Receipt Modal & Delete) */}
                       <td className="py-4 px-6 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1.5">
                           <Button
@@ -317,9 +388,10 @@ export default function AdminTransactionsPage() {
                             variant="outline"
                             onClick={() => setSelectedTxForInvoice(tx)}
                             className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
+                            title="View Invoice & Receipt"
                           >
                             <Receipt className="w-3.5 h-3.5 text-accent" />
-                            <span>View Invoice</span>
+                            <span className="hidden sm:inline">View Invoice</span>
                           </Button>
                           <Button
                             variant="ghost"

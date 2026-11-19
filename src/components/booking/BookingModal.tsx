@@ -8,6 +8,7 @@ import {
   Loader2,
   ArrowRight,
   ShieldCheck,
+  ShieldAlert,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import {
@@ -95,6 +96,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       toast.error("Please sign in to reserve an appointment.");
       router.push(`/sign-in?redirect=/services/${service._id}`);
       onClose();
+      return;
+    }
+
+    if (user?.role === "admin") {
+      toast.error(
+        "Admins cannot submit customer appointment requests. Please use a patron account."
+      );
       return;
     }
 
@@ -285,6 +293,16 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </span>
           </div>
 
+          {/* Admin Restriction Notice */}
+          {user?.role === "admin" && (
+            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs flex items-center gap-2.5">
+              <ShieldAlert className="w-4 h-4 shrink-0" />
+              <span>
+                Admins manage bookings from the Admin Dashboard and cannot place customer reservations.
+              </span>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="pt-2 flex items-center justify-end gap-3">
             <Button
@@ -300,14 +318,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               type="button"
               size="sm"
               onClick={handleBookNow}
-              disabled={isSubmitting || !selectedSlot}
-              className="rounded-xl text-xs font-bold uppercase tracking-wider h-11 px-6 bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96] shadow-sm"
+              disabled={isSubmitting || !selectedSlot || user?.role === "admin"}
+              className={`rounded-xl text-xs font-bold uppercase tracking-wider h-11 px-6 shadow-sm ${
+                user?.role === "admin"
+                  ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
+                  : "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96]"
+              }`}
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
                   Creating Appointment Request...
                 </>
+              ) : user?.role === "admin" ? (
+                <>Reservation Restricted for Admins</>
               ) : (
                 <>
                   Confirm Reservation <ArrowRight className="w-3.5 h-3.5 ml-2" />
