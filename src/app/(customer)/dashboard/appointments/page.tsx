@@ -17,7 +17,6 @@ import {
   ShieldCheck,
   RefreshCw,
   Receipt,
-  Zap,
   Trash2,
 } from "lucide-react";
 import { api } from "@/lib/api";
@@ -58,7 +57,6 @@ export default function CustomerAppointmentsPage() {
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [appointmentToPay, setAppointmentToPay] = useState<Appointment | null>(null);
   const [payingAppointmentId, setPayingAppointmentId] = useState<string | null>(null);
-  const [instantPaying, setInstantPaying] = useState(false);
 
   // Invoice modal state
   const [selectedAppointmentForInvoice, setSelectedAppointmentForInvoice] = useState<Appointment | null>(null);
@@ -147,39 +145,6 @@ export default function CustomerAppointmentsPage() {
       toast.error((err as Error).message || "Payment initiation failed.");
     } finally {
       setPayingAppointmentId(null);
-    }
-  };
-
-  const handleInstantTestPayment = async () => {
-    if (!appointmentToPay) return;
-    try {
-      setInstantPaying(true);
-      toast.info("Processing Stripe Sandbox Settlement...");
-
-      const res = await api.post<ApiResponse<{ appointment: Appointment; transaction: any }>>(
-        "/payments/simulate-dev-payment",
-        {
-          appointmentId: appointmentToPay._id,
-        }
-      );
-
-      if (res.data.success) {
-        toast.success("Payment verified and confirmed via Stripe!");
-        setAppointments((prev) =>
-          prev.map((app) =>
-            app._id === appointmentToPay._id
-              ? { ...app, paymentStatus: "paid", status: "confirmed" }
-              : app
-          )
-        );
-        setPaymentModalOpen(false);
-        const updatedApp = res.data.data?.appointment || { ...appointmentToPay, paymentStatus: "paid" };
-        setSelectedAppointmentForInvoice(updatedApp as Appointment);
-      }
-    } catch (err: unknown) {
-      toast.error((err as Error).message || "Instant test settlement failed.");
-    } finally {
-      setInstantPaying(false);
     }
   };
 
@@ -591,12 +556,21 @@ export default function CustomerAppointmentsPage() {
             </div>
           )}
 
-          <DialogFooter className="pt-4 border-t border-border flex flex-col gap-2">
+          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={payingAppointmentId !== null}
+              onClick={() => setPaymentModalOpen(false)}
+              className="w-full sm:w-auto rounded-xl text-xs border-border"
+            >
+              Cancel
+            </Button>
             <Button
               size="sm"
-              disabled={payingAppointmentId !== null || instantPaying}
+              disabled={payingAppointmentId !== null}
               onClick={proceedToStripeCheckout}
-              className="w-full rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-sm h-10"
+              className="w-full sm:flex-1 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shadow-sm h-10"
             >
               {payingAppointmentId ? (
                 <>
@@ -607,26 +581,6 @@ export default function CustomerAppointmentsPage() {
                 <>
                   <CreditCard className="w-4 h-4" />
                   <span>Proceed to Stripe Hosted Checkout</span>
-                </>
-              )}
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={payingAppointmentId !== null || instantPaying}
-              onClick={handleInstantTestPayment}
-              className="w-full rounded-xl text-xs font-semibold border-accent/40 text-accent hover:bg-accent/10 gap-2 h-10"
-            >
-              {instantPaying ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Settling Sandbox Payment...</span>
-                </>
-              ) : (
-                <>
-                  <Zap className="w-4 h-4 text-accent" />
-                  <span>1-Click Instant Test Settlement (Sandbox)</span>
                 </>
               )}
             </Button>
