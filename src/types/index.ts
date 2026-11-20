@@ -57,7 +57,7 @@ export interface Transaction {
   invoiceNumber?: string;
   amount: number;
   currency: string;
-  status: "pending" | "succeeded" | "failed" | "refunded";
+  status: "pending" | "succeeded" | "paid" | "failed" | "refunded";
   createdAt: string;
 }
 

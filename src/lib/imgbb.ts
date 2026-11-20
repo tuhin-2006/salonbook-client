@@ -47,8 +47,9 @@ export async function uploadImageToImgBB(file: File): Promise<string> {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-  if (res.data?.success && res.data?.data?.imageUrl) {
-    return res.data.data.imageUrl;
+  const uploadedUrl = res.data?.data?.url || res.data?.data?.imageUrl;
+  if (res.data?.success && uploadedUrl) {
+    return uploadedUrl;
   }
 
   throw new Error("Failed to upload image. Please try again.");
