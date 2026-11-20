@@ -217,9 +217,10 @@ function ServicesContent() {
   const searchParams = useSearchParams();
   const { isAuthenticated, user } = useAuth();
   const initialCategoryParam = searchParams.get("category");
+  const initialSearchParam = searchParams.get("search") || searchParams.get("q") || "";
 
   const [services, setServices] = useState<Service[]>(fallbackServices);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearchParam);
   const [selectedCategory, setSelectedCategory] = useState<string>(
     initialCategoryParam || "All categories"
   );
@@ -227,6 +228,13 @@ function ServicesContent() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const q = searchParams.get("search") || searchParams.get("q");
+    if (q !== null) {
+      setSearch(q);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (initialCategoryParam) {

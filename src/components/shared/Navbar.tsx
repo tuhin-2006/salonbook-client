@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Scissors,
   Menu,
@@ -14,6 +14,7 @@ import {
   ChevronDown,
   LayoutDashboard,
   User as UserIcon,
+  Search,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,17 @@ export const Navbar = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleGlobalSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
+      setMobileMenuOpen(false);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -118,6 +129,27 @@ export const Navbar = () => {
 
           {/* Desktop Right Side / Profile Trigger */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Global Quick Search - Search from any page */}
+            <form
+              onSubmit={handleGlobalSearch}
+              className="relative flex items-center"
+            >
+              <button
+                type="submit"
+                aria-label="Search services"
+                className="absolute left-3 text-[#94704C] dark:text-[#C8A879] hover:opacity-80 transition-opacity"
+              >
+                <Search className="w-3.5 h-3.5" />
+              </button>
+              <input
+                type="text"
+                placeholder="Search ritual..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-8 pl-8 pr-3 w-32 focus:w-48 text-[11px] rounded-full border border-[#E8E2D8] dark:border-[#3E3338] bg-[#F5EFEB]/90 dark:bg-[#281F23]/90 text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus:outline-none focus:ring-1 focus:ring-[#94704C] dark:focus:ring-[#C8A879] transition-all"
+              />
+            </form>
+
             <ThemeToggle />
 
             {!mounted ? (
@@ -307,6 +339,18 @@ export const Navbar = () => {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-[#E8E2D8] dark:border-[#38252E] bg-[#FAF7F2] dark:bg-[#1E1619] px-6 py-5 space-y-4">
+          {/* Mobile Global Quick Search */}
+          <form onSubmit={handleGlobalSearch} className="relative flex items-center">
+            <Search className="w-4 h-4 absolute left-3.5 text-[#94704C] dark:text-[#C8A879]" />
+            <input
+              type="text"
+              placeholder="Search rituals by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-10 pl-10 pr-4 w-full text-xs rounded-xl border border-[#E8E2D8] dark:border-[#38252E] bg-[#F5EFEB] dark:bg-[#251B20] text-[#231C1E] dark:text-[#FAF7F2] placeholder:text-[#231C1E]/40 dark:placeholder:text-[#FAF7F2]/40 focus:outline-none focus:ring-1 focus:ring-[#94704C]"
+            />
+          </form>
+
           <nav className="flex flex-col space-y-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
