@@ -24,11 +24,16 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const Navbar = () => {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,7 +120,9 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
 
-            {isAuthenticated && user ? (
+            {!mounted ? (
+              <div className="w-24 h-8 rounded-full bg-black/5 dark:bg-white/5 animate-pulse" />
+            ) : isAuthenticated && user ? (
               <div className="relative" ref={profileDropdownRef}>
                 {/* Profile Trigger Button: Icon + Name + Chevron */}
                 <button
@@ -265,7 +272,7 @@ export const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
             <ThemeToggle />
-            {isAuthenticated && user && (
+            {mounted && isAuthenticated && user && (
               <Link
                 href={isAdmin ? "/admin" : "/dashboard"}
                 className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A880]/50 bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] font-sans text-[10px] font-bold flex items-center justify-center shrink-0 shadow-xs"
@@ -321,7 +328,9 @@ export const Navbar = () => {
           </nav>
 
           <div className="pt-3 border-t border-[#E8E2D8] dark:border-[#38252E] flex flex-col gap-2.5">
-            {isAuthenticated && user ? (
+            {!mounted ? (
+              <div className="w-full h-10 rounded-xl bg-black/5 dark:bg-white/5 animate-pulse" />
+            ) : isAuthenticated && user ? (
               <>
                 {/* User Info Card in Mobile */}
                 <div className="flex items-center gap-3 p-3 bg-[#F5EFEB] dark:bg-[#251B20] rounded-xl border border-[#E8E2D8] dark:border-[#38252E]">

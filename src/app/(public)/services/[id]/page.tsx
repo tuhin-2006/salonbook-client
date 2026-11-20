@@ -47,28 +47,14 @@ export default function ServiceDetailsPage() {
     const fetchService = async () => {
       try {
         const res = await api.get<ApiResponse<Service>>(`/services/${serviceId}`);
-        setService(res.data.data);
-      } catch (err) {
-        console.warn("Using fallback service dossier:", err);
-        setService({
-          _id: serviceId,
-          title: "Signature Balayage & Silk Glaze",
-          slug: "signature-balayage-silk-glaze",
-          category: "Hair",
-          description:
-            "A hand-painted custom French balayage tailored to your cranial bone structure and natural growth fall. Finished with a luminous silk shine glaze and botanical blowout that preserves hair fiber integrity while imparting sublime, multidimensional depth.",
-          price: 195,
-          durationMinutes: 120,
-          images: [
-            "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=85",
-            "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1200&q=85",
-            "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=85",
-          ],
-          isActive: true,
-          specialists: ["Elena Vance (Master Colorist)", "Chloe Moreau"],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
+        if (res.data?.success && res.data?.data) {
+          setService(res.data.data);
+        } else {
+          setService(null);
+        }
+      } catch (err: unknown) {
+        console.warn("Failed to fetch service details:", err);
+        setService(null);
       } finally {
         setIsLoading(false);
       }
