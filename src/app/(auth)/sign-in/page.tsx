@@ -58,7 +58,6 @@ function SignInContent() {
   const { login, quickDemoLogin, isLoading, isAuthenticated, isAdmin } = useAuth();
   const { handleGoogleSignIn, isGoogleLoading } = useGoogleAuth(redirectParam || undefined);
 
-  const [activePortal, setActivePortal] = useState<"client" | "admin">("client");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -107,12 +106,10 @@ function SignInContent() {
     if (role === "admin") {
       setEmail("admin@salonbook.com");
       setPassword("Admin@123456");
-      setActivePortal("admin");
       toast.info("Admin credentials loaded into form.");
     } else {
       setEmail("customer@salonbook.com");
       setPassword("Customer@123456");
-      setActivePortal("client");
       toast.info("Client credentials loaded into form.");
     }
   };
@@ -172,106 +169,79 @@ function SignInContent() {
             </div>
           </motion.div>
 
-          {/* Dynamic Editorial Headline with Smooth Transitions */}
+          {/* Dynamic Editorial Headline with Unified Form */}
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#94704C] dark:bg-[#C8A879]" />
               <span className="text-[11px] uppercase tracking-[0.25em] text-[#94704C] dark:text-[#C8A879] font-bold font-sans">
-                {activePortal === "client" ? "PATRON EXPERIENCE" : "MANAGEMENT SUITE"}
+                SALONBOOK ATELIER
               </span>
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={activePortal}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35 }}
-                className="font-serif text-3xl sm:text-4xl xl:text-[2.65rem] font-bold text-[#251C1D] dark:text-[#F7F0E8] tracking-tight leading-[1.12]"
-              >
-                {activePortal === "client" ? (
-                  <>
-                    Your Beauty Journey <br />
-                    Starts Here.
-                  </>
-                ) : (
-                  <>
-                    Salon Management <br />
-                    & Operations.
-                  </>
-                )}
-              </motion.h1>
-            </AnimatePresence>
+            <h1 className="font-serif text-3xl sm:text-4xl xl:text-[2.65rem] font-bold text-[#251C1D] dark:text-[#F7F0E8] tracking-tight leading-[1.12]">
+              Welcome Back.
+            </h1>
 
             <p className="text-xs sm:text-sm text-[#786C68] dark:text-[#B9AEB0] leading-relaxed font-sans">
-              {activePortal === "client"
-                ? "Access your chair appointments, restorative regimens, and digital care receipts."
-                : "Manage chair scheduling, verified staff assignments, and real-time revenue."}
+              Sign in to access your chair appointments, reservation diary, and salon management suite.
             </p>
-          </div>
-
-          {/* Dynamic Interactive Role Switcher Tabs (Framer Motion sliding pill) */}
-          <div className="p-1 rounded-2xl bg-[#EFE8DF]/80 dark:bg-[#21191D] border border-[rgba(90,65,48,0.12)] dark:border-[rgba(200,168,121,0.18)] flex relative">
-            <button
-              type="button"
-              onClick={() => {
-                setActivePortal("client");
-                if (autoFilledRole === "admin") {
-                  setEmail("");
-                  setPassword("");
-                  setAutoFilledRole(null);
-                }
-              }}
-              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center gap-2 ${
-                activePortal === "client"
-                  ? "text-[#251C1D] dark:text-[#171114] font-bold"
-                  : "text-[#786C68] dark:text-[#B9AEB0] hover:text-[#251C1D] dark:hover:text-[#F7F0E8]"
-              }`}
-            >
-              <User className="w-3.5 h-3.5" />
-              <span>Patron Client</span>
-              {activePortal === "client" && (
-                <motion.div
-                  layoutId="portalActivePill"
-                  className="absolute inset-0 bg-[#FFFFFF] dark:bg-[#C8A879] rounded-xl shadow-sm -z-10"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActivePortal("admin");
-                if (autoFilledRole === "customer") {
-                  setEmail("");
-                  setPassword("");
-                  setAutoFilledRole(null);
-                }
-              }}
-              className={`flex-1 py-2 px-3 text-xs font-semibold rounded-xl transition-all duration-300 relative z-10 flex items-center justify-center gap-2 ${
-                activePortal === "admin"
-                  ? "text-[#251C1D] dark:text-[#171114] font-bold"
-                  : "text-[#786C68] dark:text-[#B9AEB0] hover:text-[#251C1D] dark:hover:text-[#F7F0E8]"
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Staff / Admin</span>
-              {activePortal === "admin" && (
-                <motion.div
-                  layoutId="portalActivePill"
-                  className="absolute inset-0 bg-[#FFFFFF] dark:bg-[#C8A879] rounded-xl shadow-sm -z-10"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
-            </button>
           </div>
 
           {/* Elevated Luxury Glassmorphic Card Container */}
           <div className="rounded-3xl p-5 sm:p-6 bg-[#FFFFFF]/90 dark:bg-[#20171B]/90 border border-[rgba(90,65,48,0.16)] dark:border-[rgba(200,168,121,0.22)] shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl relative space-y-4">
             {/* Top Hairline Gold Glow */}
             <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#C8A879]/50 to-transparent pointer-events-none" />
+
+            {/* Admin Credentials Info Card for Evaluators */}
+            <div className="p-3.5 rounded-2xl bg-[#94704C]/10 dark:bg-[#C8A879]/15 border border-[#94704C]/25 dark:border-[#C8A879]/30 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#251C1D] dark:text-[#F7F0E8]">
+                  <ShieldCheck className="w-4 h-4 text-[#94704C] dark:text-[#C8A879]" />
+                  <span>Admin Credentials (For Evaluation)</span>
+                </div>
+                <span className="text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-[#94704C]/20 dark:bg-[#C8A879]/25 text-[#94704C] dark:text-[#C8A879]">
+                  Staff Access
+                </span>
+              </div>
+              <div className="text-[11px] font-mono text-[#786C68] dark:text-[#FAF7F2]/85 bg-white/60 dark:bg-black/30 p-2.5 rounded-xl border border-[rgba(90,65,48,0.1)] dark:border-[rgba(200,168,121,0.15)] space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-sans font-semibold text-foreground">Email:</span>
+                  <span className="font-mono text-accent font-bold select-all">admin@salonbook.com</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-sans font-semibold text-foreground">Password:</span>
+                  <span className="font-mono text-accent font-bold select-all">Admin@123456</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleAutofillOnly("admin")}
+                  className="flex-1 py-2 px-3 rounded-xl bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5 shadow-xs"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Auto-fill Admin</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleInstantDemoLogin("admin")}
+                  disabled={submitting || isLoading}
+                  className="py-2 px-3 rounded-xl border border-[#94704C]/30 dark:border-[#C8A879]/30 text-xs font-semibold hover:bg-[#94704C]/10 dark:hover:bg-[#C8A879]/15 text-[#94704C] dark:text-[#C8A879] transition-colors flex items-center gap-1"
+                  title="Instant 1-click admin login"
+                >
+                  <span>1-Click Admin</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleAutofillOnly("customer")}
+                  className="py-2 px-2.5 rounded-xl border border-border text-[11px] font-medium hover:bg-muted text-muted-foreground transition-colors"
+                  title="Fill customer credentials"
+                >
+                  Client Demo
+                </button>
+              </div>
+            </div>
 
             {/* Continue with Google Button */}
             <Button
@@ -290,92 +260,9 @@ function SignInContent() {
             <div className="relative flex items-center justify-center py-0.5">
               <div className="border-t border-[rgba(90,65,48,0.14)] dark:border-[rgba(200,168,121,0.16)] w-full" />
               <span className="bg-[#FFFFFF] dark:bg-[#20171B] px-3 text-[10px] uppercase tracking-wider text-[#786C68] dark:text-[#B9AEB0] font-semibold shrink-0">
-                Or continue with credentials
+                Or enter credentials
               </span>
               <div className="border-t border-[rgba(90,65,48,0.14)] dark:border-[rgba(200,168,121,0.16)] w-full" />
-            </div>
-
-            {/* Dynamic Fast-Pass Demo Account Selector */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#786C68] dark:text-[#B9AEB0]">
-                <span className="flex items-center gap-1.5 text-[#94704C] dark:text-[#C8A879]">
-                  <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
-                  EVALUATOR QUICK ACCESS
-                </span>
-                <span className="text-[10px] text-[#786C68]/70 dark:text-[#B9AEB0]/70 font-normal">
-                  Tap to populate credentials
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                {/* Customer Demo Card */}
-                <button
-                  type="button"
-                  onClick={() => handleAutofillOnly("customer")}
-                  className={`p-2.5 rounded-xl border text-left transition-all duration-200 group relative ${
-                    autoFilledRole === "customer"
-                      ? "border-[#94704C] dark:border-[#C8A879] bg-[#94704C]/5 dark:bg-[#C8A879]/10 shadow-xs ring-1 ring-[#94704C]/20 dark:ring-[#C8A879]/30"
-                      : "border-[rgba(90,65,48,0.14)] dark:border-[rgba(200,168,121,0.16)] bg-[#F8F5F0]/60 dark:bg-[#261D21]/80 hover:border-[#94704C]/50 dark:hover:border-[#C8A879]/50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-[#251C1D] dark:text-[#F7F0E8] flex items-center gap-1.5">
-                      <User className="w-3 h-3 text-[#94704C] dark:text-[#C8A879]" />
-                      Customer
-                    </span>
-                    {autoFilledRole === "customer" ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    ) : (
-                      <span className="text-[9px] uppercase tracking-wider font-semibold text-[#94704C] dark:text-[#C8A879] opacity-70 group-hover:opacity-100">
-                        Fill
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-[10px] text-[#786C68] dark:text-[#B9AEB0] block truncate mt-0.5 font-mono">
-                    customer@salonbook
-                  </span>
-                </button>
-
-                {/* Admin Demo Card */}
-                <button
-                  type="button"
-                  onClick={() => handleAutofillOnly("admin")}
-                  className={`p-2.5 rounded-xl border text-left transition-all duration-200 group relative ${
-                    autoFilledRole === "admin"
-                      ? "border-[#94704C] dark:border-[#C8A879] bg-[#94704C]/5 dark:bg-[#C8A879]/10 shadow-xs ring-1 ring-[#94704C]/20 dark:ring-[#C8A879]/30"
-                      : "border-[rgba(90,65,48,0.14)] dark:border-[rgba(200,168,121,0.16)] bg-[#F8F5F0]/60 dark:bg-[#261D21]/80 hover:border-[#94704C]/50 dark:hover:border-[#C8A879]/50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-[#251C1D] dark:text-[#F7F0E8] flex items-center gap-1.5">
-                      <ShieldCheck className="w-3 h-3 text-[#94704C] dark:text-[#C8A879]" />
-                      Admin Suite
-                    </span>
-                    {autoFilledRole === "admin" ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    ) : (
-                      <span className="text-[9px] uppercase tracking-wider font-semibold text-[#94704C] dark:text-[#C8A879] opacity-70 group-hover:opacity-100">
-                        Fill
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-[10px] text-[#786C68] dark:text-[#B9AEB0] block truncate mt-0.5 font-mono">
-                    admin@salonbook
-                  </span>
-                </button>
-              </div>
-
-              {/* Instant 1-Click bypass button for evaluators */}
-              <button
-                type="button"
-                onClick={() => handleInstantDemoLogin(activePortal === "admin" ? "admin" : "customer")}
-                disabled={submitting || isLoading}
-                className="w-full text-[11px] py-1.5 text-center text-[#94704C] dark:text-[#C8A879] hover:underline flex items-center justify-center gap-1.5 font-semibold transition-opacity"
-              >
-                <Sparkles className="w-3 h-3" />
-                <span>Or 1-Click Instant Sign In as {activePortal === "admin" ? "Admin" : "Customer"}</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
             </div>
 
             {/* Error Banner */}
@@ -406,11 +293,7 @@ function SignInContent() {
                     id="email"
                     type="email"
                     autoComplete="email"
-                    placeholder={
-                      activePortal === "admin"
-                        ? "admin@salonbook.com"
-                        : "name@example.com"
-                    }
+                    placeholder="name@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 h-11 rounded-xl border-[rgba(90,65,48,0.18)] dark:border-[rgba(200,168,121,0.2)] bg-[#F8F5F0]/70 dark:bg-[#181115]/90 text-xs text-[#251C1D] dark:text-[#F7F0E8] placeholder:text-[#786C68]/45 dark:placeholder:text-[#B9AEB0]/40 focus-visible:ring-2 focus-visible:ring-[#94704C]/30 dark:focus-visible:ring-[#C8A879]/30 focus-visible:border-[#94704C] dark:focus-visible:border-[#C8A879] transition-all shadow-xs"
@@ -478,11 +361,7 @@ function SignInContent() {
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    <span>
-                      {activePortal === "client"
-                        ? "Sign In to SalonBook"
-                        : "Enter Management Portal"}
-                    </span>
+                    <span>Sign In to SalonBook</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                   </span>
                 )}

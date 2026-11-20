@@ -482,15 +482,15 @@ export default function AdminAppointmentsPage() {
                             </Button>
                           )}
 
-                          {/* Quick Cancel - Rule: Admin can cancel Pending OR Confirmed appointments */}
-                          {(app.status === "pending" || app.status === "confirmed") && (
+                          {/* Quick Cancel - Rule: Only pending appointments can be cancelled */}
+                          {app.status === "pending" && (
                             <Button
                               size="sm"
                               variant="ghost"
                               disabled={isActing}
                               onClick={() => handleCancel(app._id)}
                               className="h-8 px-2.5 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1 text-[11px]"
-                              title="Cancel Reservation (Pending or Confirmed)"
+                              title="Cancel Reservation (Pending Only)"
                             >
                               <X className="w-3.5 h-3.5" />
                               <span className="hidden sm:inline">Cancel</span>
@@ -764,8 +764,8 @@ export default function AdminAppointmentsPage() {
                   </Button>
                 )}
 
-                {(selectedAppointment.status === "pending" ||
-                  selectedAppointment.status === "confirmed") && (
+                {/* Rule: Only pending appointments can be cancelled */}
+                {selectedAppointment.status === "pending" && (
                   <Button
                     variant="outline"
                     onClick={() => handleCancel(selectedAppointment._id)}

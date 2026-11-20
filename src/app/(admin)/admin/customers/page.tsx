@@ -18,9 +18,11 @@ import {
   Clock,
   Scissors,
   CheckCircle2,
+  UserCog,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { User, ApiResponse, Appointment } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,6 +37,7 @@ import { formatDate, getInitials, formatCurrency } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function AdminCustomersPage() {
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -132,6 +135,39 @@ export default function AdminCustomersPage() {
       }
     } catch (err: unknown) {
       toast.error((err as Error).message || "Action failed");
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleUpdateRole = async (targetUser: User, newRole: "customer" | "admin") => {
+    const userId = targetUser.id || targetUser._id;
+    if (!userId) return;
+
+    if ((currentUser?.id || currentUser?._id) === userId && newRole !== "admin") {
+      toast.error("You cannot remove administrator privileges from your own logged-in account.");
+      return;
+    }
+
+    try {
+      setActionLoadingId(userId);
+      const res = await api.patch<ApiResponse<User>>(`/admin/users/${userId}/role`, {
+        role: newRole,
+      });
+
+      if (res.data.success) {
+        toast.success(
+          `User role updated to ${newRole === "admin" ? "Administrator" : "Patron Client"} successfully.`
+        );
+        setUsers((prev) =>
+          prev.map((u) => ((u.id || u._id) === userId ? { ...u, role: newRole } : u))
+        );
+        if (selectedUser && (selectedUser.id || selectedUser._id) === userId) {
+          setSelectedUser((prev) => (prev ? { ...prev, role: newRole } : null));
+        }
+      }
+    } catch (err: unknown) {
+      toast.error((err as Error).message || "Failed to update user role");
     } finally {
       setActionLoadingId(null);
     }
@@ -353,6 +389,36 @@ export default function AdminCustomersPage() {
                             <span>View User</span>
                           </Button>
 
+                          {/* Role Update Toggle */}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={
+                              isProcessing ||
+                              ((currentUser?.id || currentUser?._id) === clientId &&
+                                client.role === "admin")
+                            }
+                            onClick={() =>
+                              handleUpdateRole(
+                                client,
+                                client.role === "admin" ? "customer" : "admin"
+                              )
+                            }
+                            className={`rounded-xl text-[11px] font-semibold tracking-wider h-8 gap-1.5 ${
+                              client.role === "admin"
+                                ? "border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
+                                : "border-[#94704C]/30 dark:border-[#C8A879]/30 text-[#94704C] dark:text-[#C8A879] hover:bg-[#94704C]/10"
+                            }`}
+                            title={
+                              client.role === "admin"
+                                ? "Demote to Patron Client"
+                                : "Promote to Administrator"
+                            }
+                          >
+                            <UserCog className="w-3.5 h-3.5" />
+                            <span>{client.role === "admin" ? "Demote" : "Make Admin"}</span>
+                          </Button>
+
                           {/* Block / Unblock Toggle */}
                           {client.role !== "admin" ? (
                             <Button
@@ -483,6 +549,54 @@ export default function AdminCustomersPage() {
                   <span className="font-sans text-base font-bold text-accent tabular-nums">
                     {userDetailsLoading ? "..." : userBookingsCount} Reservations
                   </span>
+                </div>
+              </div>
+
+              {/* Role & Authority Governance */}
+              <div className="p-4 rounded-xl border border-border bg-card space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">
+                      Account Authority &amp; System Role
+                    </span>
+                    <span
+                      className={`inline-flex items-center gap-1.5 mt-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                        selectedUser.role === "admin"
+                          ? "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
+                          : "bg-muted text-muted-foreground border-border"
+                      }`}
+                    >
+                      {selectedUser.role === "admin" ? "✦ Administrator" : "● Patron Client"}
+                    </span>
+                  </div>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={
+                      actionLoadingId === (selectedUser.id || selectedUser._id) ||
+                      ((currentUser?.id || currentUser?._id) === (selectedUser.id || selectedUser._id) &&
+                        selectedUser.role === "admin")
+                    }
+                    onClick={() =>
+                      handleUpdateRole(
+                        selectedUser,
+                        selectedUser.role === "admin" ? "customer" : "admin"
+                      )
+                    }
+                    className={`rounded-xl text-[11px] font-semibold gap-1.5 self-start sm:self-auto ${
+                      selectedUser.role === "admin"
+                        ? "border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
+                        : "border-[#94704C]/40 text-[#94704C] dark:text-[#C8A879] hover:bg-[#94704C]/10"
+                    }`}
+                  >
+                    <UserCog className="w-3.5 h-3.5" />
+                    <span>
+                      {selectedUser.role === "admin"
+                        ? "Demote to Patron Client"
+                        : "Promote to Administrator"}
+                    </span>
+                  </Button>
                 </div>
               </div>
 
