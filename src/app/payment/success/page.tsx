@@ -31,9 +31,11 @@ import {
 import { api } from "@/lib/api";
 import { formatCurrency, formatDate, getInitials } from "@/lib/utils";
 import { InvoiceModal } from "@/components/payment/InvoiceModal";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 function PaymentSuccessContent() {
+  const { user, isAdmin } = useAuth();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const appointmentId = searchParams.get("appointment_id");
@@ -154,27 +156,34 @@ function PaymentSuccessContent() {
           </div>
         </div>
 
-        {/* 1. Monospace Stripe Session ID Card (Requirement 2) */}
-        <div className="p-4 rounded-xl bg-muted/40 border border-border/80 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-              Stripe Session ID
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={copySessionId}
-              className="h-7 px-2 text-[11px] gap-1 text-accent hover:text-accent/80 hover:bg-accent/10"
-            >
-              <Copy className="w-3 h-3" />
-              <span>Copy ID</span>
-            </Button>
+        {/* 1. Monospace Stripe Session ID Card (Visible ONLY to Admin) */}
+        {isAdmin && (
+          <div className="p-4 rounded-xl bg-muted/40 border border-border/80 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+                  Stripe Session ID
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-accent/15 text-accent border border-accent/25">
+                  Executive Admin Only
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={copySessionId}
+                className="h-7 px-2 text-[11px] gap-1 text-accent hover:text-accent/80 hover:bg-accent/10"
+              >
+                <Copy className="w-3 h-3" />
+                <span>Copy ID</span>
+              </Button>
+            </div>
+            <div className="p-2.5 rounded-lg bg-background border border-border/70 font-mono text-xs text-foreground truncate select-all">
+              {resolvedSessionId}
+            </div>
           </div>
-          <div className="p-2.5 rounded-lg bg-background border border-border/70 font-mono text-xs text-foreground truncate select-all">
-            {resolvedSessionId}
-          </div>
-        </div>
+        )}
 
         {/* 2. Itemized Proof of Purchase Summary */}
         <div className="p-4 rounded-xl bg-muted/30 border border-border/70 space-y-3 text-xs">
@@ -295,19 +304,19 @@ function PaymentSuccessContent() {
           </Button>
 
           {/* Appointments Diary Button */}
-          <Link href="/dashboard/appointments" className="w-full">
+          <Link href={isAdmin ? "/admin/appointments" : "/dashboard/appointments"} className="w-full">
             <Button
               variant="outline"
               className="w-full rounded-xl text-xs uppercase tracking-wider h-11 border-border hover:bg-muted font-bold"
             >
-              <span>Patron Diary</span>
+              <span>{isAdmin ? "Reservation Diary" : "Patron Diary"}</span>
             </Button>
           </Link>
         </div>
 
         <div className="text-center pt-2">
           <Link
-            href="/dashboard/transactions"
+            href={isAdmin ? "/admin/transactions" : "/dashboard/transactions"}
             className="text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors"
           >
             <span>Browse all transaction receipts &amp; invoices</span>

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { formatCurrency, formatDate, getAppointmentPrice, getAppointmentDate } from "@/lib/utils";
 import { Transaction, Appointment } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 
 interface InvoiceModalProps {
   isOpen: boolean;
@@ -37,6 +38,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
   transaction,
   appointment,
 }) => {
+  const { isAdmin } = useAuth();
   const receiptRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
@@ -194,10 +196,17 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
           {/* 4. Financial Total Summary */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
             <div className="space-y-1 text-xs text-muted-foreground">
-              <p className="flex items-center gap-1.5 font-mono text-[10px]">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Stripe Session: {sessionReference.slice(0, 24)}...</span>
-              </p>
+              {isAdmin ? (
+                <p className="flex items-center gap-1.5 font-mono text-[10px]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Stripe Session: {sessionReference.slice(0, 24)}...</span>
+                </p>
+              ) : (
+                <p className="flex items-center gap-1.5 font-mono text-[10px]">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Payment Gateway: Stripe TLS Verified Secured</span>
+                </p>
+              )}
               <p className="text-[10px]">
                 All charges settled in USD via Stripe Test Sandbox.
               </p>

@@ -264,8 +264,8 @@ export default function CustomerTransactionsPage() {
                           <span className="font-mono text-xs font-bold text-accent block">
                             {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
                           </span>
-                          <span className="font-mono text-[10px] text-muted-foreground block truncate max-w-[140px]">
-                            {tx.stripeSessionId ? tx.stripeSessionId.slice(0, 18) + "..." : tx._id}
+                          <span className="text-[10px] text-muted-foreground block">
+                            Verified · Stripe TLS
                           </span>
                         </div>
                       </td>

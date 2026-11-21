@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   CreditCard,
   ShieldCheck,
@@ -14,7 +15,10 @@ import {
   Clock,
   Lock,
   Receipt,
-  Trash2,
+  User,
+  X,
+  Copy,
+  Check,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Transaction, Appointment, Service, ApiResponse } from "@/types";
@@ -32,17 +36,20 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { InvoiceModal } from "@/components/payment/InvoiceModal";
 
-export default function AdminTransactionsPage() {
+function AdminTransactionsContent() {
+  const searchParams = useSearchParams();
+  const initialInvoice = searchParams.get("invoice") || "";
+  const initialQuery = searchParams.get("q") || searchParams.get("search") || "";
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialInvoice || initialQuery);
+  const [searchMode, setSearchMode] = useState<"invoice" | "all" | "customer" | "session">(
+    initialInvoice ? "invoice" : "all"
+  );
+  const [copiedInvoice, setCopiedInvoice] = useState<string | null>(null);
   const [selectedTxForInvoice, setSelectedTxForInvoice] = useState<Transaction | null>(null);
-
-  // Delete transaction state
-  const [txToDelete, setTxToDelete] = useState<Transaction | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
 
   const fetchTransactions = async () => {
     try {
@@ -65,26 +72,21 @@ export default function AdminTransactionsPage() {
     fetchTransactions();
   }, []);
 
-  const handleDeleteTransaction = async () => {
-    if (!txToDelete) return;
-    try {
-      setDeleting(true);
-      const res = await api.delete<ApiResponse<null>>(
-        `/payments/transactions/${txToDelete._id}`
-      );
-      if (res.data.success) {
-        toast.success("Transaction record deleted from ledger.");
-        setTransactions((prev) => prev.filter((t) => t._id !== txToDelete._id));
-        setDeleteDialogOpen(false);
-        setTxToDelete(null);
-      }
-    } catch (err: unknown) {
-      toast.error(
-        (err as Error).message || "Failed to delete transaction record"
-      );
-    } finally {
-      setDeleting(false);
+  const handleCopyInvoice = (inv: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(inv);
+      setCopiedInvoice(inv);
+      toast.success(`Invoice #${inv} copied to clipboard`);
+      setTimeout(() => setCopiedInvoice(null), 2000);
     }
+  };
+
+  const handleFilterByInvoice = (inv: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSearch(inv);
+    setSearchMode("invoice");
+    toast.info(`Filtered ledger for Official Tax Invoice: ${inv}`);
   };
 
   const filteredTransactions = useMemo(() => {
@@ -104,13 +106,30 @@ export default function AdminTransactionsPage() {
       const name = customer?.name?.toLowerCase() || "";
       const email = customer?.email?.toLowerCase() || "";
       const sessionId = tx.stripeSessionId?.toLowerCase() || "";
-      const invoice = tx.invoiceNumber?.toLowerCase() || "";
+      const invoice = (tx.invoiceNumber || "").toLowerCase();
       const serviceTitle = service?.title?.toLowerCase() || "";
       const serviceCategory = service?.category?.toLowerCase() || "";
-      const q = search.toLowerCase();
+      const q = search.trim().toLowerCase();
 
+      if (!q) return true;
+
+      // Dedicated Official Tax Invoice search mode
+      if (searchMode === "invoice") {
+        return invoice.includes(q);
+      }
+
+      // Patron details mode
+      if (searchMode === "customer") {
+        return name.includes(q) || email.includes(q);
+      }
+
+      // Stripe Session ID mode
+      if (searchMode === "session") {
+        return sessionId.includes(q);
+      }
+
+      // Comprehensive "all" mode
       return (
-        !search ||
         name.includes(q) ||
         email.includes(q) ||
         sessionId.includes(q) ||
@@ -125,7 +144,7 @@ export default function AdminTransactionsPage() {
       const timeB = new Date(b.createdAt || 0).getTime();
       return timeB - timeA;
     });
-  }, [transactions, search]);
+  }, [transactions, search, searchMode]);
 
   const totalSettled = useMemo(() => {
     return transactions.reduce((sum, tx) => sum + (tx.amount || 0), 0);
@@ -219,17 +238,169 @@ export default function AdminTransactionsPage() {
         </div>
       </div>
 
-      {/* 3. Search Filter */}
-      <div className="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card shadow-sm">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by patron name, email, or Stripe reference..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-10 text-xs rounded-xl border-border bg-background text-foreground"
-          />
+      {/* 3. Search & Filter Bar with Official Tax Invoice Option */}
+      <div className="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card shadow-sm space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/60">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Receipt className="w-4 h-4 text-accent" />
+              <span className="text-xs font-serif font-bold text-foreground">
+                Ledger Query &amp; Search Mode
+              </span>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Choose an option below to filter ledger entries by Official Tax Invoice, patron, or Stripe reference.
+            </p>
+          </div>
+
+          {/* Search Mode Options */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-muted/40 p-1 rounded-xl border border-border/60">
+            {/* 1. Official Tax Invoice Option */}
+            <button
+              type="button"
+              onClick={() => setSearchMode("invoice")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                searchMode === "invoice"
+                  ? "bg-accent text-accent-foreground shadow-sm font-bold ring-1 ring-accent/30"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <Receipt className="w-3.5 h-3.5" />
+              <span>Official Tax Inv</span>
+              <span
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                  searchMode === "invoice"
+                    ? "bg-black/20 text-accent-foreground"
+                    : "bg-accent/20 text-accent"
+                }`}
+              >
+                Option
+              </span>
+            </button>
+
+            {/* 2. All Attributes Option */}
+            <button
+              type="button"
+              onClick={() => setSearchMode("all")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                searchMode === "all"
+                  ? "bg-primary text-primary-foreground shadow-sm font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>All Fields</span>
+            </button>
+
+            {/* 3. Patron Option */}
+            <button
+              type="button"
+              onClick={() => setSearchMode("customer")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                searchMode === "customer"
+                  ? "bg-primary text-primary-foreground shadow-sm font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Patron Name / Email</span>
+            </button>
+
+            {/* 4. Stripe Session ID Option */}
+            <button
+              type="button"
+              onClick={() => setSearchMode("session")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                searchMode === "session"
+                  ? "bg-primary text-primary-foreground shadow-sm font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Stripe Session ID</span>
+            </button>
+          </div>
         </div>
+
+        {/* Input Row */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative flex-1">
+            {searchMode === "invoice" ? (
+              <Receipt className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-accent" />
+            ) : searchMode === "session" ? (
+              <ShieldCheck className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-accent" />
+            ) : searchMode === "customer" ? (
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-accent" />
+            ) : (
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            )}
+
+            <Input
+              placeholder={
+                searchMode === "invoice"
+                  ? "Enter Official Tax Invoice # (e.g. INV-2026-93825 or 93825)..."
+                  : searchMode === "session"
+                  ? "Enter Stripe Session ID (e.g. cs_test_...)..."
+                  : searchMode === "customer"
+                  ? "Search by patron name or email address..."
+                  : "Search by Official Tax Invoice, patron name, email, or Stripe reference..."
+              }
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={`pl-10 pr-10 h-11 text-xs rounded-xl border-border bg-background text-foreground transition-all ${
+                searchMode === "invoice"
+                  ? "border-accent/70 ring-1 ring-accent/30 font-mono"
+                  : ""
+              }`}
+            />
+
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1 transition-colors cursor-pointer"
+                title="Clear query"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {search && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearch("");
+                setSearchMode("all");
+              }}
+              className="h-11 px-4 rounded-xl text-xs font-semibold border-border hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
+              <span>Reset Filter</span>
+            </Button>
+          )}
+        </div>
+
+        {/* Active Filter Pill & Matches Count */}
+        {search && (
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/50 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
+                Active Filter:
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-accent/15 border border-accent/25 text-accent font-mono text-[11px] font-bold">
+                {searchMode === "invoice" && <Receipt className="w-3.5 h-3.5" />}
+                {searchMode === "invoice"
+                  ? `Official Tax Invoice: ${search}`
+                  : `Query: ${search}`}
+              </span>
+            </div>
+            <span className="text-[11px] text-muted-foreground">
+              Showing <strong className="text-foreground font-semibold">{filteredTransactions.length}</strong> of {transactions.length} recorded entries
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 4. Luxury Transactions Table */}
@@ -288,9 +459,31 @@ export default function AdminTransactionsPage() {
                           {customer?.email || "Email recorded"}
                         </span>
                       </div>
-                      <span className="font-mono text-[10px] font-bold px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent shrink-0">
-                        {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
-                      </span>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={(e) => handleFilterByInvoice(tx.invoiceNumber || "", e)}
+                          className="font-mono text-[10px] font-bold px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all shrink-0 flex items-center gap-1 cursor-pointer"
+                          title="Click to filter by this Official Tax Invoice"
+                        >
+                          <Receipt className="w-2.5 h-2.5" />
+                          <span>
+                            {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => handleCopyInvoice(tx.invoiceNumber || "", e)}
+                          className="text-muted-foreground hover:text-accent p-1 transition-colors cursor-pointer"
+                          title="Copy Invoice Number"
+                        >
+                          {copiedInvoice === tx.invoiceNumber ? (
+                            <Check className="w-3 h-3 text-emerald-500" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
+                        </button>
+                      </div>
                     </div>
 
                     {/* Service & Price Banner */}
@@ -326,28 +519,15 @@ export default function AdminTransactionsPage() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-border/50">
+                    <div className="flex items-center justify-end pt-2 border-t border-border/50">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => setSelectedTxForInvoice(tx)}
-                        className="h-8 px-3 rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent"
+                        className="h-8 px-3 rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent cursor-pointer"
                       >
                         <Receipt className="w-3.5 h-3.5 text-accent" />
                         <span>View Invoice</span>
-                      </Button>
-
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => {
-                          setTxToDelete(tx);
-                          setDeleteDialogOpen(true);
-                        }}
-                        className="h-8 w-8 rounded-xl text-rose-500 hover:text-rose-600 hover:bg-rose-500/10"
-                        title="Delete Transaction"
-                      >
-                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
@@ -451,10 +631,32 @@ export default function AdminTransactionsPage() {
 
                         {/* 5. Stripe Checkout Session ID (shortened ref) & Invoice */}
                         <td className="py-4 px-4">
-                          <div className="space-y-0.5">
-                            <span className="font-mono text-xs font-bold text-accent block">
-                              {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
-                            </span>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={(e) => handleFilterByInvoice(tx.invoiceNumber || "", e)}
+                                className="font-mono text-xs font-bold text-accent hover:underline text-left inline-flex items-center gap-1 group/inv cursor-pointer"
+                                title="Click to filter ledger by this Official Tax Invoice"
+                              >
+                                <span>
+                                  {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
+                                </span>
+                                <Search className="w-2.5 h-2.5 opacity-0 group-hover/inv:opacity-100 transition-opacity" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => handleCopyInvoice(tx.invoiceNumber || "", e)}
+                                className="text-muted-foreground hover:text-accent p-0.5 rounded transition-colors cursor-pointer"
+                                title="Copy Invoice Number"
+                              >
+                                {copiedInvoice === tx.invoiceNumber ? (
+                                  <Check className="w-3 h-3 text-emerald-500" />
+                                ) : (
+                                  <Copy className="w-3 h-3" />
+                                )}
+                              </button>
+                            </div>
                             <span
                               className="font-mono text-[10px] text-muted-foreground block truncate max-w-[130px]"
                               title={tx.stripeSessionId || tx._id}
@@ -482,30 +684,18 @@ export default function AdminTransactionsPage() {
                           </div>
                         </td>
 
-                        {/* 8. Action (View Invoice / Receipt Modal & Delete) */}
+                        {/* 8. Action (View Invoice / Receipt Modal) */}
                         <td className="py-4 px-6 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1.5">
+                          <div className="flex items-center justify-end">
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => setSelectedTxForInvoice(tx)}
-                              className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40"
+                              className="rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent hover:border-accent/40 cursor-pointer"
                               title="View Invoice & Receipt"
                             >
                               <Receipt className="w-3.5 h-3.5 text-accent" />
                               <span className="hidden sm:inline">View Invoice</span>
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => {
-                                setTxToDelete(tx);
-                                setDeleteDialogOpen(true);
-                              }}
-                              className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
-                              title="Delete Transaction"
-                            >
-                              <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
                         </td>
@@ -525,57 +715,23 @@ export default function AdminTransactionsPage() {
         onClose={() => setSelectedTxForInvoice(null)}
         transaction={selectedTxForInvoice}
       />
-
-      {/* Permanent Delete Transaction Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-md rounded-2xl border-border bg-card p-4 sm:p-6">
-          <DialogHeader className="space-y-2">
-            <div className="w-10 h-10 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-              <Trash2 className="w-5 h-5" />
-            </div>
-            <DialogTitle className="font-serif text-xl font-bold text-foreground">
-              Delete Ledger Entry
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
-              Are you sure you want to permanently delete transaction{" "}
-              <strong className="text-foreground font-mono">
-                {txToDelete?.invoiceNumber || txToDelete?.stripeSessionId || txToDelete?._id}
-              </strong>
-              ? This action will permanently remove the financial record from the ledger.
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter className="pt-4 border-t border-border flex flex-wrap items-center justify-end gap-2 w-full">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={deleting}
-              onClick={() => setDeleteDialogOpen(false)}
-              className="w-full sm:w-auto rounded-xl text-xs border-border"
-            >
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              disabled={deleting}
-              onClick={handleDeleteTransaction}
-              className="w-full sm:w-auto rounded-xl text-xs bg-rose-600 hover:bg-rose-700 text-white gap-1.5"
-            >
-              {deleting ? (
-                <>
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Deleting...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Delete Permanently</span>
-                </>
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
+  );
+}
+
+export default function AdminTransactionsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-24 text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-accent border-t-transparent animate-spin rounded-full mx-auto" />
+          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+            Loading Stripe Ledger...
+          </p>
+        </div>
+      }
+    >
+      <AdminTransactionsContent />
+    </Suspense>
   );
 }

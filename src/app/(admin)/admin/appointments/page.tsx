@@ -19,7 +19,6 @@ import {
   Mail,
   RefreshCw,
   Sparkles,
-  Trash2,
   ArrowUpDown,
 } from "lucide-react";
 import { api } from "@/lib/api";
@@ -52,11 +51,6 @@ export default function AdminAppointmentsPage() {
   // Details Modal
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-
-  // Delete Modal
-  const [appointmentToDelete, setAppointmentToDelete] = useState<Appointment | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
 
   // Status updating loader ID
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
@@ -137,58 +131,28 @@ export default function AdminAppointmentsPage() {
     }
   };
 
-  // Permanently delete appointment
-  const handleDelete = async () => {
-    if (!appointmentToDelete) return;
-
-    if (appointmentToDelete.paymentStatus === "paid") {
-      toast.error("Paid reservations cannot be deleted to preserve financial audit trail.");
-      setDeleteDialogOpen(false);
-      setAppointmentToDelete(null);
-      return;
-    }
-
-    try {
-      setDeleting(true);
-      const res = await api.delete<ApiResponse<null>>(
-        `/appointments/${appointmentToDelete._id}`
-      );
-      if (res.data.success) {
-        toast.success("Appointment reservation permanently deleted.");
-        setAppointments((prev) =>
-          prev.filter((a) => a._id !== appointmentToDelete._id)
-        );
-        setDeleteDialogOpen(false);
-        if (selectedAppointment?._id === appointmentToDelete._id) {
-          setDetailsModalOpen(false);
-          setSelectedAppointment(null);
-        }
-        setAppointmentToDelete(null);
-      }
-    } catch (err: unknown) {
-      toast.error((err as Error).message || "Failed to delete appointment");
-    } finally {
-      setDeleting(false);
-    }
-  };
-
   const filteredAppointments = useMemo(() => {
     const list = appointments.filter((app) => {
       const customer = typeof app.customerId === "object" ? app.customerId : null;
       const service = typeof app.serviceId === "object" ? app.serviceId : null;
+      const tx = typeof app.transactionId === "object" ? (app.transactionId as any) : null;
 
       const customerName = customer?.name?.toLowerCase() || "";
       const customerEmail = customer?.email?.toLowerCase() || "";
       const serviceTitle = service?.title?.toLowerCase() || "";
       const specialist = app.specialist?.toLowerCase() || "";
-      const q = search.toLowerCase();
+      const invoiceNum = tx?.invoiceNumber?.toLowerCase() || "";
+      const sessionId = (app.stripeSessionId || tx?.stripeSessionId)?.toLowerCase() || "";
+      const q = search.trim().toLowerCase();
 
       const matchesSearch =
         !search ||
         customerName.includes(q) ||
         customerEmail.includes(q) ||
         serviceTitle.includes(q) ||
-        specialist.includes(q);
+        specialist.includes(q) ||
+        invoiceNum.includes(q) ||
+        sessionId.includes(q);
 
       const matchesStatus =
         statusFilter === "all" ? true : app.status === statusFilter;
@@ -316,7 +280,7 @@ export default function AdminAppointmentsPage() {
             <div className="relative flex-1 min-w-[220px]">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search patron, artist, or service..."
+                placeholder="Search patron, artist, service, or Official Tax Invoice (INV-#)..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10 h-10 text-xs rounded-xl border-border bg-background text-foreground"
@@ -487,22 +451,6 @@ export default function AdminAppointmentsPage() {
                         <Eye className="w-3.5 h-3.5 text-accent" />
                         <span>Dossier</span>
                       </Button>
-
-                      {app.paymentStatus !== "paid" && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          disabled={isActing}
-                          onClick={() => {
-                            setAppointmentToDelete(app);
-                            setDeleteDialogOpen(true);
-                          }}
-                          className="h-8 w-8 rounded-xl text-rose-500 hover:text-rose-600 hover:bg-rose-500/10"
-                          title="Delete Record"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
                     </div>
                   </div>
                 );
@@ -680,33 +628,6 @@ export default function AdminAppointmentsPage() {
                             >
                               <Eye className="w-4 h-4" />
                             </Button>
-
-                            {/* Permanently Delete Appointment (Prohibited if already paid) */}
-                            {app.paymentStatus === "paid" ? (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                disabled
-                                className="h-8 w-8 rounded-lg text-muted-foreground/30 cursor-not-allowed opacity-35"
-                                title="Paid reservations cannot be deleted to preserve financial audit trail"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            ) : (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                disabled={isActing}
-                                onClick={() => {
-                                  setAppointmentToDelete(app);
-                                  setDeleteDialogOpen(true);
-                                }}
-                                className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
-                                title="Delete Reservation"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            )}
                           </div>
                         </td>
                       </tr>
@@ -950,20 +871,6 @@ export default function AdminAppointmentsPage() {
                   </Button>
                 )}
 
-                {selectedAppointment.paymentStatus !== "paid" && (
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setAppointmentToDelete(selectedAppointment);
-                      setDeleteDialogOpen(true);
-                    }}
-                    className="w-full sm:w-auto rounded-xl text-xs text-rose-600 border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/20 gap-1.5"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Delete Record</span>
-                  </Button>
-                )}
-
                 <Button
                   variant="outline"
                   onClick={() => setDetailsModalOpen(false)}
@@ -974,65 +881,6 @@ export default function AdminAppointmentsPage() {
               </DialogFooter>
             </div>
           )}
-        </DialogContent>
-      </Dialog>
-
-      {/* 5. Permanent Deletion Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
-          <DialogHeader className="space-y-2">
-            <div className="w-10 h-10 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-              <Trash2 className="w-5 h-5" />
-            </div>
-            <DialogTitle className="font-serif text-xl font-bold text-foreground">
-              Delete Atelier Reservation
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground leading-relaxed">
-              Are you sure you want to permanently delete this reservation record for{" "}
-              <strong className="text-foreground">
-                {typeof appointmentToDelete?.customerId === "object"
-                  ? appointmentToDelete?.customerId?.name
-                  : "Guest Patron"}
-              </strong>
-              {" "}for{" "}
-              <strong className="text-foreground">
-                {typeof appointmentToDelete?.serviceId === "object"
-                  ? appointmentToDelete?.serviceId?.title
-                  : "Salon Treatment"}
-              </strong>
-              ? This action will completely purge the record from the database.
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={deleting}
-              onClick={() => setDeleteDialogOpen(false)}
-              className="w-full sm:w-auto rounded-xl text-xs border-border"
-            >
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              disabled={deleting}
-              onClick={handleDelete}
-              className="w-full sm:w-auto rounded-xl text-xs bg-rose-600 hover:bg-rose-700 text-white gap-1.5"
-            >
-              {deleting ? (
-                <>
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  <span>Deleting...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Delete Permanently</span>
-                </>
-              )}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

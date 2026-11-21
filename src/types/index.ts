@@ -41,6 +41,7 @@ export interface Appointment {
   status: "pending" | "confirmed" | "cancelled" | "completed";
   specialist?: string;
   transactionId?: Transaction | string;
+  stripeSessionId?: string;
   notes?: string;
   message?: string;
   cancelledAt?: string;
