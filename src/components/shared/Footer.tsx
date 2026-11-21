@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,17 +11,11 @@ import {
   Clock,
   Instagram,
   Facebook,
-  ArrowRight,
   ShieldCheck,
-  Sparkles,
-  CheckCircle2,
 } from "lucide-react";
-import { toast } from "sonner";
 
 export const Footer = () => {
   const pathname = usePathname();
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   // Exclude footer from full-screen dedicated auth flows and admin dashboards
   const isAuthRoute =
@@ -38,62 +32,8 @@ export const Footer = () => {
     return null;
   }
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-    toast.success("Welcome to the SalonBook Private Guestlist.");
-    setEmail("");
-  };
-
   return (
     <footer className="bg-[#F4EFEA] dark:bg-[#1A1216] text-[#251C1D] dark:text-[#FAF7F2] border-t border-[rgba(90,65,48,0.15)] dark:border-[#38252E] transition-colors duration-200">
-      {/* Concierge Newsletter / VIP Notice */}
-      <div className="border-b border-[rgba(90,65,48,0.12)] dark:border-[#38252E] py-10 px-4 sm:px-6 lg:px-8 bg-[#EAE3D6] dark:bg-[#140D11] transition-colors duration-200">
-        <div className="container mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#94704C] dark:text-[#C5A880]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Priority Appointments &amp; Seasonal Care</span>
-            </div>
-            <h3 className="font-serif text-xl sm:text-2xl text-[#251C1D] dark:text-[#FAF7F2] font-normal">
-              Join the SalonBook Private Guestlist
-            </h3>
-            <p className="text-xs text-[#786C68] dark:text-[#FAF7F2]/70 max-w-md">
-              Receive seasonal styling journals, first access to holiday openings, and master artist feature notes.
-            </p>
-          </div>
-
-          {subscribed ? (
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#94704C] dark:text-[#C5A880] bg-[#FFFFFF]/80 dark:bg-[#251A20] px-5 py-3 rounded-xl border border-[rgba(90,65,48,0.15)] dark:border-[#FAF7F2]/20">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>You are on our private seasonal guestlist.</span>
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubscribe}
-              className="w-full md:w-auto flex flex-col sm:flex-row gap-2 max-w-md"
-            >
-              <input
-                type="email"
-                required
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full sm:w-auto sm:min-w-[260px] px-4 py-2.5 rounded-xl bg-[#FFFFFF] dark:bg-[#251A20] border border-[rgba(90,65,48,0.2)] dark:border-[#FAF7F2]/20 text-xs text-[#251C1D] dark:text-[#FAF7F2] placeholder:text-[#786C68]/60 dark:placeholder:text-[#FAF7F2]/50 focus:outline-none focus:border-[#94704C] dark:focus:border-[#C5A880] transition-colors"
-              />
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-[#251C1D] dark:bg-[#C5A880] text-[#F8F5F0] dark:text-[#170F13] font-medium text-xs uppercase tracking-wider hover:bg-[#3B2B2D] dark:hover:bg-[#d6bc96] transition-colors whitespace-nowrap flex items-center justify-center gap-1.5 shadow-xs"
-              >
-                <span>Join</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </form>
-          )}
-        </div>
-      </div>
-
       {/* Main Directory */}
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">

@@ -1377,23 +1377,23 @@ export default function HomePage() {
 
       {/* 
         =======================================================================
-        8. CALL TO ACTION BANNER (DEEP WINE PALETTE)
+        8. CALL TO ACTION BANNER (RESPONSIVE LUXURY ATELIER PALETTE)
         =======================================================================
       */}
-      <section className="py-16 sm:py-20 bg-[#3B1F2B] text-[#FAF7F2] relative overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#4A2035] opacity-50 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#2D1621] opacity-50 blur-3xl pointer-events-none" />
+      <section className="py-16 sm:py-20 bg-[#F4ECE3] dark:bg-[#281520] text-[#231C1E] dark:text-[#FAF7F2] border-t border-[#E2D5C7] dark:border-[#38232F] relative overflow-hidden transition-colors duration-200">
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#E4D1BF] opacity-70 dark:bg-[#4A2035] dark:opacity-40 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#DAC2AD] opacity-60 dark:bg-[#230F1A] dark:opacity-40 blur-3xl pointer-events-none" />
 
         <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-6">
-          <span className="inline-block px-3.5 py-1 rounded-full text-xs uppercase font-semibold tracking-widest bg-[#FAF7F2]/10 text-[#C5A880] border border-[#FAF7F2]/20">
+          <span className="inline-block px-3.5 py-1 rounded-full text-xs uppercase font-semibold tracking-widest bg-[#251C1D]/8 dark:bg-[#FAF7F2]/10 text-[#8C693E] dark:text-[#C5A880] border border-[#251C1D]/15 dark:border-[#FAF7F2]/20">
             APPOINTMENTS NOW OPEN
           </span>
 
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#FAF7F2] leading-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#231C1E] dark:text-[#FAF7F2] leading-tight">
             Ready for your next ritual?
           </h2>
 
-          <p className="text-sm sm:text-base text-[#FAF7F2]/80 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#63534C] dark:text-[#FAF7F2]/80 max-w-xl mx-auto leading-relaxed">
             Reserve your chair online in under two minutes with no upfront fees.
             Select your preferred specialist and experience grooming done properly.
           </p>
@@ -1402,7 +1402,7 @@ export default function HomePage() {
             <Link href="/services">
               <Button
                 size="lg"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#C5A880] hover:bg-[#d6bc96] text-[#231C1E] font-bold text-sm shadow-lg transition-all"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#251C1D] hover:bg-[#3D2F30] text-[#FAF7F2] dark:bg-[#C5A880] dark:hover:bg-[#d6bc96] dark:text-[#231C1E] font-bold text-sm shadow-md transition-all"
               >
                 <span>Browse All Services</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -1413,15 +1413,15 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-[#FAF7F2]/30 text-[#FAF7F2] hover:bg-[#FAF7F2]/10 font-semibold text-sm transition-all"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-[#251C1D]/25 dark:border-[#FAF7F2]/30 text-[#231C1E] dark:text-[#FAF7F2] hover:bg-[#251C1D]/5 dark:hover:bg-[#FAF7F2]/10 font-semibold text-sm transition-all"
               >
-                <Calendar className="w-4 h-4 mr-2 text-[#C5A880]" />
+                <Calendar className="w-4 h-4 mr-2 text-[#8C693E] dark:text-[#C5A880]" />
                 <span>Create an Account</span>
               </Button>
             </Link>
           </div>
 
-          <p className="text-[11px] text-[#FAF7F2]/60 pt-2">
+          <p className="text-[11px] text-[#7A6B65] dark:text-[#FAF7F2]/60 pt-2">
             Demo Credentials: admin@salonbook.com (Password: Admin@123456) · customer@salonbook.com (Password: Customer@123456)
           </p>
         </div>

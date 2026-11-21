@@ -119,8 +119,8 @@ export default function AdminDashboardLayout({
             href="/admin"
             className="flex items-center gap-3 group px-2 py-1 transition-all"
           >
-            <div className="w-10 h-10 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shadow-md shadow-primary/10 transition-transform duration-300 group-hover:scale-105">
-              <Scissors className="w-5 h-5 text-accent" />
+            <div className="w-10 h-10 rounded-2xl bg-[#251C1D] dark:bg-[#C8A879] text-[#FAF7F2] dark:text-[#170F13] flex items-center justify-center shadow-md shadow-primary/10 transition-transform duration-300 group-hover:scale-105">
+              <Scissors className="w-5 h-5 text-[#C8A879] dark:text-[#170F13]" />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-xl font-bold tracking-tight text-foreground block leading-none">
@@ -167,13 +167,15 @@ export default function AdminDashboardLayout({
                   <div className="flex items-center gap-3">
                     <Icon
                       className={`w-4 h-4 transition-transform duration-200 group-hover:scale-110 ${
-                        isActive ? "text-accent" : "text-muted-foreground group-hover:text-foreground"
+                        isActive
+                          ? "text-accent dark:text-primary-foreground"
+                          : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     />
                     <span className="text-xs">{item.label}</span>
                   </div>
                   {isActive ? (
-                    <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent/20 text-accent font-bold">
+                    <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-accent/20 dark:bg-primary-foreground/20 text-accent dark:text-primary-foreground font-bold">
                       {item.badge}
                     </span>
                   ) : (
@@ -297,7 +299,11 @@ export default function AdminDashboardLayout({
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-accent" />
+                    <Icon
+                      className={`w-4 h-4 ${
+                        isActive ? "text-accent dark:text-primary-foreground" : "text-muted-foreground"
+                      }`}
+                    />
                     <span>{item.label}</span>
                   </div>
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
