@@ -64,7 +64,79 @@ export default function AdminOverviewPage() {
       setRefreshing(true);
       const res = await api.get<ApiResponse<AnalyticsData>>("/admin/analytics");
       if (res.data.success) {
-        setData(res.data.data);
+        let analytics = res.data.data;
+
+        // Reconcile synchronously with Stripe transactions ledger
+        try {
+          const txRes = await api.get<ApiResponse<{ transactions: any[] }>>(
+            "/payments/transactions?limit=100"
+          );
+          if (txRes.data.success && txRes.data.data?.transactions) {
+            const txs = txRes.data.data.transactions;
+            const settledTotal = txs.reduce(
+              (sum: number, tx: any) => sum + (tx.amount || 0),
+              0
+            );
+
+            if (
+              settledTotal > 0 &&
+              (!analytics.summary.totalRevenue || analytics.summary.totalRevenue === 0)
+            ) {
+              analytics = {
+                ...analytics,
+                summary: {
+                  ...analytics.summary,
+                  totalRevenue: settledTotal,
+                },
+              };
+            }
+
+            // If monthlyRevenue from server is empty or missing data points, construct last 6 months
+            if (
+              settledTotal > 0 &&
+              (!analytics.monthlyRevenue ||
+                analytics.monthlyRevenue.length === 0 ||
+                !analytics.monthlyRevenue.some((m) => m.revenue > 0))
+            ) {
+              const monthNames = [
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+              ];
+              const now = new Date();
+              const revByMonth: Record<string, { revenue: number; bookings: number }> = {};
+
+              for (const tx of txs) {
+                const txDate = new Date(tx.createdAt || Date.now());
+                const key = `${monthNames[txDate.getMonth()]} ${txDate.getFullYear()}`;
+                if (!revByMonth[key]) {
+                  revByMonth[key] = { revenue: 0, bookings: 0 };
+                }
+                revByMonth[key].revenue += tx.amount || 0;
+                revByMonth[key].bookings += 1;
+              }
+
+              const chartData = [];
+              for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const label = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+                chartData.push({
+                  month: label,
+                  revenue: revByMonth[label]?.revenue || 0,
+                  bookings: revByMonth[label]?.bookings || 0,
+                });
+              }
+
+              analytics = {
+                ...analytics,
+                monthlyRevenue: chartData,
+              };
+            }
+          }
+        } catch (txErr) {
+          console.warn("Transactions ledger sync fallback:", txErr);
+        }
+
+        setData(analytics);
       }
     } catch (err) {
       console.warn("Failed to fetch analytics:", err);
