@@ -1422,7 +1422,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-[11px] text-[#FAF7F2]/60 pt-2">
-            Demo Accounts: admin@salonbook.com (Admin) · customer@salonbook.com (Customer) · Password: Password123!
+            Demo Credentials: admin@salonbook.com (Password: Admin@123456) · customer@salonbook.com (Password: Customer@123456)
           </p>
         </div>
       </section>
