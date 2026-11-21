@@ -20,6 +20,7 @@ import {
   RefreshCw,
   Sparkles,
   ArrowUpDown,
+  Copy,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { Appointment, ApiResponse } from "@/types";
@@ -51,6 +52,17 @@ export default function AdminAppointmentsPage() {
   // Details Modal
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [copiedSession, setCopiedSession] = useState<string | null>(null);
+
+  const handleCopySessionId = (sessionId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (typeof window !== "undefined" && sessionId) {
+      navigator.clipboard.writeText(sessionId);
+      setCopiedSession(sessionId);
+      toast.success("Stripe Session ID copied to clipboard");
+      setTimeout(() => setCopiedSession(null), 2000);
+    }
+  };
 
   // Status updating loader ID
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
@@ -833,6 +845,49 @@ export default function AdminAppointmentsPage() {
                       : "Recently Registered"}
                   </span>
                 </div>
+
+                {/* Stripe Session ID Block with Copy Button */}
+                {(() => {
+                  const txObj =
+                    typeof selectedAppointment.transactionId === "object"
+                      ? selectedAppointment.transactionId
+                      : null;
+                  const sessId =
+                    selectedAppointment.stripeSessionId || txObj?.stripeSessionId;
+                  if (!sessId) return null;
+                  return (
+                    <div className="p-3 rounded-xl border border-border bg-muted/30 space-y-2 min-w-0 sm:col-span-2 md:col-span-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase tracking-wider text-accent font-bold flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+                          Stripe Session ID
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => handleCopySessionId(sessId, e)}
+                          className="h-6 px-2 text-[10px] font-bold uppercase tracking-wider gap-1 text-accent hover:text-accent/80 hover:bg-accent/10 cursor-pointer"
+                        >
+                          {copiedSession === sessId ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-500" />
+                              <span className="text-emerald-500">Copied</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>Copy ID</span>
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                      <div className="font-mono text-xs text-foreground p-2 rounded-lg bg-background border border-border/70 truncate select-all">
+                        {sessId}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* 4. Customer Message / Notes */}

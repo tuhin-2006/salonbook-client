@@ -49,6 +49,7 @@ function AdminTransactionsContent() {
     initialInvoice ? "invoice" : "all"
   );
   const [copiedInvoice, setCopiedInvoice] = useState<string | null>(null);
+  const [copiedSession, setCopiedSession] = useState<string | null>(null);
   const [selectedTxForInvoice, setSelectedTxForInvoice] = useState<Transaction | null>(null);
 
   const fetchTransactions = async () => {
@@ -79,6 +80,16 @@ function AdminTransactionsContent() {
       setCopiedInvoice(inv);
       toast.success(`Invoice #${inv} copied to clipboard`);
       setTimeout(() => setCopiedInvoice(null), 2000);
+    }
+  };
+
+  const handleCopySessionId = (sessionId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (typeof window !== "undefined" && sessionId) {
+      navigator.clipboard.writeText(sessionId);
+      setCopiedSession(sessionId);
+      toast.success("Stripe Session ID copied to clipboard");
+      setTimeout(() => setCopiedSession(null), 2000);
     }
   };
 
@@ -518,6 +529,44 @@ function AdminTransactionsContent() {
                       </span>
                     </div>
 
+                    {/* Stripe Session ID Block with Copy button */}
+                    {tx.stripeSessionId && (
+                      <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-2 text-xs">
+                        <div className="space-y-0.5 min-w-0">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground flex items-center gap-1">
+                            <ShieldCheck className="w-3 h-3 text-accent" />
+                            Stripe Session ID
+                          </span>
+                          <span
+                            className="font-mono text-[11px] text-foreground truncate block select-all"
+                            title={tx.stripeSessionId}
+                          >
+                            {tx.stripeSessionId}
+                          </span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => handleCopySessionId(tx.stripeSessionId, e)}
+                          className="h-7 px-2 text-[11px] font-semibold gap-1 text-accent hover:text-accent/80 hover:bg-accent/10 shrink-0 cursor-pointer"
+                          title="Copy Full Stripe Session ID"
+                        >
+                          {copiedSession === tx.stripeSessionId ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-500" />
+                              <span className="text-emerald-500 text-[10px]">Copied</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span className="text-[10px]">Copy ID</span>
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    )}
+
                     {/* Actions */}
                     <div className="flex items-center justify-end pt-2 border-t border-border/50">
                       <Button
@@ -657,14 +706,31 @@ function AdminTransactionsContent() {
                                 )}
                               </button>
                             </div>
-                            <span
-                              className="font-mono text-[10px] text-muted-foreground block truncate max-w-[130px]"
-                              title={tx.stripeSessionId || tx._id}
-                            >
-                              {tx.stripeSessionId
-                                ? tx.stripeSessionId.slice(0, 16) + "..."
-                                : tx._id.slice(0, 12)}
-                            </span>
+                            <div className="flex items-center gap-1 pt-0.5">
+                              <span
+                                className="font-mono text-[10px] text-muted-foreground block truncate max-w-[125px] select-all cursor-pointer hover:text-accent transition-colors"
+                                title={`Full Stripe Session ID: ${tx.stripeSessionId || tx._id} (Click to copy)`}
+                                onClick={(e) => tx.stripeSessionId && handleCopySessionId(tx.stripeSessionId, e)}
+                              >
+                                {tx.stripeSessionId
+                                  ? tx.stripeSessionId.slice(0, 16) + "..."
+                                  : tx._id.slice(0, 12)}
+                              </span>
+                              {tx.stripeSessionId && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleCopySessionId(tx.stripeSessionId, e)}
+                                  className="text-muted-foreground hover:text-accent p-0.5 rounded transition-colors cursor-pointer shrink-0"
+                                  title="Copy Full Stripe Session ID"
+                                >
+                                  {copiedSession === tx.stripeSessionId ? (
+                                    <Check className="w-3 h-3 text-emerald-500" />
+                                  ) : (
+                                    <Copy className="w-3 h-3" />
+                                  )}
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </td>
 

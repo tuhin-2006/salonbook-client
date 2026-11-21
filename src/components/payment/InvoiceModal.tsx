@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Scissors,
   Printer,
@@ -12,7 +12,10 @@ import {
   CreditCard,
   X,
   Sparkles,
+  Copy,
+  Check,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,6 +42,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
   appointment,
 }) => {
   const { isAdmin } = useAuth();
+  const [copiedSession, setCopiedSession] = useState(false);
   const receiptRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
@@ -197,10 +201,32 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
             <div className="space-y-1 text-xs text-muted-foreground">
               {isAdmin ? (
-                <p className="flex items-center gap-1.5 font-mono text-[10px]">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Stripe Session: {sessionReference.slice(0, 24)}...</span>
-                </p>
+                <div className="flex items-center gap-1.5 font-mono text-[10px]">
+                  <p className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Stripe Session: {sessionReference.slice(0, 24)}...</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (typeof window !== "undefined") {
+                        navigator.clipboard.writeText(sessionReference);
+                        setCopiedSession(true);
+                        toast.success("Stripe Session ID copied to clipboard");
+                        setTimeout(() => setCopiedSession(false), 2000);
+                      }
+                    }}
+                    className="p-1 rounded text-muted-foreground hover:text-accent transition-colors cursor-pointer"
+                    title="Copy Full Stripe Session ID"
+                  >
+                    {copiedSession ? (
+                      <Check className="w-3 h-3 text-emerald-500" />
+                    ) : (
+                      <Copy className="w-3 h-3" />
+                    )}
+                  </button>
+                </div>
               ) : (
                 <p className="flex items-center gap-1.5 font-mono text-[10px]">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
