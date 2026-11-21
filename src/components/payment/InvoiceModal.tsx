@@ -83,9 +83,9 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-[#FAF7F2] dark:bg-[#1A1416] text-[#231C1E] dark:text-[#FAF7F2] border border-[#E8E2D8] dark:border-[#382F33] rounded-2xl shadow-2xl">
+      <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[92vh] overflow-y-auto p-0 bg-[#FAF7F2] dark:bg-[#1A1416] text-[#231C1E] dark:text-[#FAF7F2] border border-[#E8E2D8] dark:border-[#382F33] rounded-2xl shadow-2xl">
         {/* Printable Receipt Container */}
-        <div ref={receiptRef} className="p-6 sm:p-8 space-y-6 print:p-8 print:m-0 print:bg-white print:text-black">
+        <div ref={receiptRef} className="p-4 sm:p-8 space-y-5 sm:space-y-6 print:p-8 print:m-0 print:bg-white print:text-black">
           {/* 1. Atelier Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#E8E2D8] dark:border-[#382F33] print:border-neutral-300">
             <div className="flex items-center gap-3">
@@ -238,12 +238,12 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
         </div>
 
         {/* Modal Actions (Hidden in Print) */}
-        <DialogFooter className="p-4 bg-[#F5EFEB]/90 dark:bg-[#231A1E]/90 border-t border-[#E8E2D8] dark:border-[#382F33] flex flex-row items-center justify-between gap-3 print:hidden">
+        <DialogFooter className="p-4 bg-[#F5EFEB]/90 dark:bg-[#231A1E]/90 border-t border-[#E8E2D8] dark:border-[#382F33] flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 print:hidden">
           <Button
             variant="outline"
             size="sm"
             onClick={onClose}
-            className="rounded-xl text-xs border-[#E8E2D8] dark:border-[#382F33]"
+            className="w-full sm:w-auto rounded-xl text-xs border-[#E8E2D8] dark:border-[#382F33]"
           >
             Close
           </Button>
@@ -251,7 +251,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
           <Button
             size="sm"
             onClick={handlePrint}
-            className="rounded-xl text-xs font-semibold bg-[#251C1D] text-[#FAF7F2] dark:bg-[#C8A879] dark:text-[#170F13] hover:opacity-90 gap-1.5 shadow-sm"
+            className="w-full sm:w-auto rounded-xl text-xs font-semibold bg-[#251C1D] text-[#FAF7F2] dark:bg-[#C8A879] dark:text-[#170F13] hover:opacity-90 gap-1.5 shadow-sm"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print / Save PDF Receipt</span>

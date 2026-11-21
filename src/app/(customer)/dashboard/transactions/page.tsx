@@ -181,8 +181,62 @@ export default function CustomerTransactionsPage() {
             </div>
           </div>
         ) : (
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[600px] text-left text-xs">
+          <>
+            {/* Mobile Cards View (Visible on < md screens) */}
+            <div className="block md:hidden p-3 sm:p-4 space-y-3.5">
+              {transactions.map((tx) => {
+                const app: any = typeof tx.appointmentId === "object" ? tx.appointmentId : null;
+                const service: any = app?.serviceId && typeof app.serviceId === "object" ? app.serviceId : null;
+
+                return (
+                  <div
+                    key={tx._id}
+                    className="p-4 rounded-2xl border border-border/80 bg-background/50 hover:border-accent/40 transition-all space-y-3 shadow-xs"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-0.5 min-w-0">
+                        <span className="font-mono text-xs font-bold text-accent block">
+                          {tx.invoiceNumber || `INV-${new Date().getFullYear()}-${tx._id.slice(-5).toUpperCase()}`}
+                        </span>
+                        <span className="font-serif font-bold text-sm text-foreground block truncate">
+                          {service?.title || "Bespoke Treatment"}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                        <ShieldCheck className="w-3 h-3" />
+                        <span>Paid</span>
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Calendar className="w-3.5 h-3.5 text-accent" />
+                        <span>{formatDate(tx.createdAt)}</span>
+                      </div>
+                      <span className="font-sans text-base font-bold text-foreground tabular-nums">
+                        {formatCurrency(tx.amount)}
+                      </span>
+                    </div>
+
+                    <div className="pt-2 border-t border-border/50 flex justify-end">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedTxForInvoice(tx)}
+                        className="w-full sm:w-auto rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-accent/10 hover:text-accent"
+                      >
+                        <Receipt className="w-3.5 h-3.5 text-accent" />
+                        <span>View Invoice &amp; Receipt</span>
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Structured Table (Visible on md+ screens) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full min-w-[600px] text-left text-xs">
               <thead>
                 <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
                   <th className="py-4 px-6">Invoice # &amp; Ref</th>
@@ -275,7 +329,8 @@ export default function CustomerTransactionsPage() {
               </tbody>
             </table>
           </div>
-        )}
+        </>
+      )}
       </div>
       {/* Luxury Invoice & Receipt Modal */}
       <InvoiceModal

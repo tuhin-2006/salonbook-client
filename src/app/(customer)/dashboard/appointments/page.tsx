@@ -484,7 +484,7 @@ export default function CustomerAppointmentsPage() {
 
       {/* 4. Cancellation Confirmation Dialog */}
       <Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-md rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-2">
             <DialogTitle className="font-serif text-xl font-bold text-destructive">
               Cancel Appointment Request?
@@ -507,12 +507,12 @@ export default function CustomerAppointmentsPage() {
             </div>
           )}
 
-          <DialogFooter className="pt-4 border-t border-border gap-2">
+          <DialogFooter className="pt-4 border-t border-border flex flex-wrap items-center justify-end gap-2 w-full">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setCancelModalOpen(false)}
-              className="rounded-xl text-xs border-border"
+              className="w-full sm:w-auto rounded-xl text-xs border-border"
             >
               Keep Appointment
             </Button>
@@ -521,7 +521,7 @@ export default function CustomerAppointmentsPage() {
               size="sm"
               disabled={cancelling}
               onClick={confirmCancelAppointment}
-              className="rounded-xl text-xs bg-destructive text-destructive-foreground"
+              className="w-full sm:w-auto rounded-xl text-xs bg-destructive text-destructive-foreground"
             >
               {cancelling ? "Cancelling..." : "Confirm Cancellation"}
             </Button>
@@ -531,7 +531,7 @@ export default function CustomerAppointmentsPage() {
 
       {/* 5. Payment Options & Stripe Test Mode Dialog */}
       <Dialog open={paymentModalOpen} onOpenChange={setPaymentModalOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-md rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -587,7 +587,7 @@ export default function CustomerAppointmentsPage() {
             </div>
           )}
 
-          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+          <DialogFooter className="pt-4 border-t border-border flex flex-wrap items-center justify-end gap-2 w-full">
             <Button
               variant="outline"
               size="sm"
@@ -628,7 +628,7 @@ export default function CustomerAppointmentsPage() {
 
       {/* 7. Permanent Delete Dialog for Patron */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-md rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-2">
             <div className="w-10 h-10 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
               <Trash2 className="w-5 h-5" />
@@ -647,7 +647,7 @@ export default function CustomerAppointmentsPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+          <DialogFooter className="pt-4 border-t border-border flex flex-wrap items-center justify-end gap-2 w-full">
             <Button
               variant="outline"
               size="sm"

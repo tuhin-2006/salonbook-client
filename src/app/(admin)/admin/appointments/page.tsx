@@ -348,216 +348,387 @@ export default function AdminAppointmentsPage() {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[850px] text-left text-xs">
-              <thead>
-                <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-4 px-6">Patron &amp; Contact</th>
-                  <th className="py-4 px-4">Treatment</th>
-                  <th className="py-4 px-4">Session Date &amp; Time</th>
-                  <th className="py-4 px-4">Specialist</th>
-                  <th className="py-4 px-4">Total</th>
-                  <th className="py-4 px-4">Status</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {filteredAppointments.map((app) => {
-                  const customer =
-                    typeof app.customerId === "object" ? app.customerId : null;
-                  const service =
-                    typeof app.serviceId === "object" ? app.serviceId : null;
-                  const isActing = actionLoadingId === app._id;
+          <>
+            {/* 3A. Mobile & Tablet Cards View (Visible on < lg screens) */}
+            <div className="block lg:hidden p-3 sm:p-4 space-y-4">
+              {filteredAppointments.map((app) => {
+                const customer =
+                  typeof app.customerId === "object" ? app.customerId : null;
+                const service =
+                  typeof app.serviceId === "object" ? app.serviceId : null;
+                const isActing = actionLoadingId === app._id;
 
-                  return (
-                    <tr
-                      key={app._id}
-                      className="hover:bg-muted/40 transition-colors group"
-                    >
-                      {/* Patron Column */}
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-sans font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30">
-                            {getInitials(customer?.name || "Patron")}
-                          </div>
-                          <div className="space-y-0.5">
-                            <span className="font-semibold text-foreground block">
-                              {customer?.name || "Guest Patron"}
-                            </span>
-                            <span className="text-[11px] text-muted-foreground block">
-                              {customer?.email || "No email available"}
-                            </span>
-                          </div>
+                return (
+                  <div
+                    key={app._id}
+                    className="p-4 sm:p-5 rounded-2xl border border-border/80 bg-background/50 hover:border-accent/40 transition-all space-y-3.5 shadow-xs"
+                  >
+                    {/* Patron & Status */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-full bg-accent/20 text-accent font-sans font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
+                          {customer?.image ? (
+                            <img
+                              src={customer.image}
+                              alt="Customer"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            getInitials(customer?.name || "Patron")
+                          )}
                         </div>
-                      </td>
-
-                      {/* Treatment Column */}
-                      <td className="py-4 px-4">
-                        <div className="space-y-0.5 max-w-xs">
-                          <span className="font-serif text-sm font-bold text-foreground block truncate">
-                            {service?.title || "Custom Treatment"}
+                        <div className="min-w-0 space-y-0.5">
+                          <span className="font-semibold text-sm text-foreground block truncate">
+                            {customer?.name || "Guest Patron"}
                           </span>
-                          <span className="text-[10px] uppercase tracking-wider text-accent font-semibold block">
-                            {service?.category || "Atelier Ritual"}
+                          <span className="text-[11px] text-muted-foreground block truncate">
+                            {customer?.email || "No email available"}
                           </span>
                         </div>
-                      </td>
+                      </div>
 
-                      {/* Date & Time Column */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-1.5 text-foreground font-medium tabular-nums">
-                            <Calendar className="w-3.5 h-3.5 text-accent" />
-                            <span>{formatDate(getAppointmentDate(app))}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 text-muted-foreground text-[11px] tabular-nums">
-                            <Clock className="w-3 h-3" />
-                            <span>{app.timeSlot}</span>
-                          </div>
-                        </div>
-                      </td>
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border ${
+                          app.status === "confirmed"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                            : app.status === "pending"
+                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                            : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                        }`}
+                      >
+                        {app.status === "confirmed" ? (
+                          <CheckCircle2 className="w-3 h-3" />
+                        ) : app.status === "pending" ? (
+                          <Clock className="w-3 h-3" />
+                        ) : (
+                          <XCircle className="w-3 h-3" />
+                        )}
+                        <span>{app.status}</span>
+                      </span>
+                    </div>
 
-                      {/* Specialist Column */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <span className="text-xs text-foreground font-medium">
-                          {app.specialist || "Lead Atelier Artist"}
+                    {/* Treatment & Pricing */}
+                    <div className="p-3 rounded-xl bg-card border border-border/70 flex items-center justify-between gap-3">
+                      <div className="min-w-0 space-y-0.5">
+                        <span className="font-serif text-sm font-bold text-foreground block truncate">
+                          {service?.title || "Custom Treatment"}
                         </span>
-                      </td>
-
-                      {/* Price Column */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="space-y-0.5">
-                          <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
-                            {formatCurrency(getAppointmentPrice(app))}
-                          </span>
-                          <span
-                            className={`text-[9px] uppercase tracking-wider font-bold block ${
-                              app.paymentStatus === "paid"
-                                ? "text-emerald-500"
-                                : "text-amber-500"
-                            }`}
-                          >
-                            {app.paymentStatus === "paid" ? "Paid (Stripe)" : "Unpaid"}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Status Column */}
-                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="text-[10px] uppercase tracking-wider text-accent font-semibold block">
+                          {service?.category || "Atelier Ritual"}
+                        </span>
+                      </div>
+                      <div className="text-right shrink-0 space-y-0.5">
+                        <span className="font-sans text-base font-bold text-foreground tabular-nums block">
+                          {formatCurrency(getAppointmentPrice(app))}
+                        </span>
                         <span
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                            app.status === "confirmed"
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                              : app.status === "pending"
-                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                              : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                          className={`text-[9px] uppercase tracking-wider font-bold block ${
+                            app.paymentStatus === "paid"
+                              ? "text-emerald-500"
+                              : "text-amber-500"
                           }`}
                         >
-                          {app.status === "confirmed" ? (
-                            <CheckCircle2 className="w-3 h-3" />
-                          ) : app.status === "pending" ? (
-                            <Clock className="w-3 h-3" />
-                          ) : (
-                            <XCircle className="w-3 h-3" />
-                          )}
-                          <span>{app.status}</span>
+                          {app.paymentStatus === "paid" ? "Paid (Stripe)" : "Unpaid"}
                         </span>
-                      </td>
+                      </div>
+                    </div>
 
-                      {/* Actions Column */}
-                      <td className="py-4 px-6 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {/* Quick Confirm - Rule: Only pending appointments can be confirmed */}
-                          {app.status === "pending" && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              disabled={isActing}
-                              onClick={() => handleConfirm(app._id)}
-                              className="h-8 px-2.5 rounded-lg border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 gap-1 text-[11px]"
-                              title="Confirm Reservation (Pending Only)"
+                    {/* Date, Time & Specialist */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground pt-1 border-t border-border/40">
+                      <div className="flex items-center gap-1.5 font-medium text-foreground tabular-nums">
+                        <Calendar className="w-3.5 h-3.5 text-accent" />
+                        <span>{formatDate(getAppointmentDate(app))}</span>
+                        <span className="text-muted-foreground/50">•</span>
+                        <Clock className="w-3 h-3 text-accent" />
+                        <span>{app.timeSlot}</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground">
+                        {app.specialist || "Lead Atelier Artist"}
+                      </span>
+                    </div>
+
+                    {/* Mobile Action Controls */}
+                    <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-border/50">
+                      {app.status === "pending" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={isActing}
+                          onClick={() => handleConfirm(app._id)}
+                          className="h-8 px-3 rounded-xl border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 gap-1.5 text-xs font-semibold"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Confirm</span>
+                        </Button>
+                      )}
+
+                      {app.status === "pending" && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          disabled={isActing}
+                          onClick={() => handleCancel(app._id)}
+                          className="h-8 px-3 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1.5 text-xs font-semibold"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                          <span>Cancel</span>
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedAppointment(app);
+                          setDetailsModalOpen(true);
+                        }}
+                        className="h-8 px-3 rounded-xl border-border text-foreground hover:bg-muted gap-1.5 text-xs font-medium"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-accent" />
+                        <span>Dossier</span>
+                      </Button>
+
+                      {app.paymentStatus !== "paid" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          disabled={isActing}
+                          onClick={() => {
+                            setAppointmentToDelete(app);
+                            setDeleteDialogOpen(true);
+                          }}
+                          className="h-8 w-8 rounded-xl text-rose-500 hover:text-rose-600 hover:bg-rose-500/10"
+                          title="Delete Record"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 3B. Desktop Structured Table (Visible on lg+ screens with visible smooth scrollbar) */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full min-w-[850px] text-left text-xs">
+                <thead>
+                  <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
+                    <th className="py-4 px-6">Patron &amp; Contact</th>
+                    <th className="py-4 px-4">Treatment</th>
+                    <th className="py-4 px-4">Session Date &amp; Time</th>
+                    <th className="py-4 px-4">Specialist</th>
+                    <th className="py-4 px-4">Total</th>
+                    <th className="py-4 px-4">Status</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {filteredAppointments.map((app) => {
+                    const customer =
+                      typeof app.customerId === "object" ? app.customerId : null;
+                    const service =
+                      typeof app.serviceId === "object" ? app.serviceId : null;
+                    const isActing = actionLoadingId === app._id;
+
+                    return (
+                      <tr
+                        key={app._id}
+                        className="hover:bg-muted/40 transition-colors group"
+                      >
+                        {/* Patron Column */}
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-sans font-bold text-xs flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
+                              {customer?.image ? (
+                                <img
+                                  src={customer.image}
+                                  alt="Customer"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                getInitials(customer?.name || "Patron")
+                              )}
+                            </div>
+                            <div className="space-y-0.5">
+                              <span className="font-semibold text-foreground block">
+                                {customer?.name || "Guest Patron"}
+                              </span>
+                              <span className="text-[11px] text-muted-foreground block">
+                                {customer?.email || "No email available"}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Treatment Column */}
+                        <td className="py-4 px-4">
+                          <div className="space-y-0.5 max-w-xs">
+                            <span className="font-serif text-sm font-bold text-foreground block truncate">
+                              {service?.title || "Custom Treatment"}
+                            </span>
+                            <span className="text-[10px] uppercase tracking-wider text-accent font-semibold block">
+                              {service?.category || "Atelier Ritual"}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Date & Time Column */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-1.5 text-foreground font-medium tabular-nums">
+                              <Calendar className="w-3.5 h-3.5 text-accent" />
+                              <span>{formatDate(getAppointmentDate(app))}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-muted-foreground text-[11px] tabular-nums">
+                              <Clock className="w-3 h-3" />
+                              <span>{app.timeSlot}</span>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Specialist Column */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <span className="text-xs text-foreground font-medium">
+                            {app.specialist || "Lead Atelier Artist"}
+                          </span>
+                        </td>
+
+                        {/* Price Column */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <div className="space-y-0.5">
+                            <span className="font-sans text-sm font-bold text-foreground tabular-nums block">
+                              {formatCurrency(getAppointmentPrice(app))}
+                            </span>
+                            <span
+                              className={`text-[9px] uppercase tracking-wider font-bold block ${
+                                app.paymentStatus === "paid"
+                                  ? "text-emerald-500"
+                                  : "text-amber-500"
+                              }`}
                             >
-                              <Check className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Confirm</span>
-                            </Button>
-                          )}
+                              {app.paymentStatus === "paid" ? "Paid (Stripe)" : "Unpaid"}
+                            </span>
+                          </div>
+                        </td>
 
-                          {/* Quick Cancel - Rule: Only pending appointments can be cancelled */}
-                          {app.status === "pending" && (
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              disabled={isActing}
-                              onClick={() => handleCancel(app._id)}
-                              className="h-8 px-2.5 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1 text-[11px]"
-                              title="Cancel Reservation (Pending Only)"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Cancel</span>
-                            </Button>
-                          )}
-
-                          {/* Inspect Details */}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              setSelectedAppointment(app);
-                              setDetailsModalOpen(true);
-                            }}
-                            className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
-                            title="Inspect Reservation"
+                        {/* Status Column */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                              app.status === "confirmed"
+                                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                                : app.status === "pending"
+                                ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                                : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20"
+                            }`}
                           >
-                            <Eye className="w-4 h-4" />
-                          </Button>
+                            {app.status === "confirmed" ? (
+                              <CheckCircle2 className="w-3 h-3" />
+                            ) : app.status === "pending" ? (
+                              <Clock className="w-3 h-3" />
+                            ) : (
+                              <XCircle className="w-3 h-3" />
+                            )}
+                            <span>{app.status}</span>
+                          </span>
+                        </td>
 
-                          {/* Permanently Delete Appointment (Prohibited if already paid) */}
-                          {app.paymentStatus === "paid" ? (
+                        {/* Actions Column */}
+                        <td className="py-4 px-6 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {/* Quick Confirm - Rule: Only pending appointments can be confirmed */}
+                            {app.status === "pending" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={isActing}
+                                onClick={() => handleConfirm(app._id)}
+                                className="h-8 px-2.5 rounded-lg border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 gap-1 text-[11px]"
+                                title="Confirm Reservation (Pending Only)"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Confirm</span>
+                              </Button>
+                            )}
+
+                            {/* Quick Cancel - Rule: Only pending appointments can be cancelled */}
+                            {app.status === "pending" && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                disabled={isActing}
+                                onClick={() => handleCancel(app._id)}
+                                className="h-8 px-2.5 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 gap-1 text-[11px]"
+                                title="Cancel Reservation (Pending Only)"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Cancel</span>
+                              </Button>
+                            )}
+
+                            {/* Inspect Details */}
                             <Button
                               variant="ghost"
                               size="icon"
-                              disabled
-                              className="h-8 w-8 rounded-lg text-muted-foreground/30 cursor-not-allowed opacity-35"
-                              title="Paid reservations cannot be deleted to preserve financial audit trail"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              disabled={isActing}
                               onClick={() => {
-                                setAppointmentToDelete(app);
-                                setDeleteDialogOpen(true);
+                                setSelectedAppointment(app);
+                                setDetailsModalOpen(true);
                               }}
-                              className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
-                              title="Delete Reservation"
+                              className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+                              title="Inspect Reservation"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Eye className="w-4 h-4" />
                             </Button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+
+                            {/* Permanently Delete Appointment (Prohibited if already paid) */}
+                            {app.paymentStatus === "paid" ? (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled
+                                className="h-8 w-8 rounded-lg text-muted-foreground/30 cursor-not-allowed opacity-35"
+                                title="Paid reservations cannot be deleted to preserve financial audit trail"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={isActing}
+                                onClick={() => {
+                                  setAppointmentToDelete(app);
+                                  setDeleteDialogOpen(true);
+                                }}
+                                className="h-8 w-8 rounded-lg text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
+                                title="Delete Reservation"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 
-      {/* 4. Details Deep-Dive Dialog */}
+      {/* 4. Details Deep-Dive Dialog (100% Fully Responsive on All Devices) */}
       <Dialog open={detailsModalOpen} onOpenChange={setDetailsModalOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-6 sm:p-8 no-scrollbar">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-1 pb-4 border-b border-border">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <span className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold">
                 Reservation Dossier
               </span>
               <span
-                className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
+                className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border shrink-0 ${
                   selectedAppointment?.status === "confirmed"
                     ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                     : selectedAppointment?.status === "pending"
@@ -568,23 +739,23 @@ export default function AdminAppointmentsPage() {
                 {selectedAppointment?.status}
               </span>
             </div>
-            <DialogTitle className="font-serif text-2xl font-bold text-foreground">
+            <DialogTitle className="font-serif text-xl sm:text-2xl font-bold text-foreground">
               Appointment Dossier &amp; Specifications
             </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
+            <DialogDescription className="text-xs text-muted-foreground truncate">
               Reference ID: {selectedAppointment?._id}
             </DialogDescription>
           </DialogHeader>
 
           {selectedAppointment && (
-            <div className="space-y-5 pt-3 text-xs">
+            <div className="space-y-4 pt-2 text-xs">
               {/* 1. Customer Information Card */}
-              <div className="p-4 rounded-xl border border-border bg-muted/40 space-y-2">
+              <div className="p-3.5 sm:p-4 rounded-xl border border-border bg-muted/40 space-y-2">
                 <span className="text-[10px] uppercase tracking-wider text-accent font-bold block">
                   Customer Information
                 </span>
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-full bg-accent/20 text-accent font-sans font-bold text-sm flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
+                  <div className="w-11 h-11 rounded-full bg-accent/20 text-accent font-sans font-bold text-sm flex items-center justify-center shrink-0 border border-accent/30 overflow-hidden">
                     {typeof selectedAppointment.customerId === "object" &&
                     selectedAppointment.customerId?.image ? (
                       <img
@@ -607,17 +778,19 @@ export default function AdminAppointmentsPage() {
                         : "Guest Patron"}
                     </span>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-[11px]">
-                      <span className="flex items-center gap-1">
-                        <Mail className="w-3 h-3 text-accent" />
-                        {typeof selectedAppointment.customerId === "object"
-                          ? selectedAppointment.customerId?.email
-                          : "No email provided"}
+                      <span className="flex items-center gap-1 min-w-0">
+                        <Mail className="w-3 h-3 text-accent shrink-0" />
+                        <span className="truncate">
+                          {typeof selectedAppointment.customerId === "object"
+                            ? selectedAppointment.customerId?.email
+                            : "No email provided"}
+                        </span>
                       </span>
                       {typeof selectedAppointment.customerId === "object" &&
                         selectedAppointment.customerId?.phone && (
                           <span className="flex items-center gap-1">
-                            <Phone className="w-3 h-3 text-accent" />
-                            {selectedAppointment.customerId.phone}
+                            <Phone className="w-3 h-3 text-accent shrink-0" />
+                            <span>{selectedAppointment.customerId.phone}</span>
                           </span>
                         )}
                     </div>
@@ -626,14 +799,14 @@ export default function AdminAppointmentsPage() {
               </div>
 
               {/* 2. Service Information Card */}
-              <div className="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div className="p-3.5 sm:p-4 rounded-xl border border-border bg-background space-y-2">
                 <span className="text-[10px] uppercase tracking-wider text-accent font-bold block">
                   Service Information
                 </span>
                 <div className="flex items-center gap-3.5">
                   {typeof selectedAppointment.serviceId === "object" &&
                   selectedAppointment.serviceId?.images?.[0] ? (
-                    <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-border/80">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0 border border-border/80">
                       <img
                         src={selectedAppointment.serviceId.images[0]}
                         alt={selectedAppointment.serviceId.title}
@@ -641,12 +814,12 @@ export default function AdminAppointmentsPage() {
                       />
                     </div>
                   ) : (
-                    <div className="w-14 h-14 rounded-xl bg-accent/15 text-accent flex items-center justify-center shrink-0 border border-accent/20">
-                      <Scissors className="w-6 h-6" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-accent/15 text-accent flex items-center justify-center shrink-0 border border-accent/20">
+                      <Scissors className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                   )}
                   <div className="space-y-1 flex-1 min-w-0">
-                    <span className="font-serif text-base font-bold text-foreground block truncate">
+                    <span className="font-serif text-sm sm:text-base font-bold text-foreground block truncate">
                       {typeof selectedAppointment.serviceId === "object"
                         ? selectedAppointment.serviceId?.title
                         : "Salon Formulation Ritual"}
@@ -659,24 +832,25 @@ export default function AdminAppointmentsPage() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-accent" />
-                        ⏱{" "}
-                        {typeof selectedAppointment.serviceId === "object"
-                          ? selectedAppointment.serviceId?.durationMinutes || 60
-                          : 60}{" "}
-                        mins
+                        <span>
+                          {typeof selectedAppointment.serviceId === "object"
+                            ? selectedAppointment.serviceId?.durationMinutes || 60
+                            : 60}{" "}
+                          mins
+                        </span>
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* 3. Appointment Specs Grid (Date, Time, Price, Status, Payment, Booking Date) */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 space-y-1">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block">
+              {/* 3. Appointment Specs Grid (Fully Responsive on All Screen Sizes) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1 min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block truncate">
                     Session Date &amp; Time
                   </span>
-                  <span className="font-semibold text-foreground block">
+                  <span className="font-semibold text-foreground block truncate">
                     {formatDate(getAppointmentDate(selectedAppointment))}
                   </span>
                   <span className="text-[11px] text-accent font-bold block">
@@ -684,20 +858,20 @@ export default function AdminAppointmentsPage() {
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 space-y-1">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block">
+                <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1 min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block truncate">
                     Service Price
                   </span>
                   <span className="font-sans text-base font-bold text-foreground tabular-nums block">
                     {formatCurrency(getAppointmentPrice(selectedAppointment))}
                   </span>
-                  <span className="text-[10px] text-muted-foreground uppercase block font-semibold">
+                  <span className="text-[10px] text-muted-foreground uppercase block font-semibold truncate">
                     Standard Atelier Fee
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 space-y-1">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block">
+                <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1 min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block truncate">
                     Payment Status
                   </span>
                   <span
@@ -711,8 +885,8 @@ export default function AdminAppointmentsPage() {
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 space-y-1">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block">
+                <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1 min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block truncate">
                     Appointment Status
                   </span>
                   <span
@@ -728,11 +902,11 @@ export default function AdminAppointmentsPage() {
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-border bg-muted/20 space-y-1 col-span-2">
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block">
+                <div className="p-3 rounded-xl border border-border bg-muted/20 space-y-1 min-w-0 sm:col-span-2 md:col-span-2">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold block truncate">
                     Booking Request Date
                   </span>
-                  <span className="font-medium text-foreground block">
+                  <span className="font-medium text-foreground block truncate">
                     {selectedAppointment.createdAt
                       ? formatDate(selectedAppointment.createdAt)
                       : "Recently Registered"}
@@ -740,20 +914,20 @@ export default function AdminAppointmentsPage() {
                 </div>
               </div>
 
-              {/* 4. Customer Message (if provided) */}
+              {/* 4. Customer Message / Notes */}
               <div className="p-3.5 rounded-xl border border-border bg-background space-y-1">
                 <span className="text-[10px] uppercase tracking-wider text-accent font-bold block">
                   Customer Message / Notes
                 </span>
-                <p className="text-xs text-foreground italic leading-relaxed">
+                <p className="text-xs text-foreground italic leading-relaxed break-words">
                   {selectedAppointment.notes && selectedAppointment.notes.trim()
                     ? `“${selectedAppointment.notes}”`
                     : "No additional message or custom requirements provided by customer."}
                 </p>
               </div>
 
-              {/* 5. Actions in Dialog (Rules: Only pending can be confirmed; Admin can cancel pending or confirmed) */}
-              <DialogFooter className="pt-4 border-t border-border flex flex-col sm:flex-row gap-2">
+              {/* 5. Actions in Dialog (Fully Responsive Wrapping Footer) */}
+              <DialogFooter className="pt-4 border-t border-border flex flex-wrap items-center justify-end gap-2 w-full">
                 {selectedAppointment.status === "pending" && (
                   <Button
                     onClick={() => handleConfirm(selectedAppointment._id)}

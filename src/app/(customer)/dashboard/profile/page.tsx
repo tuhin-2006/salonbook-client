@@ -223,7 +223,7 @@ export default function CustomerProfilePage() {
           </div>
 
           {/* Submit Action */}
-          <div className="pt-4 border-t border-border/60 flex items-center justify-between">
+          <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
               <span>Single-client encrypted session</span>
@@ -232,7 +232,7 @@ export default function CustomerProfilePage() {
             <Button
               type="submit"
               disabled={saving || uploadingImage}
-              className="rounded-xl text-xs font-semibold tracking-wider gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-6 h-10 shadow-sm"
+              className="w-full sm:w-auto rounded-xl text-xs font-semibold tracking-wider gap-2 bg-primary text-primary-foreground hover:bg-primary/90 px-6 h-10 shadow-sm"
             >
               <Save className="w-3.5 h-3.5 text-accent" />
               <span>{saving ? "Updating..." : "Save Changes"}</span>

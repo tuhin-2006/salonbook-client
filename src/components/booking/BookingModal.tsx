@@ -304,13 +304,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           )}
 
           {/* Action Buttons */}
-          <div className="pt-2 flex items-center justify-end gap-3">
+          <div className="pt-2 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={onClose}
-              className="rounded-xl text-xs uppercase tracking-wider border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2]"
+              className="w-full sm:w-auto rounded-xl text-xs uppercase tracking-wider border-[#3B1F2B]/20 dark:border-[#FAF7F2]/20 text-[#231C1E] dark:text-[#FAF7F2]"
             >
               Cancel
             </Button>
@@ -319,7 +319,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               size="sm"
               onClick={handleBookNow}
               disabled={isSubmitting || !selectedSlot || user?.role === "admin"}
-              className={`rounded-xl text-xs font-bold uppercase tracking-wider h-11 px-6 shadow-sm ${
+              className={`w-full sm:w-auto rounded-xl text-xs font-bold uppercase tracking-wider h-11 px-6 shadow-sm ${
                 user?.role === "admin"
                   ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
                   : "bg-[#3B1F2B] dark:bg-[#C5A880] text-[#FAF7F2] dark:text-[#170F13] hover:bg-[#4A2035] dark:hover:bg-[#d6bc96]"

@@ -447,185 +447,302 @@ export default function AdminServicesPage() {
             </Button>
           </div>
         ) : (
-          <div className="overflow-x-auto no-scrollbar">
-            <table className="w-full min-w-[760px] text-left text-xs">
-              <thead>
-                <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-4 px-6">Treatment</th>
-                  <th className="py-4 px-4">Specialty</th>
-                  <th className="py-4 px-4">Duration</th>
-                  <th className="py-4 px-4">Price</th>
-                  <th className="py-4 px-4">Status</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                {filteredServices.map((service) => (
-                  <tr
-                    key={service._id}
-                    className={`transition-colors group ${
-                      !service.isActive
-                        ? "bg-muted/20 opacity-80 hover:opacity-100"
-                        : "hover:bg-muted/40"
-                    }`}
-                  >
-                    {/* Treatment Column */}
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-muted/60 shrink-0 border border-border/70 relative">
-                          <SafeImage
-                            src={service.images?.[0] || ""}
-                            alt={service.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        <div className="space-y-1 min-w-[200px] max-w-sm sm:max-w-md">
-                          <div className="flex items-center gap-2">
-                            <span className="font-sans font-semibold sm:font-bold text-sm sm:text-base text-foreground block truncate">
-                              {service.title}
-                            </span>
-                            {!service.isActive && (
-                              <span className="shrink-0 text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                                Archived
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-muted-foreground line-clamp-1">
-                            {service.description}
-                          </p>
-                        </div>
+          <>
+            {/* 3A. Mobile & Tablet Services Card View (Visible on < lg screens) */}
+            <div className="block lg:hidden p-3 sm:p-4 space-y-4">
+              {filteredServices.map((service) => (
+                <div
+                  key={service._id}
+                  className={`p-4 sm:p-5 rounded-2xl border border-border/80 bg-background/50 hover:border-accent/40 transition-all space-y-3.5 shadow-xs ${
+                    !service.isActive ? "opacity-85" : ""
+                  }`}
+                >
+                  {/* Top Image + Title + Status */}
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted/60 shrink-0 border border-border/70 relative">
+                      <SafeImage
+                        src={service.images?.[0] || ""}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="font-serif text-sm sm:text-base font-bold text-foreground block truncate">
+                          {service.title}
+                        </span>
+                        <span
+                          className={`shrink-0 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border ${
+                            service.isActive
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                              : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                          }`}
+                        >
+                          {service.isActive ? "Active" : "Archived"}
+                        </span>
                       </div>
-                    </td>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
 
-                    {/* Category Column */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-semibold text-[11px]">
+                  {/* Metadata Row: Category, Duration, Price */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-card border border-border/60 text-xs">
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent">
                         <Layers className="w-3 h-3" />
                         <span>{service.category}</span>
                       </span>
-                    </td>
-
-                    {/* Duration Column */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1.5 text-muted-foreground font-sans tabular-nums">
-                        <Clock className="w-3.5 h-3.5 text-accent" />
-                        <span className="font-medium">{service.durationMinutes} mins</span>
-                      </div>
-                    </td>
-
-                    {/* Price Column */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="font-sans text-base font-bold text-foreground tabular-nums">
-                        {formatCurrency(service.price)}
+                      <span className="flex items-center gap-1 text-[11px] text-muted-foreground tabular-nums">
+                        <Clock className="w-3 h-3 text-accent" />
+                        <span>{service.durationMinutes} mins</span>
                       </span>
-                    </td>
+                    </div>
+                    <span className="font-sans text-sm sm:text-base font-bold text-foreground tabular-nums">
+                      {formatCurrency(service.price)}
+                    </span>
+                  </div>
 
-                    {/* Status Column */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <div className="flex flex-col gap-1">
-                        <button
-                          type="button"
-                          role="switch"
-                          aria-checked={service.isActive}
-                          onClick={() => handleToggleStatus(service)}
-                          className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs cursor-pointer ${
-                            service.isActive
-                              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
-                              : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/25"
-                          }`}
-                          title={
-                            service.isActive
-                              ? "Click to Archive (Hides from Client UI)"
-                              : "Click to Activate (Shows on Client UI)"
-                          }
-                        >
-                          {/* Animated Switch Pill */}
-                          <span
-                            className={`w-7 h-4 rounded-full p-0.5 transition-colors flex items-center ${
-                              service.isActive
-                                ? "bg-emerald-600 dark:bg-emerald-500 justify-end"
-                                : "bg-muted-foreground/40 justify-start"
-                            }`}
-                          >
-                            <span className="w-3 h-3 rounded-full bg-white shadow-sm block" />
-                          </span>
-                          <span className="tracking-wider uppercase text-[10px]">
-                            {service.isActive ? "Active" : "Archived"}
-                          </span>
-                        </button>
-                        <span className="text-[10px] text-muted-foreground/75 pl-1">
-                          {service.isActive ? "Visible on client" : "Hidden from client"}
-                        </span>
-                      </div>
-                    </td>
+                  {/* Mobile Actions: Status Switch & Edit/Delete Buttons */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/50">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={service.isActive}
+                      onClick={() => handleToggleStatus(service)}
+                      className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+                        service.isActive
+                          ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
+                          : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30"
+                      }`}
+                    >
+                      <span
+                        className={`w-6 h-3.5 rounded-full p-0.5 transition-colors flex items-center ${
+                          service.isActive
+                            ? "bg-emerald-600 dark:bg-emerald-500 justify-end"
+                            : "bg-muted-foreground/40 justify-start"
+                        }`}
+                      >
+                        <span className="w-2.5 h-2.5 rounded-full bg-white shadow-xs block" />
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wider">
+                        {service.isActive ? "Active" : "Archived"}
+                      </span>
+                    </button>
 
-                    {/* Action Column */}
-                    <td className="py-4 px-6 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2">
-                        {/* Explicit Archive / Restore Action Button */}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleToggleStatus(service)}
-                          className={`h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all ${
-                            service.isActive
-                              ? "border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50"
-                              : "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/50"
-                          }`}
-                          title={
-                            service.isActive
-                              ? "Archive treatment so it won't show on client"
-                              : "Restore treatment to client catalog"
-                          }
-                        >
-                          {service.isActive ? (
-                            <>
-                              <Archive className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                              <span className="hidden xl:inline">Archive</span>
-                            </>
-                          ) : (
-                            <>
-                              <RotateCcw className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                              <span className="hidden xl:inline">Publish</span>
-                            </>
-                          )}
-                        </Button>
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditModal(service)}
+                        className="h-8 px-3 rounded-xl text-xs font-semibold gap-1.5 border-border hover:bg-muted text-foreground"
+                      >
+                        <Edit className="w-3.5 h-3.5 text-accent" />
+                        <span>Edit</span>
+                      </Button>
 
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditModal(service)}
-                          className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
-                          title="Edit Service"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            setServiceToDelete(service);
-                            setDeleteModalOpen(true);
-                          }}
-                          className="h-8 w-8 rounded-lg text-destructive/80 hover:text-destructive hover:bg-destructive/10"
-                          title="Delete Service"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setServiceToDelete(service);
+                          setDeleteModalOpen(true);
+                        }}
+                        className="h-8 w-8 rounded-xl text-destructive/80 hover:text-destructive hover:bg-destructive/10"
+                        title="Delete Service"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 3B. Desktop Structured Carte Table (Visible on lg+ screens with visible smooth scrollbar) */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full min-w-[760px] text-left text-xs">
+                <thead>
+                  <tr className="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">
+                    <th className="py-4 px-6">Treatment</th>
+                    <th className="py-4 px-4">Specialty</th>
+                    <th className="py-4 px-4">Duration</th>
+                    <th className="py-4 px-4">Price</th>
+                    <th className="py-4 px-4">Status</th>
+                    <th className="py-4 px-6 text-right">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {filteredServices.map((service) => (
+                    <tr
+                      key={service._id}
+                      className={`transition-colors group ${
+                        !service.isActive
+                          ? "bg-muted/20 opacity-80 hover:opacity-100"
+                          : "hover:bg-muted/40"
+                      }`}
+                    >
+                      {/* Treatment Column */}
+                      <td className="py-4 px-6">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-xl overflow-hidden bg-muted/60 shrink-0 border border-border/70 relative">
+                            <SafeImage
+                              src={service.images?.[0] || ""}
+                              alt={service.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="space-y-1 min-w-[200px] max-w-sm sm:max-w-md">
+                            <div className="flex items-center gap-2">
+                              <span className="font-sans font-semibold sm:font-bold text-sm sm:text-base text-foreground block truncate">
+                                {service.title}
+                              </span>
+                              {!service.isActive && (
+                                <span className="shrink-0 text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                  Archived
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-muted-foreground line-clamp-1">
+                              {service.description}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Category Column */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-semibold text-[11px]">
+                          <Layers className="w-3 h-3" />
+                          <span>{service.category}</span>
+                        </span>
+                      </td>
+
+                      {/* Duration Column */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 text-muted-foreground font-sans tabular-nums">
+                          <Clock className="w-3.5 h-3.5 text-accent" />
+                          <span className="font-medium">{service.durationMinutes} mins</span>
+                        </div>
+                      </td>
+
+                      {/* Price Column */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="font-sans text-base font-bold text-foreground tabular-nums">
+                          {formatCurrency(service.price)}
+                        </span>
+                      </td>
+
+                      {/* Status Column */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <div className="flex flex-col gap-1">
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={service.isActive}
+                            onClick={() => handleToggleStatus(service)}
+                            className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs cursor-pointer ${
+                              service.isActive
+                                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25"
+                                : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/25"
+                            }`}
+                            title={
+                              service.isActive
+                                ? "Click to Archive (Hides from Client UI)"
+                                : "Click to Activate (Shows on Client UI)"
+                            }
+                          >
+                            {/* Animated Switch Pill */}
+                            <span
+                              className={`w-7 h-4 rounded-full p-0.5 transition-colors flex items-center ${
+                                service.isActive
+                                  ? "bg-emerald-600 dark:bg-emerald-500 justify-end"
+                                  : "bg-muted-foreground/40 justify-start"
+                              }`}
+                            >
+                              <span className="w-3 h-3 rounded-full bg-white shadow-sm block" />
+                            </span>
+                            <span className="tracking-wider uppercase text-[10px]">
+                              {service.isActive ? "Active" : "Archived"}
+                            </span>
+                          </button>
+                          <span className="text-[10px] text-muted-foreground/75 pl-1">
+                            {service.isActive ? "Visible on client" : "Hidden from client"}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Action Column */}
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Explicit Archive / Restore Action Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleToggleStatus(service)}
+                            className={`h-8 px-2.5 rounded-xl text-xs font-semibold gap-1.5 transition-all ${
+                              service.isActive
+                                ? "border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50"
+                                : "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/50"
+                            }`}
+                            title={
+                              service.isActive
+                                ? "Archive treatment so it won't show on client"
+                                : "Restore treatment to client catalog"
+                            }
+                          >
+                            {service.isActive ? (
+                              <>
+                                <Archive className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                                <span className="hidden xl:inline">Archive</span>
+                              </>
+                            ) : (
+                              <>
+                                <RotateCcw className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                                <span className="hidden xl:inline">Publish</span>
+                              </>
+                            )}
+                          </Button>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openEditModal(service)}
+                            className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+                            title="Edit Service"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              setServiceToDelete(service);
+                              setDeleteModalOpen(true);
+                            }}
+                            className="h-8 w-8 rounded-lg text-destructive/80 hover:text-destructive hover:bg-destructive/10"
+                            title="Delete Service"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 
       {/* 4. Add / Edit Service Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-6 sm:p-8">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-1 pb-4 border-b border-border">
             <DialogTitle className="font-serif text-2xl font-bold text-foreground">
               {editingService ? "Edit Treatment Offering" : "New Treatment Formulation"}
@@ -847,7 +964,7 @@ export default function AdminServicesPage() {
 
       {/* 5. Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-border bg-card p-6">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-md rounded-2xl border-border bg-card p-4 sm:p-6">
           <DialogHeader className="space-y-2">
             <DialogTitle className="font-serif text-xl font-bold text-destructive">
               Remove Offering from Carte
